@@ -27,6 +27,15 @@ const DEFAULT_MOCK_PROPERTY: PropertyDetails = {
   sourceName: "Property listing (MagicBricks)"
 };
 
+const DEFAULT_MOCK_BUYER_CONTEXT: BuyerContext = {
+  purpose: "Primary residence",
+  monthlyIncome: 150000,
+  existingObligations: 12000,
+  availableFunds: 1500000,
+  emergencyReserve: 200000,
+  expectedFinancing: ["Home loan"],
+};
+
 export const useEvaluationStore = create<EvaluationStore>()(
   persist(
     (set, get) => ({
@@ -46,6 +55,7 @@ export const useEvaluationStore = create<EvaluationStore>()(
           updatedAt: new Date().toISOString(),
           step: "snapshot",
           property: newProperty,
+          buyerContext: DEFAULT_MOCK_BUYER_CONTEXT,
         };
 
         set((state) => ({
