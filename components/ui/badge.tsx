@@ -11,50 +11,50 @@ export const StatusBadge: React.FC<BadgeProps> = ({ status, className = "" }) =>
   switch (status) {
     case "verified":
       return (
-        <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#3F9E6C]/15 text-[#3F9E6C] border border-[#3F9E6C]/30 ${className}`}>
-          <CheckCircle2 className="w-3 h-3" />
+        <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#10B981]/10 text-[#34D399] border border-[#10B981]/30 ${className}`}>
+          <CheckCircle2 className="w-3 h-3 text-[#10B981]" />
           Verified
         </span>
       );
     case "user-provided":
       return (
-        <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#5B8BDF]/15 text-[#5B8BDF] border border-[#5B8BDF]/30 ${className}`}>
-          <Circle className="w-3 h-3" />
+        <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#2563EB]/10 text-[#60A5FA] border border-[#2563EB]/30 ${className}`}>
+          <Circle className="w-3 h-3 text-[#3B82F6]" />
           User-provided
         </span>
       );
     case "source-derived":
       return (
-        <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#9B6FD6]/15 text-[#9B6FD6] border border-[#9B6FD6]/30 ${className}`}>
-          <Eye className="w-3 h-3" />
+        <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#8B5CF6]/10 text-[#C084FC] border border-[#8B5CF6]/30 ${className}`}>
+          <Eye className="w-3 h-3 text-[#8B5CF6]" />
           Source-derived
         </span>
       );
     case "estimated":
       return (
-        <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#D4A017]/15 text-[#D4A017] border border-[#D4A017]/30 ${className}`}>
-          <Calculator className="w-3 h-3" />
+        <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#F59E0B]/10 text-[#FBBF24] border border-[#F59E0B]/30 ${className}`}>
+          <Calculator className="w-3 h-3 text-[#F59E0B]" />
           Estimated
         </span>
       );
     case "missing":
       return (
-        <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#222222] text-[#888888] border border-[#333333] ${className}`}>
-          <HelpCircle className="w-3 h-3" />
+        <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#1F2937] text-[#9CA3AF] border border-[#374151] ${className}`}>
+          <HelpCircle className="w-3 h-3 text-[#6B7280]" />
           Missing
         </span>
       );
     case "needs-pro":
       return (
-        <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#E6832A]/15 text-[#E6832A] border border-[#E6832A]/30 ${className}`}>
-          <AlertCircle className="w-3 h-3" />
+        <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#F97316]/10 text-[#FB923C] border border-[#F97316]/30 ${className}`}>
+          <AlertCircle className="w-3 h-3 text-[#F97316]" />
           Needs pro review
         </span>
       );
     case "potential-issue":
       return (
-        <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#D94F4F]/15 text-[#D94F4F] border border-[#D94F4F]/30 ${className}`}>
-          <AlertTriangle className="w-3 h-3" />
+        <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#EF4444]/10 text-[#F87171] border border-[#EF4444]/30 ${className}`}>
+          <AlertTriangle className="w-3 h-3 text-[#EF4444]" />
           Potential issue
         </span>
       );

@@ -10,33 +10,38 @@ const config: Config = {
     extend: {
       colors: {
         canvas: {
-          DEFAULT: "#0A0A0A",
-          muted: "#111111",
+          DEFAULT: "#0B0F17",
+          muted: "#0F172A",
         },
         surface: {
-          DEFAULT: "#141414",
-          hover: "#1C1C1C",
-          elevated: "#222222",
-          border: "#252525",
+          DEFAULT: "#111827",
+          hover: "#1F2937",
+          elevated: "#374151",
+          border: "#1F2937",
+          "border-hover": "#374151",
         },
         brand: {
-          DEFAULT: "#5B8BDF",
-          hover: "#6E9BE8",
-          subtle: "rgba(91, 139, 223, 0.1)",
+          DEFAULT: "#2563EB",
+          hover: "#3B82F6",
+          subtle: "rgba(37, 99, 235, 0.12)",
         },
         status: {
-          verified: "#3F9E6C",
-          user: "#5B8BDF",
-          source: "#9B6FD6",
-          estimate: "#D4A017",
-          missing: "#666666",
-          pro: "#E6832A",
-          issue: "#D94F4F",
+          verified: "#10B981",
+          user: "#3B82F6",
+          source: "#8B5CF6",
+          estimate: "#F59E0B",
+          missing: "#6B7280",
+          pro: "#F97316",
+          issue: "#EF4444",
         }
       },
       fontFamily: {
         sans: ["var(--font-inter)", "sans-serif"],
         mono: ["var(--font-mono)", "monospace"],
+      },
+      boxShadow: {
+        glass: "0 8px 32px 0 rgba(0, 0, 0, 0.37)",
+        card: "0 4px 20px -2px rgba(0, 0, 0, 0.5)",
       }
     },
   },

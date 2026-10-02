@@ -1,39 +1,59 @@
 import React from "react";
+import Image from "next/image";
 import { IntakeWidget } from "./intake-widget";
-import { Shield, Sparkles } from "lucide-react";
+import { ShieldCheck, Sparkles, Building2, Lock, CheckCircle2 } from "lucide-react";
 
 export const HeroSection: React.FC = () => {
   return (
-    <section className="relative pt-12 pb-16 md:pt-20 md:pb-24 overflow-hidden border-b border-[#1A1A1A]">
-      {/* Background subtle radial highlight */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[350px] bg-[#5B8BDF]/5 blur-[120px] pointer-events-none rounded-full" />
+    <section className="relative pt-12 pb-20 md:pt-16 md:pb-28 overflow-hidden border-b border-[#1F2937]">
+      {/* Background Imagery with Subtle Gradient Overlay */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="/images/hero_property.jpg"
+          alt="Modern property architectural background"
+          fill
+          className="object-cover object-center opacity-20 filter blur-[1px]"
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0B0F17]/90 via-[#0B0F17]/95 to-[#0B0F17]" />
+      </div>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center relative z-10 space-y-6">
-        {/* Overline pill */}
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#181818] border border-[#2A2A2A] text-xs font-medium text-[#888888]">
-          <Shield className="w-3.5 h-3.5 text-[#5B8BDF]" />
-          <span>Property evaluation & due-diligence workspace · India</span>
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 relative z-10 text-center space-y-8">
+        {/* Trust Pill */}
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#1F2937]/80 backdrop-blur-md border border-[#374151] text-xs font-semibold text-[#9CA3AF] shadow-md">
+          <Building2 className="w-4 h-4 text-[#3B82F6]" />
+          <span>India&apos;s Dedicated Property Due-Diligence & Decision Workspace</span>
         </div>
 
         {/* Main Headline */}
-        <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-[#EDEDED] leading-[1.15]">
-          Know what you know, what you don't, <br className="hidden sm:inline" />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#EDEDED] via-[#CCCCCC] to-[#5B8BDF]">
-            and what to do next before committing money.
+        <h1 className="text-3xl sm:text-6xl font-extrabold tracking-tight text-[#F9FAFB] leading-[1.12]">
+          Know what you know, what you don&apos;t, <br className="hidden sm:inline" />
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#60A5FA] via-[#38BDF8] to-[#34D399]">
+            and what to do next before paying booking money.
           </span>
         </h1>
 
         {/* Sub-headline */}
-        <p className="text-sm sm:text-base text-[#888888] max-w-2xl mx-auto leading-relaxed">
-          You&apos;ve shortlisted a property. HomeCheck helps you organize your financial position, track verified information, identify missing details, and execute the exact next action — without replacing your lawyer or bank.
+        <p className="text-sm sm:text-lg text-[#9CA3AF] max-w-2xl mx-auto leading-relaxed font-normal">
+          You&apos;ve shortlisted a property. HomeCheck helps you organize your financial position, track verified information, identify missing legal details, and execute the exact next action — without replacing your lawyer or bank.
         </p>
 
-        {/* Intake Widget */}
-        <div className="pt-4 max-w-2xl mx-auto text-left">
+        {/* Hero Intake Widget */}
+        <div className="pt-2 max-w-3xl mx-auto text-left shadow-2xl">
           <IntakeWidget />
-          <p className="mt-3 text-center text-xs text-[#555555]">
-            No login required to start evaluating · Data saved locally
-          </p>
+        </div>
+
+        {/* Trust highlights */}
+        <div className="flex flex-wrap items-center justify-center gap-6 text-xs text-[#9CA3AF] font-medium pt-2">
+          <span className="flex items-center gap-1.5">
+            <CheckCircle2 className="w-4 h-4 text-[#10B981]" /> No login required to evaluate
+          </span>
+          <span className="flex items-center gap-1.5">
+            <Lock className="w-4 h-4 text-[#3B82F6]" /> Private & stored locally
+          </span>
+          <span className="flex items-center gap-1.5">
+            <ShieldCheck className="w-4 h-4 text-[#8B5CF6]" /> Stage-aware Indian property checklist
+          </span>
         </div>
       </div>
     </section>
