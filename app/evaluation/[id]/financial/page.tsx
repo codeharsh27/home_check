@@ -9,7 +9,7 @@ import { UnconfirmedInfoList } from "@/components/financial/unconfirmed-info-lis
 import { BuyerContextForm } from "@/components/financial/buyer-context-form";
 import { Button } from "@/components/ui/button";
 import { useEvaluationStore } from "@/store/evaluation";
-import { ArrowRight, SlidersHorizontal, PieChart } from "lucide-react";
+import { ArrowRight, SlidersHorizontal, PieChart, ShieldAlert } from "lucide-react";
 import { BuyerContext } from "@/types";
 
 export default function FinancialPage() {
@@ -41,7 +41,7 @@ export default function FinancialPage() {
   };
 
   const effectiveFunds = Math.max(0, (context.availableFunds || 0) - (context.emergencyReserve || 0));
-  const plannedLoan = 4500000;
+  const plannedLoan = 4500000; // Expected financing amount
   const fundingGap = Math.max(0, property.price - (effectiveFunds + plannedLoan));
 
   const handleSaveContext = (updatedContext: BuyerContext) => {
@@ -55,41 +55,39 @@ export default function FinancialPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0F1115] text-[#F0F2F5] flex flex-col md:flex-row font-sans">
+    <div className="min-h-screen bg-[#0A0A0A] text-[#EDEDED] flex flex-col md:flex-row">
       <EvalSidebar evaluationId={evalId} propertyName={property.name} />
 
       <main className="flex-1 p-4 sm:p-8 max-w-4xl space-y-6">
         {/* Step Indicator Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#23262D] pb-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#1E1E1E] pb-4">
           <div>
-            <span className="text-xs font-mono text-[#D97706] uppercase tracking-wider">Screen 03 & 04</span>
-            <h1 className="text-xl sm:text-2xl font-bold text-[#F0F2F5]">Financial Picture & Funding Gap</h1>
-            <p className="text-xs text-[#8A8F9E] mt-0.5">
+            <span className="text-xs font-mono text-[#5B8BDF] uppercase tracking-wider">Screen 03 & 04</span>
+            <h1 className="text-xl sm:text-2xl font-bold text-[#EDEDED]">Financial Picture & Funding Gap</h1>
+            <p className="text-xs text-[#888888] mt-0.5">
               Map your available funds and financing against the listed price to identify financial gaps.
             </p>
           </div>
 
           <div className="flex items-center gap-2">
-            <div className="flex bg-[#121418] border border-[#23262D] p-1 rounded-md">
+            <div className="flex bg-[#141414] border border-[#252525] p-1 rounded-lg">
               <button
-                type="button"
                 onClick={() => setActiveTab("picture")}
-                className={`px-3 py-1.5 rounded text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer ${
+                className={`px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer ${
                   activeTab === "picture"
-                    ? "bg-[#D97706] text-white font-semibold"
-                    : "text-[#8A8F9E] hover:text-[#F0F2F5]"
+                    ? "bg-[#5B8BDF] text-white"
+                    : "text-[#888888] hover:text-[#EDEDED]"
                 }`}
               >
                 <PieChart className="w-3.5 h-3.5" />
                 <span>Financial Picture</span>
               </button>
               <button
-                type="button"
                 onClick={() => setActiveTab("edit")}
-                className={`px-3 py-1.5 rounded text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer ${
+                className={`px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer ${
                   activeTab === "edit"
-                    ? "bg-[#D97706] text-white font-semibold"
-                    : "text-[#8A8F9E] hover:text-[#F0F2F5]"
+                    ? "bg-[#5B8BDF] text-white"
+                    : "text-[#888888] hover:text-[#EDEDED]"
                 }`}
               >
                 <SlidersHorizontal className="w-3.5 h-3.5" />
@@ -97,7 +95,7 @@ export default function FinancialPage() {
               </button>
             </div>
 
-            <Button onClick={handleContinue} variant="primary" size="md">
+            <Button onClick={handleContinue} size="md">
               <span>Next step</span>
               <ArrowRight className="w-4 h-4" />
             </Button>
@@ -106,36 +104,36 @@ export default function FinancialPage() {
 
         {/* Top Summary Cards */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <div className="bg-[#16181D] border border-[#262930] p-4 rounded-lg space-y-1">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-[#8A8F9E]">Property Price</span>
-            <p className="text-lg font-bold font-mono text-[#F0F2F5]">
+          <div className="bg-[#121212] border border-[#222222] p-4 rounded-xl space-y-1">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-[#888888]">Property Price</span>
+            <p className="text-lg font-bold font-mono text-[#EDEDED]">
               ₹{(property.price / 100000).toFixed(2)}L
             </p>
-            <span className="text-[11px] text-[#6B7280]">Listed value</span>
+            <span className="text-[11px] text-[#666666]">Listed value</span>
           </div>
 
-          <div className="bg-[#16181D] border border-[#262930] p-4 rounded-lg space-y-1">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-[#3B82F6]">Effective Funds</span>
-            <p className="text-lg font-bold font-mono text-[#60A5FA]">
+          <div className="bg-[#121212] border border-[#222222] p-4 rounded-xl space-y-1">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-[#5B8BDF]">Effective Funds</span>
+            <p className="text-lg font-bold font-mono text-[#5B8BDF]">
               ₹{(effectiveFunds / 100000).toFixed(2)}L
             </p>
-            <span className="text-[11px] text-[#6B7280]">After reserve</span>
+            <span className="text-[11px] text-[#666666]">After reserve</span>
           </div>
 
-          <div className="bg-[#16181D] border border-[#262930] p-4 rounded-lg space-y-1">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-[#10B981]">Planned Loan</span>
-            <p className="text-lg font-bold font-mono text-[#34D399]">
+          <div className="bg-[#121212] border border-[#222222] p-4 rounded-xl space-y-1">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-[#3F9E6C]">Planned Loan</span>
+            <p className="text-lg font-bold font-mono text-[#3F9E6C]">
               ₹{(plannedLoan / 100000).toFixed(2)}L
             </p>
-            <span className="text-[11px] text-[#6B7280]">Expected financing</span>
+            <span className="text-[11px] text-[#666666]">Expected financing</span>
           </div>
 
-          <div className="bg-[#16181D] border border-[#262930] p-4 rounded-lg space-y-1">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-[#EF4444]">Funding Gap</span>
-            <p className="text-lg font-bold font-mono text-[#F87171]">
+          <div className="bg-[#121212] border border-[#222222] p-4 rounded-xl space-y-1">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-[#D94F4F]">Funding Gap</span>
+            <p className="text-lg font-bold font-mono text-[#D94F4F]">
               ₹{(fundingGap / 100000).toFixed(2)}L
             </p>
-            <span className="text-[11px] text-[#6B7280]">Uncovered amount</span>
+            <span className="text-[11px] text-[#666666]">Uncovered amount</span>
           </div>
         </div>
 
@@ -165,11 +163,11 @@ export default function FinancialPage() {
         )}
 
         {/* Footer Navigation */}
-        <div className="pt-6 border-t border-[#23262D] flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-[#6B7280]">
+        <div className="pt-6 border-t border-[#1E1E1E] flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-xs text-[#666666]">
             Knowing your gap allows you to plan negotiations or adjust loan requests before paying booking tokens.
           </p>
-          <Button onClick={handleContinue} variant="primary" size="md" className="w-full sm:w-auto">
+          <Button onClick={handleContinue} size="md" className="w-full sm:w-auto">
             <span>Proceed to Investigation Plan</span>
             <ArrowRight className="w-4 h-4" />
           </Button>

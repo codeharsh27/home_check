@@ -36,9 +36,9 @@ export const FieldRow: React.FC<FieldRowProps> = ({
   const isMissing = status === "missing" || !value;
 
   return (
-    <div className="py-2.5 px-4 rounded-md bg-[#16181D] border border-[#262930] hover:border-[#363B47] transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-3 group">
-      <div className="space-y-0.5">
-        <span className="text-[10px] font-mono text-[#8A8F9E] font-medium uppercase tracking-wider block">
+    <div className="py-3 px-4 rounded-lg bg-[#141414] border border-[#222222] hover:border-[#2E2E2E] transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-3 group">
+      <div className="space-y-1">
+        <span className="text-xs text-[#888888] font-medium uppercase tracking-wider block">
           {label}
         </span>
 
@@ -48,18 +48,18 @@ export const FieldRow: React.FC<FieldRowProps> = ({
               type="text"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
-              className="bg-[#121418] border border-[#D97706] text-xs text-[#F0F2F5] px-2.5 py-1 rounded focus:outline-none w-48 font-mono"
+              className="bg-[#1C1C1C] border border-[#5B8BDF] text-xs text-[#EDEDED] px-2.5 py-1.5 rounded focus:outline-none w-48 font-mono"
               autoFocus
             />
             <button
               onClick={handleSave}
-              className="p-1 rounded bg-[#10B981]/20 text-[#10B981] hover:bg-[#10B981]/30 cursor-pointer"
+              className="p-1 rounded bg-[#3F9E6C]/20 text-[#3F9E6C] hover:bg-[#3F9E6C]/30 cursor-pointer"
             >
               <Check className="w-3.5 h-3.5" />
             </button>
             <button
               onClick={handleCancel}
-              className="p-1 rounded bg-[#1E2128] text-[#8A8F9E] hover:text-white cursor-pointer"
+              className="p-1 rounded bg-[#222222] text-[#888888] hover:text-white cursor-pointer"
             >
               <X className="w-3.5 h-3.5" />
             </button>
@@ -67,9 +67,9 @@ export const FieldRow: React.FC<FieldRowProps> = ({
         ) : (
           <div className="flex items-center gap-2">
             {isMissing ? (
-              <span className="text-xs text-[#525866] italic">Not provided</span>
+              <span className="text-xs text-[#666666] italic">Not provided</span>
             ) : (
-              <span className="text-xs font-semibold text-[#F0F2F5] font-mono">
+              <span className="text-sm font-semibold text-[#EDEDED] font-mono">
                 {unit === "₹" ? `₹${Number(value).toLocaleString("en-IN")}` : `${value} ${unit || ""}`}
               </span>
             )}
@@ -77,7 +77,7 @@ export const FieldRow: React.FC<FieldRowProps> = ({
             {!isEditing && (
               <button
                 onClick={() => setIsEditing(true)}
-                className="opacity-0 group-hover:opacity-100 text-[#6B7280] hover:text-[#D97706] transition-opacity cursor-pointer p-0.5"
+                className="opacity-0 group-hover:opacity-100 text-[#666666] hover:text-[#5B8BDF] transition-opacity cursor-pointer p-0.5"
                 title="Edit field"
               >
                 <Edit2 className="w-3 h-3" />
@@ -92,7 +92,7 @@ export const FieldRow: React.FC<FieldRowProps> = ({
         {isMissing && !isEditing && (
           <button
             onClick={() => setIsEditing(true)}
-            className="inline-flex items-center gap-1 text-[11px] text-[#D97706] hover:underline font-medium cursor-pointer"
+            className="inline-flex items-center gap-1 text-xs text-[#5B8BDF] hover:underline font-medium cursor-pointer"
           >
             <Plus className="w-3 h-3" />
             <span>Add</span>

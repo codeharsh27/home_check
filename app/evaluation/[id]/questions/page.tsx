@@ -5,8 +5,8 @@ import { useParams, useRouter } from "next/navigation";
 import { EvalSidebar } from "@/components/layout/eval-sidebar";
 import { Button } from "@/components/ui/button";
 import { useEvaluationStore } from "@/store/evaluation";
-import { ArrowRight, HelpCircle, Sparkles, Clock } from "lucide-react";
-import { generateNextActions, generateDefaultQuestions } from "@/lib/next-action-engine";
+import { ArrowRight, HelpCircle, Sparkles, CheckCircle2, Clock, AlertTriangle, ShieldCheck } from "lucide-react";
+import { generateNextActions, generateDefaultQuestions, NextActionItem } from "@/lib/next-action-engine";
 import { OpenQuestion } from "@/types";
 import { ContextualAssistModal } from "@/components/ai/contextual-assist";
 
@@ -47,31 +47,31 @@ export default function QuestionsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0F1115] text-[#F0F2F5] flex flex-col md:flex-row font-sans">
+    <div className="min-h-screen bg-[#0A0A0A] text-[#EDEDED] flex flex-col md:flex-row">
       <EvalSidebar evaluationId={evalId} propertyName={property.name} />
 
       <main className="flex-1 p-4 sm:p-8 max-w-5xl space-y-6">
         {/* Step Indicator Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#23262D] pb-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#1E1E1E] pb-4">
           <div>
-            <span className="text-xs font-mono text-[#D97706] uppercase tracking-wider">Screen 07</span>
-            <h1 className="text-xl sm:text-2xl font-bold text-[#F0F2F5]">Open Questions & Next Actions</h1>
-            <p className="text-xs text-[#8A8F9E] mt-0.5">
+            <span className="text-xs font-mono text-[#5B8BDF] uppercase tracking-wider">Screen 07</span>
+            <h1 className="text-xl sm:text-2xl font-bold text-[#EDEDED]">Open Questions & Next Actions</h1>
+            <p className="text-xs text-[#888888] mt-0.5">
               Maintain an active record of unresolved queries and execute stage-appropriate next steps.
             </p>
           </div>
 
-          <Button onClick={handleContinue} variant="primary" size="md">
+          <Button onClick={handleContinue} size="md">
             <span>View readiness dashboard</span>
             <ArrowRight className="w-4 h-4" />
           </Button>
         </div>
 
         {/* AI Generator Triggers Bar */}
-        <div className="bg-[#16181D] border border-[#262930] p-4 rounded-lg flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div className="bg-[#121212] border border-[#232323] p-4 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-[#D97706]" />
-            <span className="text-xs text-[#D1D5DB]">
+            <Sparkles className="w-4 h-4 text-[#5B8BDF]" />
+            <span className="text-xs text-[#CCCCCC]">
               Generate contextual question lists based on missing evaluation items:
             </span>
           </div>
@@ -90,12 +90,12 @@ export default function QuestionsPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Panel 1: Open Questions List */}
           <div className="space-y-4">
-            <div className="flex items-center justify-between border-b border-[#23262D] pb-2">
-              <h2 className="text-sm font-semibold text-[#F0F2F5] flex items-center gap-2">
-                <HelpCircle className="w-4 h-4 text-[#F97316]" />
+            <div className="flex items-center justify-between border-b border-[#202020] pb-2">
+              <h2 className="text-sm font-semibold text-[#EDEDED] flex items-center gap-2">
+                <HelpCircle className="w-4 h-4 text-[#E6832A]" />
                 Unresolved Questions List
               </h2>
-              <span className="text-xs font-mono text-[#8A8F9E]">
+              <span className="text-xs font-mono text-[#888888]">
                 {questions.filter((q) => q.status === "open").length} open
               </span>
             </div>
@@ -104,64 +104,61 @@ export default function QuestionsPage() {
               {questions.map((q) => (
                 <div
                   key={q.id}
-                  className={`p-4 rounded-lg border transition-all ${
+                  className={`p-4 rounded-xl border transition-all ${
                     q.status === "resolved"
-                      ? "bg-[#121418] border-[#1F232B] opacity-60"
-                      : "bg-[#16181D] border-[#262930]"
+                      ? "bg-[#101010] border-[#1C1C1C] opacity-60"
+                      : "bg-[#141414] border-[#252525]"
                   }`}
                 >
                   <div className="space-y-1.5">
                     <div className="flex items-center justify-between gap-2">
-                      <span className="text-[10px] font-mono text-[#D97706] bg-[#D97706]/10 px-2 py-0.5 rounded border border-[#D97706]/20">
+                      <span className="text-xs font-mono text-[#5B8BDF] bg-[#5B8BDF]/10 px-2 py-0.5 rounded border border-[#5B8BDF]/20">
                         {q.category}
                       </span>
                       <span
                         className={`text-[10px] uppercase font-mono px-2 py-0.5 rounded ${
                           q.severity === "high"
-                            ? "bg-[#EF4444]/10 text-[#F87171]"
-                            : "bg-[#F59E0B]/10 text-[#FBBF24]"
+                            ? "bg-[#D94F4F]/15 text-[#D94F4F]"
+                            : "bg-[#D4A017]/15 text-[#D4A017]"
                         }`}
                       >
                         {q.severity} priority
                       </span>
                     </div>
 
-                    <h3 className="text-sm font-semibold text-[#F0F2F5]">{q.title}</h3>
-                    <p className="text-xs text-[#8A8F9E]">{q.description}</p>
+                    <h3 className="text-sm font-semibold text-[#EDEDED]">{q.title}</h3>
+                    <p className="text-xs text-[#888888]">{q.description}</p>
 
                     {/* Status Action Buttons */}
-                    <div className="pt-2 flex items-center gap-2 border-t border-[#23262D] flex-wrap">
+                    <div className="pt-2 flex items-center gap-2 border-t border-[#1C1C1C] flex-wrap">
                       <button
-                        type="button"
                         onClick={() => handleResolveQuestion(q.id, "resolved")}
                         className={`px-2.5 py-1 rounded text-[11px] font-mono cursor-pointer ${
                           q.status === "resolved"
-                            ? "bg-[#10B981]/20 text-[#10B981] font-semibold border border-[#10B981]/40"
-                            : "bg-[#121418] text-[#8A8F9E] hover:text-[#F0F2F5]"
+                            ? "bg-[#3F9E6C]/20 text-[#3F9E6C] font-semibold border border-[#3F9E6C]/40"
+                            : "bg-[#1A1A1A] text-[#777777] hover:text-[#EDEDED]"
                         }`}
                       >
                         ✓ Resolved
                       </button>
 
                       <button
-                        type="button"
                         onClick={() => handleResolveQuestion(q.id, "needs-lawyer")}
                         className={`px-2.5 py-1 rounded text-[11px] font-mono cursor-pointer ${
                           q.status === "needs-lawyer"
-                            ? "bg-[#F97316]/20 text-[#FB923C] font-semibold border border-[#F97316]/40"
-                            : "bg-[#121418] text-[#8A8F9E] hover:text-[#F0F2F5]"
+                            ? "bg-[#E6832A]/20 text-[#E6832A] font-semibold border border-[#E6832A]/40"
+                            : "bg-[#1A1A1A] text-[#777777] hover:text-[#EDEDED]"
                         }`}
                       >
                         ! Needs Lawyer
                       </button>
 
                       <button
-                        type="button"
                         onClick={() => handleResolveQuestion(q.id, "deferred")}
                         className={`px-2.5 py-1 rounded text-[11px] font-mono cursor-pointer ${
                           q.status === "deferred"
-                            ? "bg-[#1E2128] text-[#D1D5DB] font-semibold"
-                            : "bg-[#121418] text-[#8A8F9E] hover:text-[#F0F2F5]"
+                            ? "bg-[#222222] text-[#AAAAAA] font-semibold"
+                            : "bg-[#1A1A1A] text-[#777777] hover:text-[#EDEDED]"
                         }`}
                       >
                         Follow up later
@@ -175,37 +172,37 @@ export default function QuestionsPage() {
 
           {/* Panel 2: Next Actions Engine */}
           <div className="space-y-4">
-            <div className="flex items-center justify-between border-b border-[#23262D] pb-2">
-              <h2 className="text-sm font-semibold text-[#F0F2F5] flex items-center gap-2">
-                <Clock className="w-4 h-4 text-[#D97706]" />
+            <div className="flex items-center justify-between border-b border-[#202020] pb-2">
+              <h2 className="text-sm font-semibold text-[#EDEDED] flex items-center gap-2">
+                <Clock className="w-4 h-4 text-[#5B8BDF]" />
                 Next Actions Engine
               </h2>
-              <span className="text-xs font-mono text-[#8A8F9E]">{nextActions.length} actions</span>
+              <span className="text-xs font-mono text-[#888888]">{nextActions.length} actions</span>
             </div>
 
             <div className="space-y-3">
               {nextActions.map((action, idx) => (
-                <div key={action.id} className="p-4 rounded-lg bg-[#16181D] border border-[#262930] space-y-2">
+                <div key={action.id} className="p-4 rounded-xl bg-[#141414] border border-[#252525] space-y-2">
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-[11px] font-mono font-semibold text-[#F0F2F5]">
+                    <span className="text-[11px] font-mono font-semibold text-[#EDEDED]">
                       {idx + 1}. {action.title}
                     </span>
                     <span
                       className={`text-[10px] uppercase font-mono px-2 py-0.5 rounded ${
                         action.priority === "high"
-                          ? "bg-[#EF4444]/10 text-[#F87171]"
-                          : "bg-[#D97706]/10 text-[#D97706]"
+                          ? "bg-[#D94F4F]/15 text-[#D94F4F]"
+                          : "bg-[#5B8BDF]/15 text-[#5B8BDF]"
                       }`}
                     >
                       {action.priority}
                     </span>
                   </div>
 
-                  <p className="text-xs text-[#8A8F9E]">{action.why}</p>
+                  <p className="text-xs text-[#888888]">{action.why}</p>
 
-                  <div className="pt-2 flex items-center justify-between text-[11px] border-t border-[#23262D] text-[#8A8F9E]">
-                    <span>Target: <strong className="text-[#F0F2F5]">{action.who}</strong></span>
-                    <span className="font-mono text-[#D97706] bg-[#D97706]/10 px-2 py-0.5 rounded border border-[#D97706]/20">
+                  <div className="pt-2 flex items-center justify-between text-[11px] border-t border-[#1C1C1C] text-[#777777]">
+                    <span>Target: <strong className="text-[#CCCCCC]">{action.who}</strong></span>
+                    <span className="font-mono text-[#5B8BDF] bg-[#5B8BDF]/10 px-2 py-0.5 rounded border border-[#5B8BDF]/20">
                       Status: {action.status}
                     </span>
                   </div>

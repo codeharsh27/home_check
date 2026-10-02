@@ -10,30 +10,28 @@ const config: Config = {
     extend: {
       colors: {
         canvas: {
-          DEFAULT: "#0F1115",
-          muted: "#14161B",
+          DEFAULT: "#0A0A0A",
+          muted: "#111111",
         },
         surface: {
-          DEFAULT: "#16181D",
-          hover: "#1E2128",
-          elevated: "#242831",
-          border: "#262930",
-          borderHover: "#363B47",
+          DEFAULT: "#141414",
+          hover: "#1C1C1C",
+          elevated: "#222222",
+          border: "#252525",
         },
         brand: {
-          DEFAULT: "#D97706",
-          hover: "#F59E0B",
-          subtle: "rgba(217, 119, 6, 0.12)",
-          border: "rgba(217, 119, 6, 0.3)",
+          DEFAULT: "#5B8BDF",
+          hover: "#6E9BE8",
+          subtle: "rgba(91, 139, 223, 0.1)",
         },
         status: {
-          verified: "#10B981",
-          user: "#3B82F6",
-          source: "#8B5CF6",
-          estimate: "#F59E0B",
-          missing: "#6B7280",
-          pro: "#F97316",
-          issue: "#EF4444",
+          verified: "#3F9E6C",
+          user: "#5B8BDF",
+          source: "#9B6FD6",
+          estimate: "#D4A017",
+          missing: "#666666",
+          pro: "#E6832A",
+          issue: "#D94F4F",
         }
       },
       fontFamily: {

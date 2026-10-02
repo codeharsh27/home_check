@@ -7,7 +7,7 @@ import { InvestigationProgress } from "@/components/investigation/investigation-
 import { CategorySection } from "@/components/investigation/category-section";
 import { Button } from "@/components/ui/button";
 import { useEvaluationStore } from "@/store/evaluation";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, FileSearch } from "lucide-react";
 import { ChecklistItem } from "@/types";
 import { DEFAULT_CHECKLIST } from "@/lib/checklist-defaults";
 
@@ -48,21 +48,21 @@ export default function InvestigationPage() {
   const costItems = checklist.filter((i) => i.category === "costs");
 
   return (
-    <div className="min-h-screen bg-[#0F1115] text-[#F0F2F5] flex flex-col md:flex-row font-sans">
+    <div className="min-h-screen bg-[#0A0A0A] text-[#EDEDED] flex flex-col md:flex-row">
       <EvalSidebar evaluationId={evalId} propertyName={property.name} />
 
       <main className="flex-1 p-4 sm:p-8 max-w-4xl space-y-6">
         {/* Step Indicator Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#23262D] pb-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#1E1E1E] pb-4">
           <div>
-            <span className="text-xs font-mono text-[#D97706] uppercase tracking-wider">Screen 05 & 06</span>
-            <h1 className="text-xl sm:text-2xl font-bold text-[#F0F2F5]">Investigation Plan & Evidence</h1>
-            <p className="text-xs text-[#8A8F9E] mt-0.5">
+            <span className="text-xs font-mono text-[#5B8BDF] uppercase tracking-wider">Screen 05 & 06</span>
+            <h1 className="text-xl sm:text-2xl font-bold text-[#EDEDED]">Investigation Plan & Evidence</h1>
+            <p className="text-xs text-[#888888] mt-0.5">
               Stage-aware checklist tailored to {property.type} properties in {property.location}.
             </p>
           </div>
 
-          <Button onClick={handleContinue} variant="primary" size="md">
+          <Button onClick={handleContinue} size="md">
             <span>Next step</span>
             <ArrowRight className="w-4 h-4" />
           </Button>
@@ -103,11 +103,11 @@ export default function InvestigationPage() {
         </div>
 
         {/* Footer Navigation */}
-        <div className="pt-6 border-t border-[#23262D] flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-[#6B7280]">
+        <div className="pt-6 border-t border-[#1E1E1E] flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-xs text-[#666666]">
             Every item updated here automatically updates your decision readiness dashboard.
           </p>
-          <Button onClick={handleContinue} variant="primary" size="md" className="w-full sm:w-auto">
+          <Button onClick={handleContinue} size="md" className="w-full sm:w-auto">
             <span>Proceed to Open Questions</span>
             <ArrowRight className="w-4 h-4" />
           </Button>

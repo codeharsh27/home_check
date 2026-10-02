@@ -24,26 +24,26 @@ export const HowItWorksSection: React.FC = () => {
   ];
 
   return (
-    <section className="py-16 md:py-24 border-b border-[#23262D] bg-[#121418]">
+    <section className="py-16 md:py-24 border-b border-[#1A1A1A] bg-[#0C0C0C]">
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
-        <div className="text-center space-y-1.5 mb-12">
-          <h2 className="text-xs font-mono uppercase tracking-widest text-[#D97706]">
+        <div className="text-center space-y-2 mb-12">
+          <h2 className="text-xs font-mono uppercase tracking-widest text-[#5B8BDF]">
             Evaluation Journey
           </h2>
-          <p className="text-2xl sm:text-3xl font-semibold text-[#F0F2F5]">
+          <p className="text-2xl sm:text-3xl font-semibold text-[#EDEDED]">
             From shortlisted property to decision readiness
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {steps.map((item, idx) => (
-            <Card key={idx} className="relative flex flex-col justify-between space-y-3 bg-[#16181D]">
-              <div className="space-y-2.5">
-                <span className="inline-block font-mono text-[11px] text-[#D97706] bg-[#D97706]/10 px-2.5 py-0.5 rounded border border-[#D97706]/20">
+            <Card key={idx} className="relative flex flex-col justify-between space-y-4">
+              <div className="space-y-3">
+                <span className="inline-block font-mono text-xs text-[#5B8BDF] bg-[#5B8BDF]/10 px-2.5 py-1 rounded border border-[#5B8BDF]/20">
                   STEP {item.step}
                 </span>
-                <h3 className="text-base font-semibold text-[#F0F2F5]">{item.title}</h3>
-                <p className="text-xs text-[#8A8F9E] leading-relaxed">{item.description}</p>
+                <h3 className="text-base font-semibold text-[#EDEDED]">{item.title}</h3>
+                <p className="text-xs text-[#888888] leading-relaxed">{item.description}</p>
               </div>
             </Card>
           ))}

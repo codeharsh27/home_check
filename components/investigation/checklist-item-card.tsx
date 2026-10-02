@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { ChecklistItem, DocumentEvidence, EvidenceStatus } from "@/types";
 import { StatusBadge } from "@/components/ui/badge";
-import { ChevronDown, ChevronUp, FileText, Paperclip, MessageSquare, Trash2 } from "lucide-react";
+import { ChevronDown, ChevronUp, FileText, Check, Plus, Paperclip, AlertCircle, MessageSquare, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface ChecklistItemCardProps {
@@ -14,6 +14,7 @@ interface ChecklistItemCardProps {
 export const ChecklistItemCard: React.FC<ChecklistItemCardProps> = ({ item, onUpdate }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [notesInput, setNotesInput] = useState(item.notes || "");
+  const [showNotesInput, setShowNotesInput] = useState(Boolean(item.notes));
 
   const handleToggleRequested = () => {
     const nextRequested = !item.requested;
@@ -61,53 +62,47 @@ export const ChecklistItemCard: React.FC<ChecklistItemCardProps> = ({ item, onUp
   };
 
   return (
-    <div className="bg-[#16181D] border border-[#262930] hover:border-[#363B47] rounded-md transition-all overflow-hidden">
-      {/* Block Header */}
-      <div className="p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+    <div className="bg-[#121212] border border-[#232323] hover:border-[#2E2E2E] rounded-xl transition-all overflow-hidden">
+      {/* Block Header Header */}
+      <div className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="flex items-start gap-3 flex-1">
           <button
-            type="button"
             onClick={() => setIsExpanded(!isExpanded)}
-            className="mt-0.5 text-[#6B7280] hover:text-[#F0F2F5] transition-colors cursor-pointer"
+            className="mt-0.5 text-[#666666] hover:text-[#EDEDED] transition-colors cursor-pointer"
           >
             {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
           </button>
 
           <div className="space-y-1">
             <div className="flex items-center gap-2 flex-wrap">
-              <h3
-                className="text-xs font-semibold text-[#F0F2F5] cursor-pointer hover:text-[#D97706] transition-colors"
-                onClick={() => setIsExpanded(!isExpanded)}
-              >
+              <h3 className="text-sm font-semibold text-[#EDEDED] cursor-pointer" onClick={() => setIsExpanded(!isExpanded)}>
                 {item.title}
               </h3>
               <StatusBadge status={item.status} />
             </div>
-            <p className="text-xs text-[#8A8F9E]">{item.description}</p>
+            <p className="text-xs text-[#888888]">{item.description}</p>
           </div>
         </div>
 
         {/* Action Controls */}
-        <div className="flex items-center gap-2 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-[#23262D]">
+        <div className="flex items-center gap-2 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-[#1E1E1E]">
           <button
-            type="button"
             onClick={handleToggleRequested}
-            className={`px-2.5 py-1 rounded text-xs font-mono transition-colors cursor-pointer ${
+            className={`px-2.5 py-1 rounded-md text-xs font-mono transition-colors cursor-pointer ${
               item.requested
-                ? "bg-[#3B82F6]/15 text-[#60A5FA] border border-[#3B82F6]/30 font-semibold"
-                : "bg-[#121418] text-[#8A8F9E] border border-[#23262D] hover:text-[#F0F2F5]"
+                ? "bg-[#5B8BDF]/20 text-[#5B8BDF] border border-[#5B8BDF]/40"
+                : "bg-[#1A1A1A] text-[#777777] border border-[#262626] hover:text-[#EDEDED]"
             }`}
           >
             {item.requested ? "Requested ✓" : "+ Mark Requested"}
           </button>
 
           <button
-            type="button"
             onClick={handleToggleReceived}
-            className={`px-2.5 py-1 rounded text-xs font-mono transition-colors cursor-pointer ${
+            className={`px-2.5 py-1 rounded-md text-xs font-mono transition-colors cursor-pointer ${
               item.received
-                ? "bg-[#10B981]/15 text-[#10B981] border border-[#10B981]/30 font-semibold"
-                : "bg-[#121418] text-[#8A8F9E] border border-[#23262D] hover:text-[#F0F2F5]"
+                ? "bg-[#3F9E6C]/20 text-[#3F9E6C] border border-[#3F9E6C]/40"
+                : "bg-[#1A1A1A] text-[#777777] border border-[#262626] hover:text-[#EDEDED]"
             }`}
           >
             {item.received ? "Received ✓" : "+ Mark Received"}
@@ -117,37 +112,36 @@ export const ChecklistItemCard: React.FC<ChecklistItemCardProps> = ({ item, onUp
 
       {/* Expanded Block Details */}
       {isExpanded && (
-        <div className="px-4 pb-4 pt-2 border-t border-[#23262D] bg-[#121418] space-y-4 text-xs">
+        <div className="px-4 pb-4 pt-2 border-t border-[#1C1C1C] bg-[#0E0E0E] space-y-4 text-xs">
           {/* Why it Matters Callout */}
-          <div className="p-3 bg-[#181A20] rounded border border-[#262930] space-y-1">
-            <span className="font-mono text-[10px] uppercase tracking-wider text-[#D97706] font-semibold block">
+          <div className="p-3 bg-[#151515] rounded-lg border border-[#222222] space-y-1">
+            <span className="font-mono text-[10px] uppercase tracking-wider text-[#5B8BDF] font-semibold block">
               Why this matters
             </span>
-            <p className="text-[#8A8F9E] leading-relaxed">{item.whyItMatters}</p>
+            <p className="text-[#AAAAAA] leading-relaxed">{item.whyItMatters}</p>
           </div>
 
           {/* Action & Contact Info */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-[#8A8F9E]">
-            <div className="bg-[#16181D] p-2.5 rounded border border-[#23262D]">
-              <span className="text-[10px] uppercase font-mono text-[#6B7280] block">Next Action Required</span>
-              <p className="text-[#F0F2F5] font-medium mt-0.5">{item.nextAction}</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-[#999999]">
+            <div className="bg-[#141414] p-2.5 rounded border border-[#202020]">
+              <span className="text-[10px] uppercase font-mono text-[#666666] block">Next Action Required</span>
+              <p className="text-[#EDEDED] font-medium mt-0.5">{item.nextAction}</p>
             </div>
-            <div className="bg-[#16181D] p-2.5 rounded border border-[#23262D]">
-              <span className="text-[10px] uppercase font-mono text-[#6B7280] block">Responsible Party</span>
-              <p className="text-[#F0F2F5] font-medium mt-0.5">{item.whoToContact}</p>
+            <div className="bg-[#141414] p-2.5 rounded border border-[#202020]">
+              <span className="text-[10px] uppercase font-mono text-[#666666] block">Responsible Party</span>
+              <p className="text-[#EDEDED] font-medium mt-0.5">{item.whoToContact}</p>
             </div>
           </div>
 
           {/* Documents Section */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <span className="font-mono text-[10px] uppercase tracking-wider text-[#8A8F9E]">
+              <span className="font-mono text-[10px] uppercase tracking-wider text-[#888888]">
                 Attached Documents ({item.documents?.length || 0})
               </span>
               <button
-                type="button"
                 onClick={handleAttachMockDocument}
-                className="inline-flex items-center gap-1 text-[11px] text-[#D97706] hover:underline cursor-pointer"
+                className="inline-flex items-center gap-1 text-[11px] text-[#5B8BDF] hover:underline cursor-pointer"
               >
                 <Paperclip className="w-3 h-3" />
                 <span>Upload document</span>
@@ -159,17 +153,16 @@ export const ChecklistItemCard: React.FC<ChecklistItemCardProps> = ({ item, onUp
                 {item.documents.map((doc) => (
                   <div
                     key={doc.id}
-                    className="flex items-center justify-between p-2 rounded bg-[#16181D] border border-[#262930]"
+                    className="flex items-center justify-between p-2 rounded bg-[#161616] border border-[#262626]"
                   >
                     <div className="flex items-center gap-2">
-                      <FileText className="w-3.5 h-3.5 text-[#10B981]" />
-                      <span className="font-mono text-[#F0F2F5]">{doc.fileName}</span>
-                      <span className="text-[#6B7280] text-[10px]">({doc.uploadedAt})</span>
+                      <FileText className="w-3.5 h-3.5 text-[#3F9E6C]" />
+                      <span className="font-mono text-[#EDEDED]">{doc.fileName}</span>
+                      <span className="text-[#666666] text-[10px]">({doc.uploadedAt})</span>
                     </div>
                     <button
-                      type="button"
                       onClick={() => handleRemoveDocument(doc.id)}
-                      className="text-[#6B7280] hover:text-[#EF4444] transition-colors cursor-pointer"
+                      className="text-[#666666] hover:text-[#D94F4F] transition-colors cursor-pointer"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
@@ -177,15 +170,15 @@ export const ChecklistItemCard: React.FC<ChecklistItemCardProps> = ({ item, onUp
                 ))}
               </div>
             ) : (
-              <p className="text-[#525866] italic">No document attached yet.</p>
+              <p className="text-[#555555] italic">No document attached yet.</p>
             )}
           </div>
 
           {/* Seller Response / Notes */}
           <div className="space-y-1.5 pt-1">
             <div className="flex items-center justify-between">
-              <span className="font-mono text-[10px] uppercase tracking-wider text-[#8A8F9E] flex items-center gap-1">
-                <MessageSquare className="w-3 h-3 text-[#8A8F9E]" />
+              <span className="font-mono text-[10px] uppercase tracking-wider text-[#888888] flex items-center gap-1">
+                <MessageSquare className="w-3 h-3 text-[#888888]" />
                 Notes / Seller Response
               </span>
             </div>
@@ -196,7 +189,7 @@ export const ChecklistItemCard: React.FC<ChecklistItemCardProps> = ({ item, onUp
                 value={notesInput}
                 onChange={(e) => setNotesInput(e.target.value)}
                 placeholder="Add response received from seller or personal note..."
-                className="flex-1 bg-[#16181D] border border-[#262930] text-xs text-[#F0F2F5] rounded px-3 py-1.5 focus:outline-none focus:border-[#D97706]"
+                className="flex-1 bg-[#161616] border border-[#252525] text-xs text-[#EDEDED] rounded px-3 py-1.5 focus:outline-none focus:border-[#5B8BDF]"
               />
               <Button size="sm" variant="secondary" onClick={handleSaveNotes}>
                 Save note
