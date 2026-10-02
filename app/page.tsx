@@ -1,40 +1,52 @@
-import React from "react";
-import { Navbar } from "@/components/layout/nav";
-import { HeroSection } from "@/components/landing/hero";
+import { TopBanner } from "@/components/landing/top-banner";
+import { LandingNav } from "@/components/landing/landing-nav";
+import { LandingHero } from "@/components/landing/hero";
+import { FeatureRow } from "@/components/landing/feature-row";
+import { SketchRow } from "@/components/landing/sketch-row";
+import { MissionStatement } from "@/components/landing/mission-statement";
+import { StatsRow } from "@/components/landing/stats-row";
 import { HowItWorksSection } from "@/components/landing/how-it-works";
-import { WhatYouGetSection } from "@/components/landing/what-you-get";
-import { TrustSection } from "@/components/landing/trust-section";
-import { Footer } from "@/components/landing/footer";
-import { IntakeWidget } from "@/components/landing/intake-widget";
+import { TestimonialsSection } from "@/components/landing/testimonials";
+import { CtaSection } from "@/components/landing/cta-section";
+import { LandingFooter } from "@/components/landing/footer";
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-[#0A0A0A] text-[#EDEDED] flex flex-col font-sans">
-      <Navbar />
+    <div className="landing-root min-h-screen bg-[#F4F1EC] font-sans flex flex-col">
+      {/* ── 0. Top announcement banner ──────────────────────── */}
+      <TopBanner />
+
+      {/* ── 1. Navbar ───────────────────────────────────────── */}
+      <LandingNav />
 
       <main className="flex-1">
-        <HeroSection />
-        <HowItWorksSection />
-        <WhatYouGetSection />
-        <TrustSection />
+        {/* ── 2. Hero: headline + full-bleed image + floating search card ── */}
+        <LandingHero />
 
-        {/* Second Intake Callout */}
-        <section className="py-16 md:py-20 bg-[#080808]">
-          <div className="max-w-3xl mx-auto px-4 text-center space-y-6">
-            <h2 className="text-2xl font-bold text-[#EDEDED]">
-              Ready to evaluate your shortlisted property?
-            </h2>
-            <p className="text-xs text-[#888888] max-w-lg mx-auto">
-              Start now with a listing URL, document brochure, or manual entry.
-            </p>
-            <div className="text-left">
-              <IntakeWidget />
-            </div>
-          </div>
-        </section>
+        {/* ── 3. Feature icons row ────────────────────────────── */}
+        <FeatureRow />
+
+        {/* ── 4. Architectural sketch row ─────────────────────── */}
+        <SketchRow />
+
+        {/* ── 5. Mixed-weight mission statement ───────────────── */}
+        <MissionStatement />
+
+        {/* ── 6. 4-KPI stats divider row ──────────────────────── */}
+        <StatsRow />
+
+        {/* ── 7. How HomeCheck Works (feature cards grid) ─────── */}
+        <HowItWorksSection />
+
+        {/* ── 8. Testimonials ─────────────────────────────────── */}
+        <TestimonialsSection />
+
+        {/* ── 9. Dark CTA section with map pattern ────────────── */}
+        <CtaSection />
       </main>
 
-      <Footer />
+      {/* ── 10. Footer ──────────────────────────────────────── */}
+      <LandingFooter />
     </div>
   );
 }

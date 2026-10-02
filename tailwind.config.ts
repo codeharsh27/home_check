@@ -9,6 +9,7 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // ── Dark evaluation workspace tokens ──────────────────────────
         canvas: {
           DEFAULT: "#0A0A0A",
           muted: "#111111",
@@ -32,12 +33,33 @@ const config: Config = {
           missing: "#666666",
           pro: "#E6832A",
           issue: "#D94F4F",
-        }
+        },
+        // ── Light landing page tokens (Homera-inspired) ───────────────
+        cream: {
+          DEFAULT: "#F4F1EC",
+          dark: "#EDE9E2",
+          border: "#E2DED6",
+        },
+        forest: {
+          DEFAULT: "#2A5C2A",
+          dark: "#1A2318",
+          mid: "#243022",
+          light: "#3D7A3D",
+        },
+        ink: {
+          DEFAULT: "#111111",
+          secondary: "#555555",
+          muted: "#999999",
+        },
       },
       fontFamily: {
         sans: ["var(--font-inter)", "sans-serif"],
         mono: ["var(--font-mono)", "monospace"],
-      }
+      },
+      borderRadius: {
+        "4xl": "2rem",
+        "5xl": "2.5rem",
+      },
     },
   },
   plugins: [],
