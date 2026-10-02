@@ -31,27 +31,27 @@ export const WhatYouGetSection: React.FC = () => {
   ];
 
   return (
-    <section className="py-16 md:py-24 border-b border-[#1A1A1A]">
+    <section className="py-16 md:py-24 border-b border-[#23262D] bg-[#0F1115]">
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
-        <div className="text-center space-y-2 mb-12">
-          <h2 className="text-xs font-mono uppercase tracking-widest text-[#5B8BDF]">
+        <div className="text-center space-y-1.5 mb-12">
+          <h2 className="text-xs font-mono uppercase tracking-widest text-[#D97706]">
             Core Capabilities
           </h2>
-          <p className="text-2xl sm:text-3xl font-semibold text-[#EDEDED]">
+          <p className="text-2xl sm:text-3xl font-semibold text-[#F0F2F5]">
             Everything you need for complete due diligence
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           {features.map((feat, idx) => {
             const Icon = feat.icon;
             return (
-              <Card key={idx} hoverable className="space-y-3">
-                <div className="w-9 h-9 rounded-lg bg-[#1F1F1F] border border-[#2E2E2E] flex items-center justify-center text-[#5B8BDF]">
-                  <Icon className="w-5 h-5" />
+              <Card key={idx} hoverable className="space-y-3 bg-[#16181D]">
+                <div className="w-8 h-8 rounded bg-[#1F232B] border border-[#2B2F38] flex items-center justify-center text-[#D97706]">
+                  <Icon className="w-4 h-4" />
                 </div>
-                <h3 className="text-base font-semibold text-[#EDEDED]">{feat.title}</h3>
-                <p className="text-xs text-[#888888] leading-relaxed">{feat.description}</p>
+                <h3 className="text-base font-semibold text-[#F0F2F5]">{feat.title}</h3>
+                <p className="text-xs text-[#8A8F9E] leading-relaxed">{feat.description}</p>
               </Card>
             );
           })}

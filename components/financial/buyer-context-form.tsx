@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { BuyerContext } from "@/types";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Check, Edit2 } from "lucide-react";
+import { Check } from "lucide-react";
 
 interface BuyerContextFormProps {
   context: BuyerContext;
@@ -44,14 +44,14 @@ export const BuyerContextForm: React.FC<BuyerContextFormProps> = ({ context, onS
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-[#121212] border border-[#252525] rounded-xl p-6 space-y-6">
-      <div className="flex items-center justify-between border-b border-[#202020] pb-4">
+    <form onSubmit={handleSubmit} className="bg-[#16181D] border border-[#262930] rounded-lg p-6 space-y-6">
+      <div className="flex items-center justify-between border-b border-[#23262D] pb-4">
         <div>
-          <h2 className="text-base font-semibold text-[#EDEDED]">Your Financial Context</h2>
-          <p className="text-xs text-[#888888]">Approximate inputs are fine. Used strictly to calculate funding gaps.</p>
+          <h2 className="text-base font-semibold text-[#F0F2F5]">Your Financial Context</h2>
+          <p className="text-xs text-[#8A8F9E]">Approximate inputs are fine. Used strictly to calculate funding gaps.</p>
         </div>
         {isSaved && (
-          <span className="inline-flex items-center gap-1 text-xs text-[#3F9E6C] font-mono bg-[#3F9E6C]/10 px-2.5 py-1 rounded border border-[#3F9E6C]/30">
+          <span className="inline-flex items-center gap-1 text-xs text-[#10B981] font-mono bg-[#10B981]/10 px-2.5 py-1 rounded border border-[#10B981]/30">
             <Check className="w-3.5 h-3.5" /> Updated
           </span>
         )}
@@ -59,19 +59,19 @@ export const BuyerContextForm: React.FC<BuyerContextFormProps> = ({ context, onS
 
       {/* 1. Purchase Purpose */}
       <div className="space-y-2">
-        <label className="block text-xs font-medium text-[#888888] uppercase tracking-wider">
+        <label className="block text-[11px] font-mono text-[#8A8F9E] uppercase tracking-wider">
           Purchase Purpose
         </label>
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-wrap gap-2.5">
           {(["Primary residence", "Investment", "Both"] as const).map((option) => (
             <button
               key={option}
               type="button"
               onClick={() => setPurpose(option)}
-              className={`px-4 py-2 rounded-lg text-xs font-medium border transition-colors cursor-pointer ${
+              className={`px-3.5 py-1.5 rounded text-xs font-medium border transition-colors cursor-pointer ${
                 purpose === option
-                  ? "bg-[#5B8BDF]/15 text-[#5B8BDF] border border-[#5B8BDF]/50"
-                  : "bg-[#181818] text-[#888888] border-[#2A2A2A] hover:bg-[#202020]"
+                  ? "bg-[#D97706]/15 text-[#D97706] border-[#D97706]/50 font-semibold"
+                  : "bg-[#14161B] text-[#8A8F9E] border-[#262930] hover:bg-[#1C1F26]"
               }`}
             >
               {option}
@@ -118,7 +118,7 @@ export const BuyerContextForm: React.FC<BuyerContextFormProps> = ({ context, onS
 
       {/* 3. Expected Financing */}
       <div className="space-y-2 pt-2">
-        <label className="block text-xs font-medium text-[#888888] uppercase tracking-wider">
+        <label className="block text-[11px] font-mono text-[#8A8F9E] uppercase tracking-wider">
           Expected Financing Method
         </label>
         <div className="flex flex-wrap gap-2">
@@ -129,10 +129,10 @@ export const BuyerContextForm: React.FC<BuyerContextFormProps> = ({ context, onS
                 key={item}
                 type="button"
                 onClick={() => handleFinancingToggle(item)}
-                className={`px-3 py-1.5 rounded-md text-xs font-medium border transition-colors cursor-pointer ${
+                className={`px-3 py-1 rounded text-xs font-medium border transition-colors cursor-pointer ${
                   isSelected
-                    ? "bg-[#3F9E6C]/15 text-[#3F9E6C] border-[#3F9E6C]/40"
-                    : "bg-[#181818] text-[#777777] border-[#252525] hover:border-[#333333]"
+                    ? "bg-[#10B981]/15 text-[#10B981] border-[#10B981]/40"
+                    : "bg-[#14161B] text-[#6B7280] border-[#262930] hover:border-[#363B47]"
                 }`}
               >
                 {isSelected ? `✓ ${item}` : `+ ${item}`}
@@ -143,7 +143,7 @@ export const BuyerContextForm: React.FC<BuyerContextFormProps> = ({ context, onS
       </div>
 
       <div className="pt-2 flex justify-end">
-        <Button type="submit" size="md">
+        <Button type="submit" variant="amber" size="md">
           Update Financial Picture
         </Button>
       </div>

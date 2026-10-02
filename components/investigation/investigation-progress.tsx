@@ -13,62 +13,62 @@ export const InvestigationProgress: React.FC<InvestigationProgressProps> = ({ ch
   const needsProCount = checklist.filter((i) => i.status === "needs-pro").length;
 
   return (
-    <div className="bg-[#121212] border border-[#252525] rounded-xl p-5 space-y-4">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#202020] pb-3">
+    <div className="bg-[#16181D] border border-[#262930] rounded-lg p-5 space-y-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#23262D] pb-3">
         <div>
-          <span className="text-xs font-mono uppercase tracking-wider text-[#5B8BDF]">
+          <span className="text-[11px] font-mono uppercase tracking-wider text-[#D97706]">
             Due Diligence Status Tracker
           </span>
-          <h3 className="text-base font-semibold text-[#EDEDED] mt-0.5">
+          <h3 className="text-base font-semibold text-[#F0F2F5] mt-0.5">
             {verifiedCount} of {total} verification items completed
           </h3>
         </div>
-        <span className="text-xs font-mono text-[#888888]">
+        <span className="text-xs font-mono text-[#8A8F9E]">
           {Math.round((verifiedCount / total) * 100)}% overall progress
         </span>
       </div>
 
       {/* Segmented Progress Bar */}
       <div className="space-y-2">
-        <div className="w-full h-3 bg-[#222222] rounded-full overflow-hidden flex">
+        <div className="w-full h-2.5 bg-[#121418] rounded-full overflow-hidden flex border border-[#23262D]">
           <div
-            className="h-full bg-[#3F9E6C] transition-all duration-300"
+            className="h-full bg-[#10B981] transition-all duration-300"
             style={{ width: `${(verifiedCount / total) * 100}%` }}
             title={`Verified/Received: ${verifiedCount}`}
           />
           <div
-            className="h-full bg-[#5B8BDF] transition-all duration-300"
+            className="h-full bg-[#3B82F6] transition-all duration-300"
             style={{ width: `${(requestedCount / total) * 100}%` }}
             title={`Requested: ${requestedCount}`}
           />
           <div
-            className="h-full bg-[#E6832A] transition-all duration-300"
+            className="h-full bg-[#F97316] transition-all duration-300"
             style={{ width: `${(needsProCount / total) * 100}%` }}
             title={`Needs Pro Review: ${needsProCount}`}
           />
           <div
-            className="h-full bg-[#333333] transition-all duration-300"
+            className="h-full bg-[#2B2F38] transition-all duration-300"
             style={{ width: `${(missingCount / total) * 100}%` }}
             title={`Missing: ${missingCount}`}
           />
         </div>
 
         {/* Legend */}
-        <div className="flex flex-wrap items-center justify-between text-xs text-[#888888] pt-1">
+        <div className="flex flex-wrap items-center justify-between text-xs text-[#8A8F9E] pt-1">
           <span className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#3F9E6C]" />
+            <span className="w-2.5 h-2.5 rounded-full bg-[#10B981]" />
             Received ({verifiedCount})
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#5B8BDF]" />
+            <span className="w-2.5 h-2.5 rounded-full bg-[#3B82F6]" />
             Requested ({requestedCount})
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#E6832A]" />
+            <span className="w-2.5 h-2.5 rounded-full bg-[#F97316]" />
             Needs Pro ({needsProCount})
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#333333]" />
+            <span className="w-2.5 h-2.5 rounded-full bg-[#2B2F38]" />
             Missing ({missingCount})
           </span>
         </div>

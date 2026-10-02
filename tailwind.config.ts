@@ -10,20 +10,21 @@ const config: Config = {
     extend: {
       colors: {
         canvas: {
-          DEFAULT: "#0B0F17",
-          muted: "#0F172A",
+          DEFAULT: "#0F1115",
+          muted: "#14161B",
         },
         surface: {
-          DEFAULT: "#111827",
-          hover: "#1F2937",
-          elevated: "#374151",
-          border: "#1F2937",
-          "border-hover": "#374151",
+          DEFAULT: "#16181D",
+          hover: "#1E2128",
+          elevated: "#242831",
+          border: "#262930",
+          borderHover: "#363B47",
         },
         brand: {
-          DEFAULT: "#2563EB",
-          hover: "#3B82F6",
-          subtle: "rgba(37, 99, 235, 0.12)",
+          DEFAULT: "#D97706",
+          hover: "#F59E0B",
+          subtle: "rgba(217, 119, 6, 0.12)",
+          border: "rgba(217, 119, 6, 0.3)",
         },
         status: {
           verified: "#10B981",
@@ -38,10 +39,6 @@ const config: Config = {
       fontFamily: {
         sans: ["var(--font-inter)", "sans-serif"],
         mono: ["var(--font-mono)", "monospace"],
-      },
-      boxShadow: {
-        glass: "0 8px 32px 0 rgba(0, 0, 0, 0.37)",
-        card: "0 4px 20px -2px rgba(0, 0, 0, 0.5)",
       }
     },
   },

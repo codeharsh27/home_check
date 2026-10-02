@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Link2, Upload, Edit3, ArrowRight, FileText, CheckCircle2, Loader2 } from "lucide-react";
+import { Link2, Upload, Edit3, ArrowRight, FileText, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useEvaluationStore } from "@/store/evaluation";
@@ -13,11 +13,9 @@ export const IntakeWidget: React.FC = () => {
 
   const [activeTab, setActiveTab] = useState<"url" | "upload" | "manual">("url");
   const [urlInput, setUrlInput] = useState("");
-  const [loading, setLoading] = useState(false);
   const [dragActive, setDragActive] = useState(false);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
 
-  // Manual form state
   const [manualData, setManualData] = useState({
     name: "Green Valley Residency",
     location: "Wakad, Pune",
@@ -25,41 +23,19 @@ export const IntakeWidget: React.FC = () => {
     type: "Apartment" as const,
   });
 
-  const handleStartWithUrl = async (e: React.FormEvent) => {
+  const handleStartWithUrl = (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-
-    try {
-      const res = await fetch("/api/property/parse-url", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url: urlInput || "https://magicbricks.com/property/2bhk-pune" }),
-      });
-
-      const data = await res.json();
-      const propertyData = data.property || {
-        sourceUrl: urlInput,
-        sourceName: "Property Listing Link",
-      };
-
-      const id = startNewEvaluation(propertyData);
-      router.push(`/evaluation/${id}/snapshot`);
-    } catch (err) {
-      const id = startNewEvaluation({
-        sourceUrl: urlInput || "https://magicbricks.com/property/demo-pune",
-        sourceName: "Property Listing URL",
-      });
-      router.push(`/evaluation/${id}/snapshot`);
-    } finally {
-      setLoading(false);
-    }
+    const id = startNewEvaluation({
+      sourceUrl: urlInput || "https://magicbricks.com/property/demo-pune",
+      sourceName: "Property Listing URL",
+    });
+    router.push(`/evaluation/${id}/snapshot`);
   };
 
   const handleStartWithFile = (e: React.FormEvent) => {
     e.preventDefault();
     const id = startNewEvaluation({
-      name: uploadedFile ? uploadedFile.name.replace(/\.[^/.]+$/, "") : "Uploaded Brochure Property",
-      sourceName: uploadedFile ? uploadedFile.name : "Brochure Document",
+      sourceName: uploadedFile ? uploadedFile.name : "Brochure document",
     });
     router.push(`/evaluation/${id}/snapshot`);
   };
@@ -71,112 +47,86 @@ export const IntakeWidget: React.FC = () => {
       location: manualData.location,
       price: parseFloat(manualData.price) || 6800000,
       type: manualData.type,
-      sourceName: "Manual User Entry",
+      sourceName: "User manual entry",
     });
     router.push(`/evaluation/${id}/snapshot`);
   };
 
   return (
-    <div className="w-full bg-[#111827]/90 backdrop-blur-xl border border-[#374151] rounded-2xl overflow-hidden shadow-2xl">
-      {/* Tabs Header */}
-      <div className="flex border-b border-[#1F2937] bg-[#0F172A]/70">
+    <div className="w-full bg-[#16181D] border border-[#262930] rounded-lg overflow-hidden shadow-xl">
+      {/* Segmented Tabs Header */}
+      <div className="flex border-b border-[#23262D] bg-[#121418] p-1 gap-1">
         <button
+          type="button"
           onClick={() => setActiveTab("url")}
-          className={`flex-1 flex items-center justify-center gap-2 py-3.5 px-4 text-xs font-semibold transition-all border-b-2 cursor-pointer ${
+          className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 text-xs font-medium rounded transition-all cursor-pointer ${
             activeTab === "url"
-              ? "border-[#2563EB] text-[#F9FAFB] bg-[#111827]"
-              : "border-transparent text-[#9CA3AF] hover:text-[#D1D5DB] hover:bg-[#111827]/50"
+              ? "bg-[#1E2128] text-[#F0F2F5] border border-[#2B2F38] shadow-sm font-semibold"
+              : "text-[#8A8F9E] hover:text-[#F0F2F5]"
           }`}
         >
-          <Link2 className="w-4 h-4 text-[#3B82F6]" />
-          <span>Paste listing URL</span>
+          <Link2 className="w-3.5 h-3.5" />
+          <span>Paste URL</span>
         </button>
 
         <button
+          type="button"
           onClick={() => setActiveTab("upload")}
-          className={`flex-1 flex items-center justify-center gap-2 py-3.5 px-4 text-xs font-semibold transition-all border-b-2 cursor-pointer ${
+          className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 text-xs font-medium rounded transition-all cursor-pointer ${
             activeTab === "upload"
-              ? "border-[#2563EB] text-[#F9FAFB] bg-[#111827]"
-              : "border-transparent text-[#9CA3AF] hover:text-[#D1D5DB] hover:bg-[#111827]/50"
+              ? "bg-[#1E2128] text-[#F0F2F5] border border-[#2B2F38] shadow-sm font-semibold"
+              : "text-[#8A8F9E] hover:text-[#F0F2F5]"
           }`}
         >
-          <Upload className="w-4 h-4 text-[#10B981]" />
-          <span>Upload brochure</span>
+          <Upload className="w-3.5 h-3.5" />
+          <span>Upload Brochure</span>
         </button>
 
         <button
+          type="button"
           onClick={() => setActiveTab("manual")}
-          className={`flex-1 flex items-center justify-center gap-2 py-3.5 px-4 text-xs font-semibold transition-all border-b-2 cursor-pointer ${
+          className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 text-xs font-medium rounded transition-all cursor-pointer ${
             activeTab === "manual"
-              ? "border-[#2563EB] text-[#F9FAFB] bg-[#111827]"
-              : "border-transparent text-[#9CA3AF] hover:text-[#D1D5DB] hover:bg-[#111827]/50"
+              ? "bg-[#1E2128] text-[#F0F2F5] border border-[#2B2F38] shadow-sm font-semibold"
+              : "text-[#8A8F9E] hover:text-[#F0F2F5]"
           }`}
         >
-          <Edit3 className="w-4 h-4 text-[#8B5CF6]" />
-          <span>Enter manually</span>
+          <Edit3 className="w-3.5 h-3.5" />
+          <span>Manual Entry</span>
         </button>
       </div>
 
       {/* Tab Contents */}
-      <div className="p-6 sm:p-8">
+      <div className="p-5">
         {/* TAB 1: PASTE URL */}
         {activeTab === "url" && (
-          <form onSubmit={handleStartWithUrl} className="space-y-4">
-            <p className="text-xs text-[#9CA3AF] font-medium">
-              Paste a link from MagicBricks, 99acres, Housing.com, or developer brochure URL:
+          <form onSubmit={handleStartWithUrl} className="space-y-3.5">
+            <p className="text-xs text-[#8A8F9E]">
+              Paste a link from MagicBricks, 99acres, Housing.com, or developer website:
             </p>
-            <div className="flex flex-col sm:flex-row gap-3">
+            <div className="flex flex-col sm:flex-row gap-2.5">
               <Input
                 type="url"
                 placeholder="https://www.magicbricks.com/propertyDetail/2BHK-Apartment-Wakad-Pune..."
                 value={urlInput}
                 onChange={(e) => setUrlInput(e.target.value)}
-                className="font-mono text-xs bg-[#0B0F17] border-[#374151]"
+                className="font-mono text-xs"
               />
-              <Button type="submit" size="md" className="shrink-0" disabled={loading}>
-                {loading ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    <span>Parsing URL...</span>
-                  </>
-                ) : (
-                  <>
-                    <span>Start evaluation</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </>
-                )}
+              <Button type="submit" variant="amber" size="md" className="shrink-0">
+                <span>Start evaluation</span>
+                <ArrowRight className="w-4 h-4" />
               </Button>
             </div>
-            <div className="flex flex-wrap items-center gap-3 text-[11px] text-[#6B7280] pt-1">
-              <span>Quick Demo Links:</span>
+            <div className="flex items-center gap-2 text-[11px] text-[#6B7280]">
+              <span>Sample listing:</span>
               <button
                 type="button"
                 onClick={() => {
-                  setUrlInput("https://www.magicbricks.com/property/2bhk-wakad-pune");
+                  setUrlInput("https://www.magicbricks.com/property/2bhk-wakad-pune-demo");
                 }}
-                className="text-[#3B82F6] hover:underline font-medium cursor-pointer"
+                className="text-[#D97706] hover:underline cursor-pointer"
               >
-                Pune 2BHK (₹68L)
-              </button>
-              <span>·</span>
-              <button
-                type="button"
-                onClick={() => {
-                  setUrlInput("https://www.99acres.com/property/3bhk-mumbai-bandra");
-                }}
-                className="text-[#3B82F6] hover:underline font-medium cursor-pointer"
-              >
-                Mumbai 3BHK (₹1.85Cr)
-              </button>
-              <span>·</span>
-              <button
-                type="button"
-                onClick={() => {
-                  setUrlInput("https://www.housing.com/property/4bhk-gurgaon-dlf");
-                }}
-                className="text-[#3B82F6] hover:underline font-medium cursor-pointer"
-              >
-                Gurgaon 4BHK (₹2.4Cr)
+                Use demo listing (₹68L 2BHK Wakad, Pune)
               </button>
             </div>
           </form>
@@ -184,7 +134,7 @@ export const IntakeWidget: React.FC = () => {
 
         {/* TAB 2: UPLOAD BROCHURE */}
         {activeTab === "upload" && (
-          <form onSubmit={handleStartWithFile} className="space-y-4">
+          <form onSubmit={handleStartWithFile} className="space-y-3.5">
             <div
               onDragOver={(e) => {
                 e.preventDefault();
@@ -198,33 +148,28 @@ export const IntakeWidget: React.FC = () => {
                   setUploadedFile(e.dataTransfer.files[0]);
                 }
               }}
-              className={`border-2 border-dashed rounded-2xl p-8 text-center transition-all ${
+              className={`border border-dashed rounded-lg p-5 text-center transition-colors ${
                 dragActive
-                  ? "border-[#2563EB] bg-[#2563EB]/10"
+                  ? "border-[#D97706] bg-[#D97706]/5"
                   : uploadedFile
                   ? "border-[#10B981]/50 bg-[#10B981]/5"
-                  : "border-[#374151] hover:border-[#4B5563] bg-[#0B0F17]/60"
+                  : "border-[#2B2F38] hover:border-[#3A3F4B] bg-[#121418]"
               }`}
             >
               {uploadedFile ? (
                 <div className="flex items-center justify-center gap-3 text-[#10B981]">
-                  <FileText className="w-6 h-6" />
-                  <span className="text-sm font-mono font-semibold">{uploadedFile.name}</span>
-                  <CheckCircle2 className="w-5 h-5" />
+                  <FileText className="w-4 h-4" />
+                  <span className="text-xs font-mono">{uploadedFile.name}</span>
+                  <CheckCircle2 className="w-4 h-4" />
                 </div>
               ) : (
-                <div className="space-y-3">
-                  <Upload className="w-8 h-8 mx-auto text-[#3B82F6]" />
-                  <div className="space-y-1">
-                    <p className="text-xs text-[#F9FAFB] font-semibold">
-                      Drop property brochure, floorplan, or project PDF
-                    </p>
-                    <p className="text-[11px] text-[#9CA3AF]">
-                      Supports PDF, PNG, JPG files up to 15MB
-                    </p>
-                  </div>
-                  <label className="inline-block text-xs font-semibold text-[#3B82F6] bg-[#2563EB]/10 hover:bg-[#2563EB]/20 px-3.5 py-1.5 rounded-lg border border-[#2563EB]/30 transition-colors cursor-pointer">
-                    Browse Files
+                <div className="space-y-2">
+                  <Upload className="w-5 h-5 mx-auto text-[#6B7280]" />
+                  <p className="text-xs text-[#8A8F9E]">
+                    Drop property brochure, floorplan, or screenshot (PDF, PNG, JPG)
+                  </p>
+                  <label className="inline-block text-xs font-medium text-[#D97706] hover:underline cursor-pointer">
+                    Browse file
                     <input
                       type="file"
                       className="hidden"
@@ -240,8 +185,8 @@ export const IntakeWidget: React.FC = () => {
               )}
             </div>
 
-            <Button type="submit" size="md" className="w-full" variant="emerald">
-              <span>Continue with Document</span>
+            <Button type="submit" variant="amber" size="md" className="w-full">
+              <span>Continue with file</span>
               <ArrowRight className="w-4 h-4" />
             </Button>
           </form>
@@ -249,35 +194,32 @@ export const IntakeWidget: React.FC = () => {
 
         {/* TAB 3: ENTER MANUALLY */}
         {activeTab === "manual" && (
-          <form onSubmit={handleStartManual} className="space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <form onSubmit={handleStartManual} className="space-y-3.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <Input
-                label="Property Name / Project"
+                label="Property name / Project"
                 value={manualData.name}
                 onChange={(e) => setManualData({ ...manualData, name: e.target.value })}
-                className="bg-[#0B0F17] border-[#374151]"
               />
               <Input
                 label="Location (City, Area)"
                 value={manualData.location}
                 onChange={(e) => setManualData({ ...manualData, location: e.target.value })}
-                className="bg-[#0B0F17] border-[#374151]"
               />
               <Input
-                label="Listed Base Price (₹)"
+                label="Listed price (₹)"
                 type="number"
                 value={manualData.price}
                 onChange={(e) => setManualData({ ...manualData, price: e.target.value })}
-                className="bg-[#0B0F17] border-[#374151] font-mono"
               />
               <div className="space-y-1.5">
-                <label className="block text-xs font-semibold text-[#9CA3AF] uppercase tracking-wider">
-                  Property Type
+                <label className="block text-[11px] font-mono uppercase tracking-wider text-[#8A8F9E]">
+                  Property type
                 </label>
                 <select
                   value={manualData.type}
                   onChange={(e) => setManualData({ ...manualData, type: e.target.value as any })}
-                  className="w-full bg-[#0B0F17] border border-[#374151] text-[#F9FAFB] rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-[#2563EB]"
+                  className="w-full bg-[#14161B] border border-[#262930] text-[#F0F2F5] rounded-md px-3.5 py-2 text-sm focus:outline-none focus:border-[#D97706]"
                 >
                   <option value="Apartment">Apartment</option>
                   <option value="Villa">Villa</option>
@@ -288,8 +230,8 @@ export const IntakeWidget: React.FC = () => {
               </div>
             </div>
 
-            <Button type="submit" size="md" className="w-full">
-              <span>Create Property Profile</span>
+            <Button type="submit" variant="amber" size="md" className="w-full">
+              <span>Create property snapshot</span>
               <ArrowRight className="w-4 h-4" />
             </Button>
           </form>
