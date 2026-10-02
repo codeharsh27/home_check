@@ -1,232 +1,164 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import { MapPin, Link2, Upload, PenLine, Search } from "lucide-react";
+import { Search } from "lucide-react";
 
-const TABS = [
-  { id: "url", label: "Paste URL", icon: Link2 },
-  { id: "upload", label: "Upload Brochure", icon: Upload },
-  { id: "manual", label: "Enter Manually", icon: PenLine },
-] as const;
+const NAV_LINKS = ["Home", "Evaluate", "How it Works", "Home Loans", "Find an Agent"];
 
-type TabId = (typeof TABS)[number]["id"];
+const STATS = [
+  { number: "4.2L+", label: "properties evaluated in India" },
+  { number: "12+", label: "due diligence checkpoints" },
+  { number: "₹0", label: "broker fee or commission" },
+];
 
 export function LandingHero() {
-  const [activeTab, setActiveTab] = useState<TabId>("url");
-  const [urlValue, setUrlValue] = useState("");
   const [propertyType, setPropertyType] = useState("");
   const [location, setLocation] = useState("");
+  const [listingUrl, setListingUrl] = useState("");
 
   return (
-    <section className="bg-[#F4F1EC] relative overflow-hidden">
-      {/* ── Text block ──────────────────────────────────────── */}
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 pt-10 pb-0 relative z-10">
-        {/* Trust pill */}
-        <div className="inline-flex items-center gap-1.5 border border-[#D4CFC6] rounded-full px-3.5 py-1.5 text-xs font-medium text-[#555555] bg-white/60 mb-6">
-          <span className="text-amber-500">★★★★★</span>
-          <span>Top-rated by first-time buyers · 4.8 / 5</span>
+    <section className="relative w-full min-h-screen overflow-hidden flex flex-col">
+      {/* ── Full-bleed sky + architecture background ────────────── */}
+      <div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: `url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1600&q=80')`,
+        }}
+      />
+      {/* Subtle overlay so white text reads cleanly against the sky */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/10 to-black/40" />
+
+      {/* ── Navbar — transparent overlay ────────────────────────── */}
+      <nav className="relative z-30 w-full flex items-center justify-between px-6 sm:px-10 pt-5 pb-3">
+        {/* Logo */}
+        <span className="text-white font-bold text-[18px] tracking-tight drop-shadow">
+          home<span className="text-blue-300">check</span>
+          <span className="text-blue-400 text-[22px] leading-none">.</span>
+        </span>
+
+        {/* Center pill nav */}
+        <div className="hidden md:flex items-center bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-1 py-1 gap-0.5">
+          {NAV_LINKS.map((link, i) => (
+            <a
+              key={link}
+              href="#"
+              className={`px-4 py-1.5 rounded-full text-[13px] font-medium transition-all ${
+                i === 0
+                  ? "bg-white text-[#111111]"
+                  : "text-white/90 hover:bg-white/15"
+              }`}
+            >
+              {link}
+            </a>
+          ))}
         </div>
 
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-6">
-          {/* Headline */}
-          <div className="max-w-[600px]">
-            <h1 className="text-[42px] sm:text-[52px] font-extrabold leading-[1.08] tracking-tight text-[#111111] mb-4">
-              Evaluate Your Property,
-              <br />
-              <span className="text-[#2A5C2A]">Before You Commit</span>
-              <br />
-              Any Money.
-            </h1>
-            <p className="text-[15px] text-[#666666] leading-relaxed max-w-[440px]">
-              Know what you know, what you don't, and what to do next —
-              without a broker, without bias.
+        {/* Right auth buttons */}
+        <div className="flex items-center gap-2">
+          <button className="px-5 py-1.5 rounded-full text-[13px] font-medium text-white border border-white/40 hover:bg-white/10 backdrop-blur-sm transition-all">
+            Login
+          </button>
+          <Link
+            href="/evaluation/default/snapshot"
+            className="px-5 py-1.5 rounded-full text-[13px] font-semibold bg-blue-500 text-white hover:bg-blue-600 transition-colors"
+          >
+            Get Started
+          </Link>
+        </div>
+      </nav>
+
+      {/* ── Hero content — centered over sky ────────────────────── */}
+      <div className="relative z-20 flex-1 flex flex-col items-center justify-center text-center px-4 pt-8 pb-36">
+        {/* Headline */}
+        <h1 className="text-[44px] sm:text-[58px] md:text-[68px] font-extrabold text-white leading-[1.05] tracking-tight drop-shadow-lg max-w-[800px] mb-5">
+          Know Before You
+          <br />
+          Commit Any Money.
+        </h1>
+
+        {/* Subtitle */}
+        <p className="text-[15px] sm:text-[17px] text-white/85 max-w-[520px] leading-relaxed mb-10 drop-shadow">
+          From listing URL to decision-readiness — HomeCheck gives you
+          structured evidence, funding clarity, and zero broker bias.
+        </p>
+
+        {/* ── Single-row white pill search bar ─────────────────── */}
+        <div className="w-full max-w-[680px] bg-white rounded-full shadow-[0_8px_40px_rgba(0,0,0,0.18)] flex items-center overflow-hidden px-5 py-3 gap-0">
+          {/* Field 1: Property Type */}
+          <div className="flex-1 min-w-0 border-r border-[#E5E5E5] pr-4">
+            <p className="text-[11px] font-semibold text-[#111111] leading-none mb-1">
+              Property Type
             </p>
+            <select
+              value={propertyType}
+              onChange={(e) => setPropertyType(e.target.value)}
+              className="w-full text-[13px] text-[#888888] bg-transparent outline-none appearance-none cursor-pointer truncate"
+            >
+              <option value="">Select type…</option>
+              <option>Apartment</option>
+              <option>Villa / House</option>
+              <option>Plot / Land</option>
+              <option>Commercial</option>
+            </select>
           </div>
 
-          {/* Right floating badge */}
-          <div className="hidden md:flex flex-col items-end gap-2 mb-2">
-            <div className="flex items-center gap-2 bg-white rounded-xl px-4 py-2.5 shadow-sm border border-[#EEEAE2]">
-              <div className="flex -space-x-2">
-                {["#3B82F6", "#10B981", "#F59E0B"].map((c, i) => (
-                  <div
-                    key={i}
-                    className="w-7 h-7 rounded-full border-2 border-white"
-                    style={{ backgroundColor: c }}
-                  />
-                ))}
-              </div>
-              <div>
-                <p className="text-[11px] font-semibold text-[#111111]">
-                  Supporting your
+          {/* Field 2: Location */}
+          <div className="flex-1 min-w-0 border-r border-[#E5E5E5] px-4">
+            <p className="text-[11px] font-semibold text-[#111111] leading-none mb-1">
+              Location
+            </p>
+            <input
+              type="text"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              placeholder="City or area…"
+              className="w-full text-[13px] text-[#888888] placeholder:text-[#BBBBBB] bg-transparent outline-none"
+            />
+          </div>
+
+          {/* Field 3: Listing URL */}
+          <div className="flex-1 min-w-0 pl-4">
+            <p className="text-[11px] font-semibold text-[#111111] leading-none mb-1">
+              Listing URL
+            </p>
+            <input
+              type="url"
+              value={listingUrl}
+              onChange={(e) => setListingUrl(e.target.value)}
+              placeholder="Paste 99acres / MagicBricks URL…"
+              className="w-full text-[13px] text-[#888888] placeholder:text-[#BBBBBB] bg-transparent outline-none"
+            />
+          </div>
+
+          {/* Search button */}
+          <Link
+            href="/evaluation/default/snapshot"
+            className="ml-4 flex-shrink-0 w-11 h-11 rounded-full bg-blue-500 hover:bg-blue-600 transition-colors flex items-center justify-center shadow-md"
+            aria-label="Evaluate"
+          >
+            <Search size={18} className="text-white" />
+          </Link>
+        </div>
+      </div>
+
+      {/* ── Stats bar — bottom overlay over building ─────────────── */}
+      <div className="relative z-20 w-full">
+        <div className="flex items-center justify-center sm:justify-start gap-0 px-8 sm:px-14 pb-8">
+          {STATS.map((s, i) => (
+            <div key={s.label} className="flex items-center">
+              <div className="pr-6 sm:pr-10">
+                <p className="text-white font-bold text-[22px] sm:text-[26px] leading-none drop-shadow">
+                  {s.number}
                 </p>
-                <p className="text-[11px] text-[#888888]">property journey</p>
+                <p className="text-white/70 text-[11px] sm:text-[12px] leading-snug mt-0.5 max-w-[100px]">
+                  {s.label}
+                </p>
               </div>
+              {i < STATS.length - 1 && (
+                <div className="h-10 w-px bg-white/30 mr-6 sm:mr-10 flex-shrink-0" />
+              )}
             </div>
-          </div>
-        </div>
-      </div>
-
-      {/* ── Full-bleed hero image ────────────────────────────── */}
-      <div className="relative w-full h-[340px] sm:h-[420px] md:h-[480px]">
-        {/* Property image */}
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{
-            backgroundImage: `url('https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=1600&q=80')`,
-          }}
-        />
-
-        {/* Fade to cream at bottom */}
-        <div className="hero-image-fade absolute inset-0" />
-
-        {/* Floating property badge on image */}
-        <div className="absolute bottom-20 right-6 sm:right-12 bg-white/95 backdrop-blur-sm rounded-xl px-3.5 py-2.5 shadow-lg flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-[#F0EDE6] flex items-center justify-center">
-            <MapPin size={14} className="text-[#2A5C2A]" />
-          </div>
-          <div>
-            <p className="text-[12px] font-semibold text-[#111111]">
-              Green Valley Residency
-            </p>
-            <p className="text-[11px] text-[#888888]">📍 Wakad, Pune</p>
-          </div>
-        </div>
-      </div>
-
-      {/* ── Floating white search card ───────────────────────── */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 relative z-20 -mt-16 pb-10">
-        <div className="bg-white rounded-[20px] shadow-[0_8px_48px_rgba(0,0,0,0.10)] border border-[#EEEBE4] p-5 sm:p-7">
-          {/* Pill tabs */}
-          <div className="flex gap-2 mb-5">
-            {TABS.map((tab) => {
-              const Icon = tab.icon;
-              const isActive = activeTab === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-[13px] font-medium transition-all ${
-                    isActive
-                      ? "bg-[#111111] text-white"
-                      : "text-[#666666] hover:bg-[#F4F1EC]"
-                  }`}
-                >
-                  <Icon size={12} />
-                  {tab.label}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Input row */}
-          {activeTab === "url" && (
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-0 sm:divide-x sm:divide-[#EEEAE2]">
-              <div className="flex-1 sm:pr-4">
-                <label className="block text-[11px] font-semibold text-[#999999] uppercase tracking-wide mb-1.5">
-                  Property Type
-                </label>
-                <select
-                  value={propertyType}
-                  onChange={(e) => setPropertyType(e.target.value)}
-                  className="w-full bg-transparent text-[14px] text-[#111111] outline-none appearance-none cursor-pointer"
-                >
-                  <option value="">Apartment / Villa / Plot…</option>
-                  <option>Apartment</option>
-                  <option>Villa / Independent House</option>
-                  <option>Plot / Land</option>
-                  <option>Commercial</option>
-                </select>
-              </div>
-
-              <div className="flex-1 sm:px-4">
-                <label className="block text-[11px] font-semibold text-[#999999] uppercase tracking-wide mb-1.5">
-                  Location
-                </label>
-                <input
-                  type="text"
-                  value={location}
-                  onChange={(e) => setLocation(e.target.value)}
-                  placeholder="City, area, or project name…"
-                  className="w-full bg-transparent text-[14px] text-[#111111] placeholder:text-[#BBBBBB] outline-none"
-                />
-              </div>
-
-              <div className="flex-1 sm:pl-4">
-                <label className="block text-[11px] font-semibold text-[#999999] uppercase tracking-wide mb-1.5">
-                  Listing URL
-                </label>
-                <input
-                  type="url"
-                  value={urlValue}
-                  onChange={(e) => setUrlValue(e.target.value)}
-                  placeholder="Paste MagicBricks / 99acres URL…"
-                  className="w-full bg-transparent text-[14px] text-[#111111] placeholder:text-[#BBBBBB] outline-none"
-                />
-              </div>
-
-              <div className="sm:pl-4 flex items-end">
-                <Link
-                  href="/evaluation/default/snapshot"
-                  className="flex items-center gap-2 bg-[#111111] text-white text-[13px] font-semibold px-5 py-2.5 rounded-full hover:bg-[#333333] transition-colors whitespace-nowrap"
-                >
-                  <Search size={13} />
-                  Evaluate Property
-                </Link>
-              </div>
-            </div>
-          )}
-
-          {activeTab === "upload" && (
-            <div className="flex flex-col sm:flex-row gap-4 items-center">
-              <label className="flex-1 flex flex-col items-center justify-center border-2 border-dashed border-[#E2DED6] rounded-xl py-8 cursor-pointer hover:border-[#2A5C2A] transition-colors group">
-                <Upload
-                  size={22}
-                  className="text-[#BBBBBB] group-hover:text-[#2A5C2A] mb-2 transition-colors"
-                />
-                <span className="text-[13px] text-[#888888]">
-                  Drop brochure PDF here or{" "}
-                  <span className="text-[#2A5C2A] font-medium underline">
-                    browse
-                  </span>
-                </span>
-                <input type="file" accept=".pdf,.jpg,.png" className="hidden" />
-              </label>
-              <Link
-                href="/evaluation/default/snapshot"
-                className="flex items-center gap-2 bg-[#111111] text-white text-[13px] font-semibold px-6 py-3 rounded-full hover:bg-[#333333] transition-colors"
-              >
-                Evaluate Property
-              </Link>
-            </div>
-          )}
-
-          {activeTab === "manual" && (
-            <div className="flex flex-col sm:flex-row gap-3">
-              <input
-                type="text"
-                placeholder="Property name or project…"
-                className="flex-1 border border-[#E2DED6] rounded-xl px-4 py-3 text-[14px] text-[#111111] placeholder:text-[#BBBBBB] outline-none focus:border-[#2A5C2A] transition-colors"
-              />
-              <input
-                type="text"
-                placeholder="Developer / builder name…"
-                className="flex-1 border border-[#E2DED6] rounded-xl px-4 py-3 text-[14px] text-[#111111] placeholder:text-[#BBBBBB] outline-none focus:border-[#2A5C2A] transition-colors"
-              />
-              <Link
-                href="/evaluation/default/snapshot"
-                className="flex items-center gap-2 bg-[#111111] text-white text-[13px] font-semibold px-6 py-3 rounded-full hover:bg-[#333333] transition-colors whitespace-nowrap"
-              >
-                <PenLine size={13} />
-                Start Evaluation
-              </Link>
-            </div>
-          )}
-
-          {/* Fine print */}
-          <p className="mt-4 text-center text-[11px] text-[#AAAAAA]">
-            Your data stays private. We never share your evaluation with
-            brokers or developers.
-          </p>
+          ))}
         </div>
       </div>
     </section>
