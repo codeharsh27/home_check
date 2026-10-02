@@ -27,6 +27,8 @@ const DEFAULT_MOCK_PROPERTY: PropertyDetails = {
   sourceName: "Property listing (MagicBricks)"
 };
 
+import { DEFAULT_CHECKLIST } from '@/lib/checklist-defaults';
+
 const DEFAULT_MOCK_BUYER_CONTEXT: BuyerContext = {
   purpose: "Primary residence",
   monthlyIncome: 150000,
@@ -56,6 +58,7 @@ export const useEvaluationStore = create<EvaluationStore>()(
           step: "snapshot",
           property: newProperty,
           buyerContext: DEFAULT_MOCK_BUYER_CONTEXT,
+          checklist: DEFAULT_CHECKLIST,
         };
 
         set((state) => ({
