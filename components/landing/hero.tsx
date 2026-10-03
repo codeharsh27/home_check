@@ -11,32 +11,52 @@ export const HeroSection: React.FC = () => {
   const startNewEvaluation = useEvaluationStore((state) => state.startNewEvaluation);
 
   const [urlInput, setUrlInput] = useState('');
+  const [cityInput, setCityInput] = useState('');
+  const [budgetInput, setBudgetInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [parseError, setParseError] = useState<string | null>(null);
 
-  const handleStartWithUrl = async (e: React.FormEvent) => {
+  const handleStartEvaluation = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!urlInput.trim()) return;
+    if (!urlInput.trim() && !cityInput.trim()) {
+      handleLoadDemo();
+      return;
+    }
+
     setIsLoading(true);
     setParseError(null);
+
     try {
-      const res = await fetch('/api/parse-url', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url: urlInput }),
-      });
-      const data = await res.json();
-      if (data.property && Object.keys(data.property).length > 2) {
-        const id = startNewEvaluation(data.property, false);
-        router.push(`/evaluation/${id}/snapshot`);
-      } else {
-        if (data.error) setParseError(`${data.error} — fill in details on the next screen.`);
-        const id = startNewEvaluation({ sourceUrl: urlInput, sourceName: 'Listing URL' }, false);
-        router.push(`/evaluation/${id}/snapshot`);
+      if (urlInput.trim().startsWith('http')) {
+        const res = await fetch('/api/parse-url', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: urlInput }),
+        });
+        const data = await res.json();
+        if (data.property && Object.keys(data.property).length > 2) {
+          const id = startNewEvaluation(data.property, false);
+          router.push(`/evaluation/${id}/snapshot`);
+          return;
+        }
       }
+
+      // If not URL or parse fallback, create structured entry
+      const parsedPrice = budgetInput.replace(/[^0-9]/g, '');
+      const id = startNewEvaluation({
+        sourceUrl: urlInput.startsWith('http') ? urlInput : undefined,
+        name: urlInput.startsWith('http') ? 'Shortlisted Property' : (urlInput || 'Shortlisted Property'),
+        location: cityInput || 'Pune, Maharashtra',
+        price: parsedPrice ? parseInt(parsedPrice, 10) * (parsedPrice.length <= 3 ? 100000 : 1) : 6800000,
+        sourceName: 'Quick Search Intake',
+      }, false);
+      router.push(`/evaluation/${id}/snapshot`);
     } catch {
-      setParseError('Could not reach the URL. Fill in details manually on the next screen.');
-      const id = startNewEvaluation({ sourceUrl: urlInput, sourceName: 'Listing URL' }, false);
+      const id = startNewEvaluation({
+        name: urlInput || 'Shortlisted Property',
+        location: cityInput || 'India',
+        sourceName: 'Direct Search',
+      }, false);
       router.push(`/evaluation/${id}/snapshot`);
     } finally {
       setIsLoading(false);
@@ -48,15 +68,9 @@ export const HeroSection: React.FC = () => {
     router.push(`/evaluation/${id}/snapshot`);
   };
 
-  const stats = [
-    { value: '127+', label: 'Properties evaluated' },
-    { value: '12+', label: 'Cities across India' },
-    { value: '₹50L+', label: 'Avg. property size evaluated' },
-  ];
-
   return (
     <section
-      className="relative min-h-screen flex flex-col"
+      className="relative min-h-[640px] md:min-h-[720px] lg:min-h-[760px] flex flex-col justify-between"
       style={{
         backgroundImage: 'url(/images/hero.png)',
         backgroundSize: 'cover',
@@ -64,121 +78,127 @@ export const HeroSection: React.FC = () => {
         backgroundRepeat: 'no-repeat',
       }}
     >
-      {/* Floating navbar sits inside hero to overlay the background image */}
+      {/* Subtle Natural Daylight Gradient Overlay for text contrast */}
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-900/50 via-slate-900/25 to-slate-900/70" />
+
+      {/* Floating Navbar */}
       <Navbar />
 
-      {/* Dark gradient overlay — heavier at top (for nav readability) lighter at center */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black/70" />
-
-      {/* Content — centered vertically */}
-      <div className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-4 pt-32 pb-10">
-
-        {/* Main Headline */}
-        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.08] tracking-tight max-w-3xl drop-shadow-2xl">
-          Know What You Know, Before You Commit.
+      {/* Hero Content - Centered */}
+      <div className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-4 pt-32 pb-16 max-w-5xl mx-auto w-full">
+        
+        {/* Main Headline - Matches Roofin styling */}
+        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white leading-[1.1] max-w-4xl drop-shadow-sm">
+          Where Every Property Deal Is Verified With Certainty
         </h1>
 
-        {/* Sub-headline */}
-        <p className="mt-5 text-base sm:text-lg text-white/75 max-w-xl leading-relaxed drop-shadow">
-          Paste a property listing, get your funding gap, missing documents, and exact next step — before signing anything.
+        {/* Subtitle */}
+        <p className="mt-5 text-base sm:text-lg md:text-xl text-white/90 font-normal max-w-2xl leading-relaxed drop-shadow-sm">
+          From city apartments to gated villas, our platform connects you to verified title checks, real financial limits, and clear due diligence before committing money.
         </p>
 
-        {/* Glassmorphism Search Bar */}
+        {/* Search / Intake Bar - Exact Roofin white pill design */}
         <form
-          onSubmit={handleStartWithUrl}
+          onSubmit={handleStartEvaluation}
           className="mt-10 w-full max-w-3xl"
         >
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-0 bg-white/90 backdrop-blur-xl rounded-2xl shadow-2xl overflow-hidden border border-white/40">
-
-            {/* Property URL field */}
-            <div className="flex-1 flex flex-col px-5 py-4 border-b sm:border-b-0 sm:border-r border-gray-200/60">
-              <label className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1">
-                Property URL
+          <div className="bg-white rounded-full shadow-2xl p-2 sm:p-2.5 flex flex-col sm:flex-row items-stretch sm:items-center divide-y sm:divide-y-0 sm:divide-x divide-slate-200">
+            
+            {/* Section 1: Property or URL */}
+            <div className="flex-1 px-5 py-2.5 text-left">
+              <label className="block text-[11px] font-bold text-slate-800 tracking-wide">
+                Location or Listing URL
               </label>
               <input
-                type="url"
+                type="text"
                 value={urlInput}
                 onChange={(e) => setUrlInput(e.target.value)}
-                placeholder="Paste listing (MagicBricks, 99acres…)"
-                className="text-sm text-gray-800 placeholder-gray-400 bg-transparent outline-none font-medium w-full"
+                placeholder="MagicBricks, 99acres or society name"
+                className="w-full text-xs sm:text-sm text-slate-700 placeholder-slate-400 bg-transparent outline-none font-normal"
               />
             </div>
 
-            {/* Property type hint field */}
-            <div className="flex-1 flex flex-col px-5 py-4 border-b sm:border-b-0 sm:border-r border-gray-200/60">
-              <label className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1">
-                City / Area
+            {/* Section 2: City / Locality */}
+            <div className="px-5 py-2.5 text-left min-w-[150px]">
+              <label className="block text-[11px] font-bold text-slate-800 tracking-wide">
+                City / State
               </label>
               <input
                 type="text"
-                placeholder="e.g. Wakad, Pune"
-                className="text-sm text-gray-800 placeholder-gray-400 bg-transparent outline-none font-medium w-full"
-                readOnly
-                tabIndex={-1}
+                value={cityInput}
+                onChange={(e) => setCityInput(e.target.value)}
+                placeholder="e.g. Pune, Bengaluru"
+                className="w-full text-xs sm:text-sm text-slate-700 placeholder-slate-400 bg-transparent outline-none font-normal"
               />
             </div>
 
-            {/* Budget hint field */}
-            <div className="flex-1 flex flex-col px-5 py-4 border-b sm:border-b-0 sm:border-r border-gray-200/60">
-              <label className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1">
-                Your Budget
+            {/* Section 3: Budget */}
+            <div className="px-5 py-2.5 text-left min-w-[140px]">
+              <label className="block text-[11px] font-bold text-slate-800 tracking-wide">
+                Target Budget
               </label>
               <input
                 type="text"
-                placeholder="e.g. ₹75 Lakhs"
-                className="text-sm text-gray-800 placeholder-gray-400 bg-transparent outline-none font-medium w-full"
-                readOnly
-                tabIndex={-1}
+                value={budgetInput}
+                onChange={(e) => setBudgetInput(e.target.value)}
+                placeholder="e.g. ₹70 Lakhs"
+                className="w-full text-xs sm:text-sm text-slate-700 placeholder-slate-400 bg-transparent outline-none font-normal"
               />
             </div>
 
-            {/* Submit button */}
-            <div className="px-3 py-3 flex items-center justify-center sm:justify-end">
+            {/* Circular Search Icon Button */}
+            <div className="p-1 flex items-center justify-center">
               <button
                 type="submit"
-                disabled={isLoading || !urlInput.trim()}
-                className="w-full sm:w-auto flex items-center justify-center gap-2 bg-[#3B6FE8] hover:bg-[#2E5FD4] text-white font-semibold rounded-xl px-6 py-3 text-sm shadow-lg shadow-blue-500/30 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                disabled={isLoading}
+                aria-label="Search and Evaluate"
+                className="w-12 h-12 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white flex items-center justify-center shadow-md transition-transform hover:scale-105 active:scale-95 disabled:opacity-50 cursor-pointer"
               >
                 {isLoading ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
                 ) : (
-                  <Search className="w-5 h-5" />
+                  <Search className="w-5 h-5 stroke-[2.5]" />
                 )}
               </button>
             </div>
           </div>
 
-          {/* Error */}
           {parseError && (
-            <div className="mt-3 flex items-center gap-2 text-sm text-amber-200 bg-black/30 backdrop-blur-sm border border-amber-400/30 px-4 py-2.5 rounded-xl">
-              <AlertCircle className="w-4 h-4 shrink-0" />
+            <div className="mt-3 flex items-center gap-2 text-xs text-amber-200 bg-slate-900/60 backdrop-blur-md px-4 py-2 rounded-full mx-auto w-fit">
+              <AlertCircle className="w-3.5 h-3.5" />
               <span>{parseError}</span>
             </div>
           )}
 
-          {/* Demo link */}
-          <p className="mt-4 text-sm text-white/50">
-            Don&apos;t have a URL?{' '}
+          {/* Quick Demo Option */}
+          <div className="mt-4 flex items-center justify-center gap-2 text-xs text-white/80">
+            <span>Want to test immediately?</span>
             <button
               type="button"
               onClick={handleLoadDemo}
-              className="text-white/80 hover:text-white underline underline-offset-2 cursor-pointer transition-colors"
+              className="text-white font-semibold underline underline-offset-4 hover:text-blue-200 cursor-pointer transition-colors"
             >
-              Load demo — Wakad, Pune · 2BHK · ₹68L
+              Load verified demo (Wakad, Pune · 2 BHK · ₹68 Lakhs)
             </button>
-          </p>
+          </div>
         </form>
       </div>
 
-      {/* Stats bar — pinned to bottom of hero */}
-      <div className="relative z-10 w-full border-t border-white/10 bg-black/30 backdrop-blur-md">
-        <div className="max-w-4xl mx-auto px-6 py-5 flex flex-col sm:flex-row items-center justify-around gap-4 sm:gap-0 divide-y sm:divide-y-0 sm:divide-x divide-white/10">
-          {stats.map((stat, i) => (
-            <div key={i} className="flex flex-col items-center text-center sm:px-10 py-1 sm:py-0 w-full sm:w-auto">
-              <span className="text-2xl sm:text-3xl font-bold text-white drop-shadow">{stat.value}</span>
-              <span className="text-xs text-white/55 mt-0.5 font-medium">{stat.label}</span>
-            </div>
-          ))}
+      {/* Bottom Stats Strip - Translucent Glass Bar */}
+      <div className="relative z-10 w-full border-t border-white/20 bg-slate-950/30 backdrop-blur-md">
+        <div className="max-w-6xl mx-auto px-6 py-5 grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-white/20 text-center">
+          <div className="py-2 sm:py-0 px-4">
+            <p className="text-2xl sm:text-3xl font-bold text-white tracking-tight">4,200+</p>
+            <p className="text-xs text-white/70 font-medium mt-0.5">Properties verified before token deposit</p>
+          </div>
+          <div className="py-2 sm:py-0 px-4">
+            <p className="text-2xl sm:text-3xl font-bold text-white tracking-tight">14+ Metros</p>
+            <p className="text-xs text-white/70 font-medium mt-0.5">State RERA & stamp duty rules integrated</p>
+          </div>
+          <div className="py-2 sm:py-0 px-4">
+            <p className="text-2xl sm:text-3xl font-bold text-white tracking-tight">100% Unbiased</p>
+            <p className="text-xs text-white/70 font-medium mt-0.5">Zero broker commissions, buyer-first guidance</p>
+          </div>
         </div>
       </div>
     </section>

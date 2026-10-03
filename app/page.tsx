@@ -1,53 +1,40 @@
-import React from "react";
-import { HeroSection } from "@/components/landing/hero";
-import { SocialProofStrip } from "@/components/landing/social-proof-strip";
-import { HowItWorksSection } from "@/components/landing/how-it-works";
-import { WhatYouGetSection } from "@/components/landing/what-you-get";
-import { TrustSection } from "@/components/landing/trust-section";
-import { Footer } from "@/components/landing/footer";
-import { IntakeWidget } from "@/components/landing/intake-widget";
+import React from 'react';
+import { HeroSection } from '@/components/landing/hero';
+import { FeatureToolsSection } from '@/components/landing/feature-tools';
+import { FeaturedPropertiesSection } from '@/components/landing/featured-properties';
+import { ShowcaseSpacesSection } from '@/components/landing/showcase-spaces';
+import { PropertyCategoriesSection } from '@/components/landing/property-categories';
+import { FAQSection } from '@/components/landing/faq-section';
+import { CTABannerSection } from '@/components/landing/cta-banner';
+import { Footer } from '@/components/landing/footer';
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-[#0A0A0A] text-[#EDEDED] flex flex-col font-sans">
-      {/* Hero section contains the floating Navbar internally */}
-      <HeroSection />
-
+    <div className="min-h-screen bg-white text-slate-900 flex flex-col font-sans selection:bg-blue-600/20 selection:text-blue-900">
       <main className="flex-1">
-        <SocialProofStrip />
-        <HowItWorksSection />
-        <WhatYouGetSection />
-        <TrustSection />
+        {/* Hero Section with Glass Navbar and Search Pill Bar */}
+        <HeroSection />
 
-        {/* Final CTA */}
-        <section className="py-20 md:py-28 bg-[#080808]" id="full-intake">
-          <div className="max-w-3xl mx-auto px-4 text-center space-y-8">
-            <div className="space-y-3">
-              <p className="text-xs font-mono uppercase tracking-widest text-[#5B8BDF]">
-                Ready to start?
-              </p>
-              <h2 className="text-2xl sm:text-3xl font-semibold text-[#EDEDED]">
-                Most buyers say they wished they&apos;d started earlier.
-              </h2>
-              <p className="text-sm text-[#666666] max-w-md mx-auto">
-                Paste a listing URL, upload a brochure, or enter details manually. No account needed.
-              </p>
-            </div>
+        {/* Section 1: Intuitive Due Diligence Tools & Light Interactive Card */}
+        <FeatureToolsSection />
 
-            <div className="text-left max-w-2xl mx-auto">
-              <IntakeWidget />
-            </div>
+        {/* Section 2: Recently Evaluated Properties (4-Card Grid) */}
+        <FeaturedPropertiesSection />
 
-            <div className="flex flex-wrap items-center justify-center gap-6 text-[11px] text-[#555555]">
-              <span>🏙️ Used across 12+ Indian cities</span>
-              <span>📋 RERA-aware checklists</span>
-              <span>🔒 Your data stays on your device</span>
-              <span>⚡ Results in under 10 minutes</span>
-            </div>
-          </div>
-        </section>
+        {/* Section 3: Large Living Space Showcase with Overlaid Detail Card */}
+        <ShowcaseSpacesSection />
+
+        {/* Section 4: Tailored Due Diligence by Property Type (3 Isometric Cards) */}
+        <PropertyCategoriesSection />
+
+        {/* Section 5: Frequently Asked Questions Accordion */}
+        <FAQSection />
+
+        {/* Section 6: Pre-Footer CTA Banner with Search Pill */}
+        <CTABannerSection />
       </main>
 
+      {/* Clean Light Theme Footer */}
       <Footer />
     </div>
   );

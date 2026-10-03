@@ -1,44 +1,82 @@
-import React from "react";
-import Link from "next/link";
-import { ShieldCheck } from "lucide-react";
+import React from 'react';
+import Link from 'next/link';
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="w-full border-t border-[#1A1A1A] py-10 bg-[#070707]">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8">
-
-          {/* Brand */}
-          <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-[#5B8BDF]" />
-              <span className="font-semibold text-sm text-[#AAAAAA]">HomeCheck</span>
+    <footer className="w-full bg-white border-t border-slate-200 py-16 text-slate-600 text-xs">
+      <div className="max-w-7xl mx-auto px-4 sm:px-8">
+        
+        {/* Top Footer Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-slate-100">
+          
+          {/* Brand Info */}
+          <div className="lg:col-span-2 space-y-4">
+            <Link href="/" className="inline-block">
+              <span className="text-xl font-bold tracking-tight text-slate-900">
+                HomeCheck<span className="text-blue-600">.</span>
+              </span>
+            </Link>
+            <p className="text-xs text-slate-500 leading-relaxed max-w-sm font-normal">
+              An unbiased due-diligence workspace for Indian real estate buyers. Analyze funding gaps, verify builder title chains, and enforce RERA compliance before paying booking deposits.
+            </p>
+            <div className="pt-2 text-[11px] text-slate-400 font-medium">
+              Maharashtra · Karnataka · Tamil Nadu · Delhi NCR · Telangana
             </div>
-            <p className="text-xs text-[#555555] max-w-xs leading-relaxed">
-              Structured property due diligence workspace for Indian home buyers.
-              Built for first-time buyers, plot investors &amp; second-home evaluations.
-            </p>
-            <p className="text-[11px] text-[#444444]">
-              🇮🇳 RERA · Stamp Duty · RBI Home Loan rules · Indian property market
-            </p>
           </div>
 
-          {/* Links */}
-          <div className="flex flex-col gap-3 text-xs text-[#666666]">
-            <div className="flex gap-5">
-              <a href="#how-it-works" className="hover:text-[#AAAAAA] transition-colors">How it works</a>
-              <a href="#what-cleared-up" className="hover:text-[#AAAAAA] transition-colors">Features</a>
-              <a href="#trust" className="hover:text-[#AAAAAA] transition-colors">Our commitment</a>
-            </div>
-            <div className="flex gap-5">
-              <Link href="/admin" className="hover:text-[#5B8BDF] transition-colors text-[#444444]">
-                PM &amp; Founder Console
-              </Link>
-              <span className="text-[#333333]">·</span>
-              <span className="text-[#444444]">© 2026 HomeCheck</span>
-            </div>
+          {/* Column 1: Due Diligence */}
+          <div className="space-y-3">
+            <p className="text-xs font-bold text-slate-900 uppercase tracking-wider">Due Diligence</p>
+            <ul className="space-y-2 text-slate-500">
+              <li><a href="#categories" className="hover:text-blue-600 transition-colors">Apartment Audit</a></li>
+              <li><a href="#categories" className="hover:text-blue-600 transition-colors">Villa Sanction Check</a></li>
+              <li><a href="#categories" className="hover:text-blue-600 transition-colors">Plot 7/12 &amp; NA Clearances</a></li>
+              <li><a href="#smart-tools" className="hover:text-blue-600 transition-colors">80% LTV Loan Calculator</a></li>
+              <li><a href="#smart-tools" className="hover:text-blue-600 transition-colors">7% Stamp Duty Engine</a></li>
+            </ul>
+          </div>
+
+          {/* Column 2: Key Metros */}
+          <div className="space-y-3">
+            <p className="text-xs font-bold text-slate-900 uppercase tracking-wider">Major Markets</p>
+            <ul className="space-y-2 text-slate-500">
+              <li><span className="hover:text-slate-800 transition-colors">Pune (MahaRERA)</span></li>
+              <li><span className="hover:text-slate-800 transition-colors">Mumbai &amp; Thane (MahaRERA)</span></li>
+              <li><span className="hover:text-slate-800 transition-colors">Bengaluru (K-RERA)</span></li>
+              <li><span className="hover:text-slate-800 transition-colors">Hyderabad (TG-RERA)</span></li>
+              <li><span className="hover:text-slate-800 transition-colors">Delhi NCR (HRERA &amp; UP-RERA)</span></li>
+            </ul>
+          </div>
+
+          {/* Column 3: Platform & Recruiter */}
+          <div className="space-y-3">
+            <p className="text-xs font-bold text-slate-900 uppercase tracking-wider">Platform</p>
+            <ul className="space-y-2 text-slate-500">
+              <li><a href="#faq" className="hover:text-blue-600 transition-colors">Frequently Asked Questions</a></li>
+              <li><a href="#featured-properties" className="hover:text-blue-600 transition-colors">Sample Due Diligence Files</a></li>
+              <li>
+                <Link href="/admin" className="text-blue-600 hover:text-blue-800 font-semibold transition-colors">
+                  PM &amp; Founder Console
+                </Link>
+              </li>
+              <li><span className="text-slate-400">Zero Commission Policy</span></li>
+            </ul>
+          </div>
+
+        </div>
+
+        {/* Bottom Sub-Footer */}
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-slate-400 text-xs">
+          <p>© 2026 HomeCheck Technologies. Built for Indian Home Buyers.</p>
+          <div className="flex items-center gap-6">
+            <span className="hover:text-slate-600 transition-colors">Privacy Principles</span>
+            <span>·</span>
+            <span className="hover:text-slate-600 transition-colors">Terms of Verification</span>
+            <span>·</span>
+            <Link href="/admin" className="hover:text-slate-700 transition-colors">Recruiter Demo</Link>
           </div>
         </div>
+
       </div>
     </footer>
   );
