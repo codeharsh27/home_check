@@ -47,6 +47,12 @@ export interface BuyerContext {
   interestRate?: number;      // default 8.5
   tenureYears?: number;       // default 20
   expectedFinancing?: FinancingSource[];
+  companyLoanAmount?: number;
+  companyLoanEmi?: number;
+  familyFundsAmount?: number;
+  familyFundsNotes?: string;
+  otherFinancingAmount?: number;
+  otherFinancingSource?: string;
 }
 
 export interface DocumentEvidence {

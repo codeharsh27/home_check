@@ -4,9 +4,19 @@ import { BuyerContext, PropertyDetails } from '@/types';
 export const TRANSACTION_COST_PERCENT = 0.07;
 
 export function calculateEffectiveFunds(context: BuyerContext): number {
-  const available = context.availableFunds ?? 0;
+  const directSavings = context.availableFunds ?? 0;
+  const familyFunds = context.expectedFinancing?.includes('Family funds')
+    ? (context.familyFundsAmount ?? 0)
+    : 0;
+  const companyLoan = context.expectedFinancing?.includes('Company loan')
+    ? (context.companyLoanAmount ?? 0)
+    : 0;
+  const otherFunds = context.expectedFinancing?.includes('Other')
+    ? (context.otherFinancingAmount ?? 0)
+    : 0;
+  const totalAvailable = directSavings + familyFunds + companyLoan + otherFunds;
   const reserve = context.emergencyReserve ?? 0;
-  return Math.max(0, available - reserve);
+  return Math.max(0, totalAvailable - reserve);
 }
 
 export function calculatePlannedLoan(
@@ -59,13 +69,16 @@ export function calculateTotalMonthlyDebt(
   property: PropertyDetails
 ): number {
   const existing = context.existingObligations ?? 0;
+  const companyEmi = context.expectedFinancing?.includes('Company loan')
+    ? (context.companyLoanEmi ?? 0)
+    : 0;
   const loan = calculatePlannedLoan(property, context);
   const emi = calculateEMI(
     loan,
     context.interestRate ?? 8.5,
     context.tenureYears ?? 20
   );
-  return existing + emi;
+  return existing + companyEmi + emi;
 }
 
 export function calculateDebtToIncomeRatio(
