@@ -1,5 +1,4 @@
 import React from "react";
-import { Navbar } from "@/components/layout/nav";
 import { HeroSection } from "@/components/landing/hero";
 import { SocialProofStrip } from "@/components/landing/social-proof-strip";
 import { HowItWorksSection } from "@/components/landing/how-it-works";
@@ -7,32 +6,31 @@ import { WhatYouGetSection } from "@/components/landing/what-you-get";
 import { TrustSection } from "@/components/landing/trust-section";
 import { Footer } from "@/components/landing/footer";
 import { IntakeWidget } from "@/components/landing/intake-widget";
-import { ArrowRight } from "lucide-react";
 
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-[#EDEDED] flex flex-col font-sans">
-      <Navbar />
+      {/* Hero section contains the floating Navbar internally */}
+      <HeroSection />
 
       <main className="flex-1">
-        <HeroSection />
         <SocialProofStrip />
         <HowItWorksSection />
         <WhatYouGetSection />
         <TrustSection />
 
-        {/* Final CTA — outcome-focused, not a repeated intake */}
-        <section className="py-20 md:py-28 bg-[#080808]">
+        {/* Final CTA */}
+        <section className="py-20 md:py-28 bg-[#080808]" id="full-intake">
           <div className="max-w-3xl mx-auto px-4 text-center space-y-8">
             <div className="space-y-3">
               <p className="text-xs font-mono uppercase tracking-widest text-[#5B8BDF]">
                 Ready to start?
               </p>
               <h2 className="text-2xl sm:text-3xl font-semibold text-[#EDEDED]">
-                Most buyers who use HomeCheck say they wished they&apos;d started earlier.
+                Most buyers say they wished they&apos;d started earlier.
               </h2>
               <p className="text-sm text-[#666666] max-w-md mx-auto">
-                Paste a listing URL below, or upload a brochure. No account needed.
+                Paste a listing URL, upload a brochure, or enter details manually. No account needed.
               </p>
             </div>
 
@@ -40,7 +38,6 @@ export default function LandingPage() {
               <IntakeWidget />
             </div>
 
-            {/* Micro-social proof */}
             <div className="flex flex-wrap items-center justify-center gap-6 text-[11px] text-[#555555]">
               <span>🏙️ Used across 12+ Indian cities</span>
               <span>📋 RERA-aware checklists</span>
