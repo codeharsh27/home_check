@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Search, Loader2, AlertCircle, SlidersHorizontal, UploadCloud, Edit3, X, CheckCircle2 } from 'lucide-react';
+import { Search, Loader2, AlertCircle, SlidersHorizontal, UploadCloud, Edit3, X, CheckCircle2, IndianRupee, FileCheck2, ArrowRightCircle } from 'lucide-react';
 import { useEvaluationStore, DEMO_PROPERTY } from '@/store/evaluation';
 import { Navbar } from '@/components/layout/nav';
 
@@ -111,12 +111,12 @@ export const HeroSection: React.FC = () => {
 
   return (
     <>
-      {/* Outer Padding Container on desktop for 1-Glance Framed Aesthetic */}
+      {/* Outer Padding Container for 1-Glance Framed Aesthetic */}
       <div className="w-full p-2.5 sm:p-4 md:p-6 bg-[#FAF8F5]">
         
         {/* Main Hero Card Container with Rounded Borders from ALL corners */}
         <section
-          className="relative w-full h-[90vh] min-h-[580px] max-h-[820px] rounded-[24px] sm:rounded-[32px] md:rounded-[40px] overflow-hidden flex flex-col justify-between shadow-2xl shadow-stone-900/10 border border-stone-200/60"
+          className="relative w-full h-[92vh] min-h-[600px] max-h-[820px] rounded-[24px] sm:rounded-[32px] md:rounded-[40px] overflow-hidden flex flex-col justify-between shadow-2xl shadow-stone-900/10 border border-stone-200/60"
           style={{
             backgroundImage: 'url(/images/hero.png)',
             backgroundSize: 'cover',
@@ -125,43 +125,51 @@ export const HeroSection: React.FC = () => {
           }}
         >
           {/* Subtle Natural Daylight Gradient Overlay for text contrast */}
-          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/60 via-slate-900/30 to-slate-950/75 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/60 via-slate-900/30 to-slate-950/80 pointer-events-none" />
 
           {/* Floating Centered Navbar inside rounded container */}
           <Navbar />
 
-          {/* Hero Content - Perfectly Balanced in the 1-Glance Viewport Area */}
-          <div className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-4 sm:px-6 pt-24 sm:pt-28 pb-6 max-w-4xl mx-auto w-full">
+          {/* Hero Content - Centered */}
+          <div className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-4 sm:px-6 pt-24 sm:pt-28 pb-4 max-w-4xl mx-auto w-full">
             
-            {/* Clear, Everyday-Language Headline */}
-            <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-white leading-[1.15] max-w-3xl drop-shadow-md">
-              Check Any Property Before You Pay Booking Money
+            {/* Small Eyebrow */}
+            <div className="mb-3 sm:mb-4">
+              <span className="text-[11px] sm:text-xs font-bold uppercase tracking-[1.5px] text-blue-400 bg-blue-950/60 border border-blue-500/30 px-3.5 py-1 rounded-full backdrop-blur-md inline-block">
+                BEFORE YOU COMMIT
+              </span>
+            </div>
+
+            {/* Main Headline */}
+            <h1 className="text-3xl sm:text-5xl md:text-[56px] font-extrabold tracking-tight text-white leading-[1.08] max-w-3xl drop-shadow-md">
+              Check a Property Before You Commit
             </h1>
 
-            {/* Easy-to-Understand Sub-headline */}
+            {/* Supporting Text */}
             <p className="mt-4 sm:mt-5 text-sm sm:text-base md:text-lg text-white/90 font-normal max-w-2xl leading-relaxed drop-shadow-sm">
-              See if the legal papers are clear, how much loan the bank will really give you, and your exact out-of-pocket cost — before signing anything.
+              Understand what you can afford, what you still need to verify, and what to do next — before putting your money down.
             </p>
 
-            {/* Search Intake Pill - Clean Single Input with Options Icon */}
+            {/* Search Intake Pill */}
             <form
+              id="hero-intake"
               onSubmit={handleStartEvaluation}
-              className="mt-7 sm:mt-8 w-full max-w-2xl relative"
+              className="mt-6 sm:mt-8 w-full max-w-2xl relative"
             >
               <div className="bg-white rounded-full shadow-2xl p-1.5 sm:p-2 flex items-center gap-2 border border-white/60">
                 
-                {/* Single Clean Input */}
+                {/* Single Input */}
                 <div className="flex-1 px-4 sm:px-5">
                   <input
                     type="text"
                     value={urlInput}
                     onChange={(e) => setUrlInput(e.target.value)}
-                    placeholder="Paste link from MagicBricks, 99acres, NoBroker, Housing..."
+                    placeholder="Paste a property listing URL (MagicBricks, 99acres, Housing...)"
                     className="w-full text-xs sm:text-sm text-stone-800 placeholder-stone-400 bg-transparent outline-none font-normal"
                   />
                 </div>
 
-                {/* Options Icon Button (Upload Brochure / Manual Entry) */}
+                {/* Options Icon Button */}
                 <button
                   type="button"
                   onClick={() => {
@@ -174,17 +182,19 @@ export const HeroSection: React.FC = () => {
                   <SlidersHorizontal className="w-4 h-4" />
                 </button>
 
-                {/* Circular Search / Analyze Button */}
+                {/* Primary CTA Button */}
                 <button
                   type="submit"
                   disabled={isLoading}
-                  aria-label="Analyze property"
-                  className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white flex items-center justify-center shadow-md transition-transform hover:scale-105 active:scale-95 disabled:opacity-50 shrink-0 cursor-pointer"
+                  className="px-4 sm:px-6 py-2.5 sm:py-3 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs sm:text-sm font-bold shadow-md shadow-blue-600/30 transition-all shrink-0 cursor-pointer flex items-center gap-1.5"
                 >
                   {isLoading ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
                   ) : (
-                    <Search className="w-4 h-4 stroke-[2.5]" />
+                    <>
+                      <span>Evaluate Property</span>
+                      <Search className="w-3.5 h-3.5" />
+                    </>
                   )}
                 </button>
               </div>
@@ -196,36 +206,64 @@ export const HeroSection: React.FC = () => {
                 </div>
               )}
 
-              {/* Quick Demo Link */}
-              <div className="mt-3.5 flex items-center justify-center gap-2 text-xs text-white/80">
-                <span>Want a quick test?</span>
+              {/* Sample link below the input */}
+              <div className="mt-3.5 flex items-center justify-center gap-1.5 text-xs text-white/80">
+                <span>No listing?</span>
                 <button
                   type="button"
                   onClick={handleLoadDemo}
                   className="text-white font-semibold underline underline-offset-4 hover:text-blue-200 cursor-pointer transition-colors"
                 >
-                  Try sample property (Pune · 2 BHK · ₹68 Lakhs) →
+                  Start with a sample property →
                 </button>
               </div>
             </form>
 
           </div>
 
-          {/* Bottom Stats Strip - Framed neatly inside the rounded container */}
-          <div className="relative z-10 w-full border-t border-white/20 bg-slate-950/35 backdrop-blur-md">
-            <div className="max-w-5xl mx-auto px-6 py-4 grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-white/20 text-center">
-              <div className="py-1.5 sm:py-0 px-4">
-                <p className="text-xl sm:text-2xl font-bold text-white tracking-tight">4,200+</p>
-                <p className="text-[11px] text-white/70 font-medium mt-0.5">Properties checked before deposit</p>
+          {/* Hero Bottom Value Strip - Grounded Real Value, No Fabricated Numbers */}
+          <div className="relative z-10 w-full border-t border-white/20 bg-slate-950/40 backdrop-blur-md">
+            <div className="max-w-6xl mx-auto px-6 py-4 grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-white/20 text-center sm:text-left">
+              
+              {/* Column 1 */}
+              <div className="py-2 sm:py-0 px-4 flex items-start gap-3">
+                <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center shrink-0 mt-0.5 text-blue-300">
+                  <IndianRupee className="w-4 h-4" />
+                </div>
+                <div>
+                  <p className="text-xs sm:text-sm font-bold text-white tracking-tight">Know your real cost</p>
+                  <p className="text-[11px] sm:text-xs text-white/70 font-normal mt-0.5">
+                    Understand the money you may need to arrange.
+                  </p>
+                </div>
               </div>
-              <div className="py-1.5 sm:py-0 px-4">
-                <p className="text-xl sm:text-2xl font-bold text-white tracking-tight">14+ Metros</p>
-                <p className="text-[11px] text-white/70 font-medium mt-0.5">RERA &amp; legal rules pre-configured</p>
+
+              {/* Column 2 */}
+              <div className="py-2 sm:py-0 px-4 flex items-start gap-3">
+                <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center shrink-0 mt-0.5 text-emerald-300">
+                  <FileCheck2 className="w-4 h-4" />
+                </div>
+                <div>
+                  <p className="text-xs sm:text-sm font-bold text-white tracking-tight">Know what to verify</p>
+                  <p className="text-[11px] sm:text-xs text-white/70 font-normal mt-0.5">
+                    See documents and information that still need checking.
+                  </p>
+                </div>
               </div>
-              <div className="py-1.5 sm:py-0 px-4">
-                <p className="text-xl sm:text-2xl font-bold text-white tracking-tight">100% Free</p>
-                <p className="text-[11px] text-white/70 font-medium mt-0.5">Unbiased check, no broker bias</p>
+
+              {/* Column 3 */}
+              <div className="py-2 sm:py-0 px-4 flex items-start gap-3">
+                <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center shrink-0 mt-0.5 text-amber-300">
+                  <ArrowRightCircle className="w-4 h-4" />
+                </div>
+                <div>
+                  <p className="text-xs sm:text-sm font-bold text-white tracking-tight">Know your next step</p>
+                  <p className="text-[11px] sm:text-xs text-white/70 font-normal mt-0.5">
+                    Understand what to do before committing.
+                  </p>
+                </div>
               </div>
+
             </div>
           </div>
         </section>

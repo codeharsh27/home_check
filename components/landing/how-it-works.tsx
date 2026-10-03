@@ -1,91 +1,92 @@
-import React from "react";
-import { Search, IndianRupee, ClipboardList } from "lucide-react";
+'use client';
 
-const steps = [
+import React from 'react';
+import { PlusCircle, Wallet, FileCheck, CheckCircle2 } from 'lucide-react';
+
+const workflowSteps = [
   {
-    step: "01",
-    icon: Search,
-    title: "Tell us about the property",
-    description: "Paste a listing URL, upload a brochure, or type the address. We build a complete structured snapshot.",
-    example: "e.g. Lodha Palava, 2BHK, ₹72L, Dombivli East",
-    color: "text-[#5B8BDF]",
-    bg: "bg-[#5B8BDF]/10",
-    border: "border-[#5B8BDF]/20",
+    step: '01',
+    icon: PlusCircle,
+    title: 'Add your property',
+    description: 'Paste a listing or enter the basic property details.',
   },
   {
-    step: "02",
-    icon: IndianRupee,
-    title: "Map your real financial picture",
-    description: "Income, savings, existing EMIs, and all financing sources — we calculate your funding gap instantly.",
-    example: "e.g. You need ₹11.8L more than your current savings",
-    color: "text-[#3F9E6C]",
-    bg: "bg-[#3F9E6C]/10",
-    border: "border-[#3F9E6C]/20",
+    step: '02',
+    icon: Wallet,
+    title: 'Tell us about your finances',
+    description: 'Add your available funds, income, existing commitments and expected financing.',
   },
   {
-    step: "03",
-    icon: ClipboardList,
-    title: "Investigate before you commit",
-    description: "A RERA-aware checklist tailored to your property type. Track what's verified, what's missing, and what to ask.",
-    example: "e.g. RERA ✓ — Encumbrance certificate missing ⚠️",
-    color: "text-[#E6832A]",
-    bg: "bg-[#E6832A]/10",
-    border: "border-[#E6832A]/20",
+    step: '03',
+    icon: FileCheck,
+    title: 'Review what needs checking',
+    description: 'See the documents, costs and property-specific checks relevant to your situation.',
+  },
+  {
+    step: '04',
+    icon: CheckCircle2,
+    title: 'Get your next steps',
+    description: "See what's missing, what needs professional verification and what to do before committing.",
   },
 ];
 
 export const HowItWorksSection: React.FC = () => {
   return (
-    <section className="py-20 md:py-28 border-b border-[#1A1A1A] bg-[#0C0C0C]">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6">
-
+    <section id="how-it-works" className="py-20 md:py-24 bg-[#F5F2EB] border-b border-stone-200/60">
+      <div className="max-w-6xl mx-auto px-4 sm:px-8">
+        
         {/* Header */}
-        <div className="text-center space-y-3 mb-16">
-          <p className="text-xs font-mono uppercase tracking-widest text-[#5B8BDF]">
-            How It Works
-          </p>
-          <h2 className="text-2xl sm:text-3xl font-semibold text-[#EDEDED]">
-            From shortlisted property to confident decision
+        <div className="max-w-3xl mb-14 sm:mb-16">
+          <span className="text-[11px] sm:text-xs font-bold uppercase tracking-[1.5px] text-blue-700 bg-blue-50 px-3.5 py-1 rounded-full border border-blue-100 inline-block mb-3">
+            HOW IT WORKS
+          </span>
+
+          <h2 className="text-3xl sm:text-4xl lg:text-[40px] font-extrabold tracking-tight text-stone-900 leading-[1.12]">
+            From shortlisted property to clear next steps.
           </h2>
-          <p className="text-sm text-[#666666] max-w-md mx-auto">
-            Three steps. Usually under 15 minutes.
+
+          <p className="mt-4 text-base sm:text-lg text-stone-600 font-normal leading-relaxed">
+            Start with what you already know. Add more information as you get it. HomeCheck organizes the evaluation around your purchase.
           </p>
         </div>
 
-        {/* Steps — connected timeline */}
-        <div className="relative">
-          {/* Horizontal connector line (desktop) */}
-          <div className="hidden md:block absolute top-[52px] left-[calc(16.66%+32px)] right-[calc(16.66%+32px)] h-px bg-gradient-to-r from-[#5B8BDF]/40 via-[#888888]/20 to-[#E6832A]/40" />
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-6">
-            {steps.map((item, idx) => {
-              const Icon = item.icon;
-              return (
-                <div key={idx} className="relative flex flex-col items-center text-center group">
-                  {/* Step number + icon circle */}
-                  <div className={`relative w-16 h-16 rounded-2xl ${item.bg} border ${item.border} flex items-center justify-center mb-5 shadow-sm group-hover:scale-105 transition-transform duration-200`}>
-                    <Icon className={`w-7 h-7 ${item.color}`} />
-                    {/* Step badge */}
-                    <div className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-[#1A1A1A] border border-[#2A2A2A] flex items-center justify-center">
-                      <span className="text-[9px] font-mono font-bold text-[#888888]">{item.step}</span>
+        {/* 4 Product Workflow Steps */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative">
+          {workflowSteps.map((item, idx) => {
+            const Icon = item.icon;
+            return (
+              <div
+                key={item.step}
+                className="bg-white rounded-3xl p-6 sm:p-7 border border-stone-200/90 shadow-sm flex flex-col justify-between relative group hover:border-blue-300 transition-colors"
+              >
+                <div>
+                  {/* Step Number + Icon */}
+                  <div className="flex items-center justify-between mb-6">
+                    <span className="text-xs font-bold font-mono px-2.5 py-1 rounded-lg bg-stone-100 text-stone-700 border border-stone-200/60">
+                      {item.step}
+                    </span>
+                    <div className="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center">
+                      <Icon className="w-4 h-4 stroke-[2]" />
                     </div>
                   </div>
 
-                  {/* Text */}
-                  <div className="space-y-2.5 max-w-[240px]">
-                    <h3 className="text-base font-semibold text-[#EDEDED] leading-snug">{item.title}</h3>
-                    <p className="text-xs text-[#888888] leading-relaxed">{item.description}</p>
+                  <h3 className="text-lg font-bold text-stone-900 mb-2 leading-snug">
+                    {item.title}
+                  </h3>
 
-                    {/* Example callout */}
-                    <div className={`inline-block px-3 py-1.5 rounded-lg ${item.bg} border ${item.border} text-[11px] ${item.color} font-mono leading-snug`}>
-                      {item.example}
-                    </div>
-                  </div>
+                  <p className="text-xs sm:text-sm text-stone-600 leading-relaxed font-normal">
+                    {item.description}
+                  </p>
                 </div>
-              );
-            })}
-          </div>
+
+                <div className="mt-6 pt-4 border-t border-stone-100 flex items-center text-[11px] font-semibold text-stone-400">
+                  Step {idx + 1} of 4
+                </div>
+              </div>
+            );
+          })}
         </div>
+
       </div>
     </section>
   );

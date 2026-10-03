@@ -9,10 +9,10 @@ import { useEvaluationStore } from '@/store/evaluation';
 import { User } from '@supabase/supabase-js';
 
 const navItems = [
-  { label: 'Home', href: '/', active: true },
-  { label: 'Evaluations', href: '#featured-properties' },
-  { label: 'Financials', href: '#smart-tools' },
-  { label: 'Due Diligence', href: '#categories' },
+  { label: 'Home', href: '#', active: true },
+  { label: 'How It Works', href: '#how-it-works' },
+  { label: 'What We Check', href: '#what-we-check' },
+  { label: 'Sample', href: '#sample-evaluation' },
   { label: 'FAQ', href: '#faq' },
 ];
 
@@ -39,23 +39,23 @@ export const Navbar: React.FC = () => {
 
   return (
     <>
-      <header className="absolute top-0 left-0 right-0 z-50 px-4 sm:px-8 py-6">
+      <header className="absolute top-0 left-0 right-0 z-50 px-4 sm:px-8 py-5">
         <div className="max-w-7xl mx-auto relative flex items-center justify-between">
           
           {/* Left: Brand Logo */}
           <Link href="/" className="flex items-center gap-1 z-10 group">
-            <span className="text-white text-2xl font-bold tracking-tight drop-shadow-md">
+            <span className="text-white text-2xl font-extrabold tracking-tight drop-shadow-md">
               HomeCheck<span className="text-blue-500">.</span>
             </span>
           </Link>
 
           {/* Center: Nav Pill Bar (Centered using absolute positioning) */}
-          <nav className="hidden md:flex items-center gap-1 px-2 py-1.5 rounded-full bg-white/20 backdrop-blur-md border border-white/30 shadow-lg absolute left-1/2 -translate-x-1/2 z-10">
+          <nav className="hidden lg:flex items-center gap-1 px-2 py-1.5 rounded-full bg-white/20 backdrop-blur-md border border-white/30 shadow-lg absolute left-1/2 -translate-x-1/2 z-10">
             {navItems.map((item) => (
               <a
                 key={item.label}
                 href={item.href}
-                className={`px-5 py-2 rounded-full text-xs font-semibold tracking-wide transition-all ${
+                className={`px-4 sm:px-5 py-2 rounded-full text-xs font-semibold tracking-wide transition-all ${
                   item.active
                     ? 'bg-white text-stone-900 shadow-md'
                     : 'text-white/90 hover:text-white hover:bg-white/15'
@@ -67,7 +67,7 @@ export const Navbar: React.FC = () => {
           </nav>
 
           {/* Right: Auth Action Buttons */}
-          <div className="flex items-center gap-3 z-10">
+          <div className="flex items-center gap-2.5 z-10">
             {user ? (
               <div className="flex items-center gap-2">
                 <div className="hidden sm:flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-white/15 backdrop-blur-md border border-white/25 text-xs text-white">
@@ -86,16 +86,16 @@ export const Navbar: React.FC = () => {
               <div className="flex items-center gap-2.5">
                 <button
                   onClick={() => setAuthModalOpen(true)}
-                  className="px-5 py-2 rounded-full text-xs font-semibold text-white bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/25 transition-all shadow-sm cursor-pointer"
+                  className="px-4 sm:px-5 py-2 rounded-full text-xs font-semibold text-white/90 hover:text-white bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/25 transition-all shadow-sm cursor-pointer"
                 >
                   Login
                 </button>
-                <button
-                  onClick={() => setAuthModalOpen(true)}
-                  className="px-5 py-2 rounded-full text-xs font-semibold text-white bg-[#2563EB] hover:bg-[#1D4ED8] transition-all shadow-md shadow-blue-600/30 cursor-pointer"
+                <a
+                  href="#hero-intake"
+                  className="px-4 sm:px-5 py-2 rounded-full text-xs font-bold text-white bg-[#2563EB] hover:bg-[#1D4ED8] transition-all shadow-md shadow-blue-600/30 cursor-pointer"
                 >
-                  Register
-                </button>
+                  Evaluate Property
+                </a>
               </div>
             )}
           </div>
