@@ -124,8 +124,8 @@ export const HeroSection: React.FC = () => {
             backgroundRepeat: 'no-repeat',
           }}
         >
-          {/* Subtle Natural Daylight Gradient Overlay for text contrast */}
-          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/60 via-slate-900/30 to-slate-950/80 pointer-events-none" />
+          {/* Subtle Natural Daylight Gradient Overlay letting the sky blue shine through */}
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/45 via-blue-950/20 to-slate-950/50 pointer-events-none" />
 
           {/* Floating Centered Navbar inside rounded container */}
           <Navbar />

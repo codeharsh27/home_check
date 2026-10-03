@@ -43,8 +43,8 @@ export const CTABannerSection: React.FC = () => {
               fill
               className="object-cover brightness-75 scale-105"
             />
-            {/* Ambient Dark Navy Overlay for text readability */}
-            <div className="absolute inset-0 bg-gradient-to-r from-[#071324]/95 via-[#0B1A32]/85 to-[#071324]/95 backdrop-blur-[2px]" />
+            {/* Ambient Hero-Matching Blue Overlay for text readability */}
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-950/90 via-blue-900/75 to-sky-950/85 backdrop-blur-[2px]" />
           </div>
 
           {/* Banner Content */}
@@ -52,7 +52,7 @@ export const CTABannerSection: React.FC = () => {
             
             {/* Left Copy */}
             <div className="max-w-xl space-y-3.5">
-              <span className="text-[11px] sm:text-xs font-bold uppercase tracking-[1.5px] text-blue-400 bg-blue-950/80 border border-blue-500/40 px-3.5 py-1 rounded-full backdrop-blur-md inline-block shadow-sm">
+              <span className="text-[11px] sm:text-xs font-bold uppercase tracking-[1.5px] text-blue-200 bg-blue-900/70 border border-blue-400/40 px-3.5 py-1 rounded-full backdrop-blur-md inline-block shadow-sm">
                 READY TO START?
               </span>
 
@@ -60,28 +60,28 @@ export const CTABannerSection: React.FC = () => {
                 Have a property shortlisted? Start there.
               </h2>
 
-              <p className="text-sm sm:text-base text-blue-100/80 font-normal leading-relaxed">
+              <p className="text-sm sm:text-base text-blue-100/90 font-normal leading-relaxed">
                 Add the listing or basic property details and start building your evaluation.
               </p>
             </div>
 
-            {/* Right Action / Input with Inner Border */}
+            {/* Right Action / Input with Crisp Inner Form */}
             <div className="w-full lg:max-w-md space-y-2.5">
               <form
                 onSubmit={handleSubmit}
-                className="w-full bg-[#091527]/90 rounded-full p-2 shadow-2xl flex items-center justify-between border-2 border-blue-500/50 focus-within:border-blue-400 focus-within:ring-4 focus-within:ring-blue-500/20 backdrop-blur-md transition-all"
+                className="w-full bg-white rounded-full p-1.5 sm:p-2 shadow-2xl flex items-center justify-between border-2 border-white/90 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/25 transition-all"
               >
                 <input
                   type="text"
                   value={inputVal}
                   onChange={(e) => setInputVal(e.target.value)}
                   placeholder="Paste a property listing URL..."
-                  className="flex-1 px-4 py-2 text-xs sm:text-sm text-white placeholder-blue-200/50 outline-none bg-transparent font-normal"
+                  className="flex-1 px-4 py-2 text-xs sm:text-sm text-stone-800 placeholder-stone-400 outline-none bg-transparent font-normal"
                 />
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm font-bold shadow-lg shadow-blue-600/40 transition-all hover:scale-[1.02] shrink-0 cursor-pointer flex items-center gap-1.5 group"
+                  className="px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-bold shadow-lg shadow-blue-600/40 transition-all hover:scale-[1.02] shrink-0 cursor-pointer flex items-center gap-1.5 group"
                 >
                   {isLoading ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
@@ -95,8 +95,8 @@ export const CTABannerSection: React.FC = () => {
               </form>
 
               <div className="flex items-center gap-2 pl-3">
-                <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
-                <p className="text-[11px] sm:text-xs text-blue-200/70 font-normal">
+                <span className="w-1.5 h-1.5 rounded-full bg-sky-300 animate-pulse" />
+                <p className="text-[11px] sm:text-xs text-blue-200/90 font-normal">
                   Start with the information you already have.
                 </p>
               </div>
