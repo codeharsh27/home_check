@@ -1,4 +1,5 @@
 import React from 'react';
+import { Navbar } from '@/components/layout/nav';
 import { HeroSection } from '@/components/landing/hero';
 import { ProblemSection } from '@/components/landing/problem-section';
 import { HowItWorksSection } from '@/components/landing/how-it-works';
@@ -9,41 +10,48 @@ import { TrustSection } from '@/components/landing/trust-section';
 import { FAQSection } from '@/components/landing/faq-section';
 import { CTABannerSection } from '@/components/landing/cta-banner';
 import { Footer } from '@/components/landing/footer';
+import { BackToTop } from '@/components/layout/back-to-top';
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-[#FAF8F5] text-stone-900 flex flex-col font-sans selection:bg-blue-600/20 selection:text-blue-900">
+    <div className="min-h-screen bg-[#FAF8F5] text-stone-900 flex flex-col font-sans selection:bg-blue-600/20 selection:text-blue-900 relative">
+      {/* Sticky Navigation Bar */}
+      <Navbar />
+
       <main className="flex-1">
-        {/* 1. Navbar & 2. Hero & 3. Value strip */}
+        {/* 1. Hero & 2. Value strip */}
         <HeroSection />
 
-        {/* 4. Problem / "You found the property. Now what?" */}
+        {/* 3. Problem / "You found the property. Now what?" */}
         <ProblemSection />
 
-        {/* 5. How it works */}
+        {/* 4. How it works */}
         <HowItWorksSection />
 
-        {/* 6. Product evaluation showcase */}
+        {/* 5. Product evaluation showcase */}
         <ProductShowcaseSection />
 
-        {/* 7. What we help you check */}
+        {/* 6. What we help you check */}
         <WhatWeCheckSection />
 
-        {/* 8. Sample evaluation */}
+        {/* 7. Sample evaluation */}
         <SampleEvaluationSection />
 
-        {/* 9. What HomeCheck is / isn't */}
+        {/* 8. What HomeCheck is / isn't */}
         <TrustSection />
 
-        {/* 10. FAQ */}
+        {/* 9. FAQ */}
         <FAQSection />
 
-        {/* 11. Final CTA */}
+        {/* 10. Final CTA */}
         <CTABannerSection />
       </main>
 
-      {/* 12. Footer */}
+      {/* 11. Footer */}
       <Footer />
+
+      {/* 12. Floating Back to Top Button */}
+      <BackToTop />
     </div>
   );
 }

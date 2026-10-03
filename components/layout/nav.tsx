@@ -19,7 +19,19 @@ const navItems = [
 export const Navbar: React.FC = () => {
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [user, setUser] = useState<User | null>(null);
+  const [isScrolled, setIsScrolled] = useState(false);
   const { clearUserSession } = useEvaluationStore();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 40);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     if (!supabase || !isSupabaseConfigured) return;
@@ -39,25 +51,45 @@ export const Navbar: React.FC = () => {
 
   return (
     <>
-      <header className="absolute top-0 left-0 right-0 z-50 px-4 sm:px-8 py-5">
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          isScrolled
+            ? 'bg-[#FAF8F5]/90 backdrop-blur-md border-b border-stone-200/80 shadow-sm py-3 px-4 sm:px-8'
+            : 'bg-transparent py-4 sm:py-5 px-4 sm:px-8'
+        }`}
+      >
         <div className="max-w-7xl mx-auto relative flex items-center justify-between">
           
           {/* Left: Brand Logo */}
           <Link href="/" className="flex items-center gap-1 z-10 group">
-            <span className="text-white text-2xl font-extrabold tracking-tight drop-shadow-md">
-              HomeCheck<span className="text-blue-500">.</span>
+            <span
+              className={`text-2xl font-extrabold tracking-tight transition-colors ${
+                isScrolled ? 'text-stone-900' : 'text-white drop-shadow-md'
+              }`}
+            >
+              HomeCheck<span className="text-blue-600">.</span>
             </span>
           </Link>
 
-          {/* Center: Nav Pill Bar (Centered using absolute positioning) */}
-          <nav className="hidden lg:flex items-center gap-1 px-2 py-1.5 rounded-full bg-white/20 backdrop-blur-md border border-white/30 shadow-lg absolute left-1/2 -translate-x-1/2 z-10">
+          {/* Center: Nav Pill Bar */}
+          <nav
+            className={`hidden lg:flex items-center gap-1 px-2 py-1.5 rounded-full transition-all absolute left-1/2 -translate-x-1/2 z-10 ${
+              isScrolled
+                ? 'bg-stone-100/90 border border-stone-200/90 shadow-xs'
+                : 'bg-white/20 backdrop-blur-md border border-white/30 shadow-lg'
+            }`}
+          >
             {navItems.map((item) => (
               <a
                 key={item.label}
                 href={item.href}
                 className={`px-4 sm:px-5 py-2 rounded-full text-xs font-semibold tracking-wide transition-all ${
                   item.active
-                    ? 'bg-white text-stone-900 shadow-md'
+                    ? isScrolled
+                      ? 'bg-white text-stone-900 shadow-xs border border-stone-200/70'
+                      : 'bg-white text-stone-900 shadow-md'
+                    : isScrolled
+                    ? 'text-stone-600 hover:text-blue-700 hover:bg-stone-200/60'
                     : 'text-white/90 hover:text-white hover:bg-white/15'
                 }`}
               >
@@ -70,14 +102,24 @@ export const Navbar: React.FC = () => {
           <div className="flex items-center gap-2.5 z-10">
             {user ? (
               <div className="flex items-center gap-2">
-                <div className="hidden sm:flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-white/15 backdrop-blur-md border border-white/25 text-xs text-white">
+                <div
+                  className={`hidden sm:flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs transition-all ${
+                    isScrolled
+                      ? 'bg-white border border-stone-200 text-stone-800 shadow-2xs'
+                      : 'bg-white/15 backdrop-blur-md border border-white/25 text-white'
+                  }`}
+                >
                   <UserIcon className="w-3.5 h-3.5" />
                   <span className="max-w-[120px] truncate">{user.email}</span>
                 </div>
                 <button
                   onClick={handleSignOut}
                   title="Sign out"
-                  className="p-2 rounded-full bg-white/15 hover:bg-white/25 text-white transition-colors cursor-pointer"
+                  className={`p-2 rounded-full transition-colors cursor-pointer ${
+                    isScrolled
+                      ? 'bg-stone-100 hover:bg-stone-200 text-stone-700'
+                      : 'bg-white/15 hover:bg-white/25 text-white'
+                  }`}
                 >
                   <LogOut className="w-4 h-4" />
                 </button>
@@ -86,7 +128,11 @@ export const Navbar: React.FC = () => {
               <div className="flex items-center gap-2.5">
                 <button
                   onClick={() => setAuthModalOpen(true)}
-                  className="px-4 sm:px-5 py-2 rounded-full text-xs font-semibold text-white/90 hover:text-white bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/25 transition-all shadow-sm cursor-pointer"
+                  className={`px-4 sm:px-5 py-2 rounded-full text-xs font-semibold transition-all shadow-xs cursor-pointer ${
+                    isScrolled
+                      ? 'text-stone-800 bg-white hover:bg-stone-100 border border-stone-200'
+                      : 'text-white/90 hover:text-white bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/25'
+                  }`}
                 >
                   Login
                 </button>
