@@ -3,7 +3,7 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { useEvaluationStore } from '@/store/evaluation';
-import { Building2, Home, Landmark, ArrowRight } from 'lucide-react';
+import { Building2, Home, Landmark, ArrowRight, ListChecks } from 'lucide-react';
 
 interface CategoryCard {
   id: string;
@@ -21,31 +21,31 @@ const categories: CategoryCard[] = [
     id: 'cat-apartments',
     title: 'Apartments & Societies',
     type: 'Apartment',
-    description: 'Verify Occupancy Certificate (OC), RERA carpet area ratio, undivided share of land (UDS), and builder-buyer maintenance covenants.',
+    description: 'Tracks society Occupancy Certificate (OC), RERA carpet area audit, undivided share of land (UDS), and maintenance fund provisions.',
     icon: Building2,
-    buttonText: 'Browse Apartment Checklist',
+    buttonText: 'Start Apartment Checklist',
     checksCount: '24 Checkpoints',
-    checks: ['RERA Carpet Audit', 'Society OC & Fire NOC', 'UDS Ratio Check', 'Lift & Water Sanctions'],
+    checks: ['RERA Carpet Area vs Built-up Audit', 'Society OC & Building Sanctions', 'Undivided Land Share (UDS) Ratio', 'Maintenance & Advance Dues Check'],
   },
   {
     id: 'cat-villas',
     title: 'Villas & Row Houses',
     type: 'Villa',
-    description: 'Inspect independent plot demarcation, sanctioned structural drawings, municipal mutation extract, and dedicated utility meters.',
+    description: 'Focuses on individual plot boundary survey, sanctioned structural plans, mutation extract, and independent utility meter rights.',
     icon: Home,
-    buttonText: 'Browse Villa Checklist',
+    buttonText: 'Start Villa Checklist',
     checksCount: '28 Checkpoints',
-    checks: ['Plot Demarcation Boundary', 'Sanctioned Floor Plans', 'Mutation Extract', 'Water / Borewell Rights'],
+    checks: ['Plot Demarcation & Survey Boundary', 'Sanctioned Floor Construction Drawings', 'Mutation Extract in Buyer Name', 'Independent Water & Power Meters'],
   },
   {
     id: 'cat-plots',
-    title: 'Plots & Land Parcells',
+    title: 'Residential Plots & Land',
     type: 'Plot',
-    description: 'Validate Non-Agricultural (NA-47) conversion order, 30-year 7/12 extract chain, encumbrance certificate, and master zoning compliance.',
+    description: 'Validates Non-Agricultural (NA) conversion order, 30-year 7/12 land history chain, encumbrance status, and master plan zoning.',
     icon: Landmark,
-    buttonText: 'Browse Plot Checklist',
+    buttonText: 'Start Plot Checklist',
     checksCount: '22 Checkpoints',
-    checks: ['NA Conversion Order', '30-Year Encumbrance', 'Zonal Master Plan Check', 'Layout Sanction Map'],
+    checks: ['NA Conversion Order (NA-47/Collector)', '30-Year Encumbrance History', 'Town Planning Sanctioned Layout', 'Zonal Master Plan Road Widening Check'],
   },
 ];
 
@@ -55,11 +55,11 @@ export const PropertyCategoriesSection: React.FC = () => {
 
   const handleSelectCategory = (type: 'Apartment' | 'Villa' | 'Plot') => {
     const id = startNewEvaluation({
-      name: `Sample ${type} Evaluation`,
+      name: `Shortlisted ${type}`,
       location: 'Pune, Maharashtra',
       type: type,
       price: type === 'Plot' ? 3500000 : type === 'Villa' ? 12000000 : 7000000,
-      sourceName: `${type} Due Diligence`,
+      sourceName: `${type} Due Diligence Checklist`,
     }, false);
     router.push(`/evaluation/${id}/snapshot`);
   };
@@ -71,16 +71,20 @@ export const PropertyCategoriesSection: React.FC = () => {
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-14">
           <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-stone-200/80 text-stone-700 text-xs font-semibold mb-2">
+              <ListChecks className="w-3.5 h-3.5 text-blue-600" />
+              <span>STAGE-AWARE DUE DILIGENCE</span>
+            </div>
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-stone-900 leading-tight">
-              Tailored Due Diligence by Property Type
+              Different Properties. Completely Different Checklists.
             </h2>
           </div>
-          <p className="text-xs sm:text-sm text-stone-500 max-w-md font-normal leading-relaxed">
-            Different property types carry entirely different financial and legal risks. Our engine selects the exact checklist automatically.
+          <p className="text-xs sm:text-sm text-stone-600 max-w-md font-normal leading-relaxed">
+            A high-rise flat has completely different legal requirements than an open plot or standalone bungalow. HomeCheck configures your checklist to match the exact property type.
           </p>
         </div>
 
-        {/* 3 Clean Architectural Cards - Matching Roofin Isometric Cards */}
+        {/* 3 Clean Architectural Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {categories.map((cat) => {
             const Icon = cat.icon;
@@ -100,7 +104,6 @@ export const PropertyCategoriesSection: React.FC = () => {
                       <span>{cat.checksCount}</span>
                     </div>
 
-                    {/* Subtle grid lines in background */}
                     <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000005_1px,transparent_1px),linear-gradient(to_bottom,#00000005_1px,transparent_1px)] bg-[size:16px_16px] pointer-events-none" />
                   </div>
 
@@ -113,9 +116,9 @@ export const PropertyCategoriesSection: React.FC = () => {
                   </p>
 
                   {/* Check list pills */}
-                  <div className="space-y-1.5 mb-6">
+                  <div className="space-y-2 mb-6">
                     {cat.checks.map((check, idx) => (
-                      <div key={idx} className="flex items-center gap-2 text-xs text-stone-600 font-medium">
+                      <div key={idx} className="flex items-center gap-2 text-xs text-stone-700 font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-blue-600 shrink-0" />
                         <span>{check}</span>
                       </div>

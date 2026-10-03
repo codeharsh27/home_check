@@ -44,7 +44,7 @@ export const CTABannerSection: React.FC = () => {
               className="object-cover brightness-95"
             />
             {/* Ambient Overlay for text readability */}
-            <div className="absolute inset-0 bg-gradient-to-r from-slate-950/70 via-slate-900/50 to-slate-950/60 backdrop-blur-[2px]" />
+            <div className="absolute inset-0 bg-gradient-to-r from-slate-950/75 via-slate-900/60 to-slate-950/70 backdrop-blur-[2px]" />
           </div>
 
           {/* Banner Content - Left Title, Right Input Pill */}
@@ -53,24 +53,24 @@ export const CTABannerSection: React.FC = () => {
             {/* Title */}
             <div className="max-w-lg">
               <h3 className="text-2xl sm:text-3xl font-bold text-white tracking-tight leading-snug drop-shadow-sm">
-                Join HomeCheck For Updates On Verified Properties.
+                Have a Property Shortlisted? Evaluate It in 2 Minutes.
               </h3>
-              <p className="text-xs sm:text-sm text-white/80 font-normal mt-1.5">
-                Check funding caps, RERA status, and document authenticity for free.
+              <p className="text-xs sm:text-sm text-white/80 font-normal mt-1.5 leading-relaxed">
+                Paste any listing link or enter the project name. Get your true funding gap and customized due diligence checklist before committing any money.
               </p>
             </div>
 
-            {/* Input Pill matching Roofin */}
+            {/* Input Pill */}
             <form
               onSubmit={handleSubmit}
-              className="w-full lg:max-w-md bg-white rounded-full p-1.5 shadow-xl flex items-center justify-between"
+              className="w-full lg:max-w-md bg-white rounded-full p-1.5 shadow-xl flex items-center justify-between border border-white/60"
             >
               <input
                 type="text"
                 value={inputVal}
                 onChange={(e) => setInputVal(e.target.value)}
-                placeholder="Enter listing URL or property name"
-                className="flex-1 px-4 py-2 text-xs sm:text-sm text-slate-800 placeholder-slate-400 outline-none bg-transparent font-medium"
+                placeholder="Paste listing link from MagicBricks, 99acres..."
+                className="flex-1 px-4 py-2 text-xs sm:text-sm text-stone-800 placeholder-stone-400 outline-none bg-transparent font-medium"
               />
               <button
                 type="submit"

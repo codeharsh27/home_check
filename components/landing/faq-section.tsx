@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Plus, Minus, ArrowRight } from 'lucide-react';
+import { Plus, Minus, ArrowRight, HelpCircle } from 'lucide-react';
 
 interface FAQItem {
   id: string;
@@ -12,28 +12,28 @@ interface FAQItem {
 const faqs: FAQItem[] = [
   {
     id: 'faq-1',
-    question: 'How does HomeCheck calculate my actual funding gap?',
-    answer: 'We compute your total capital requirement — adding mandatory 7% stamp duty and registration fees on top of the base agreement value — and cross-reference it against your liquid funds and the RBI maximum 80% home loan ceiling. This pinpoints your exact out-of-pocket deficit before you pay any token money.',
+    question: 'Does HomeCheck replace my property lawyer or banker?',
+    answer: 'No, absolutely not. HomeCheck is a structured decision-support workspace. We calculate your real funding gap, highlight unverified documents, and generate the exact questions you should ask. We prepare you so that when you consult a lawyer or apply to a bank, you walk in fully informed rather than relying blindly on the seller’s pitch.',
   },
   {
     id: 'faq-2',
-    question: 'Does HomeCheck replace my property lawyer or banker?',
-    answer: 'No. HomeCheck is a structured due-diligence workspace built to empower you during those discussions. We identify missing title papers, regulatory flags, and lending barriers so that your lawyer and bank can focus on verification rather than starting from scratch.',
+    question: 'How does the funding gap calculation work?',
+    answer: 'We compute your total acquisition cost — adding mandatory 7% government stamp duty and registration fees to the quoted agreement value — and cross-reference it against the RBI 80% maximum bank loan limit and your available savings. Any shortfall between your available funds and the required cash outlay is flagged as your funding gap.',
   },
   {
     id: 'faq-3',
-    question: 'What documents should I ask the seller before paying a booking deposit?',
-    answer: 'Always obtain the official RERA registration certificate, sanctioned architectural plan, Commencement Certificate (CC), title search report, draft agreement for sale, and an encumbrance certificate. HomeCheck tracks these directly in your tailored checklist.',
+    question: 'What if I only have a listing URL and no legal papers yet?',
+    answer: 'That is where almost every buyer begins. Paste the listing link from MagicBricks, 99acres, NoBroker, or Housing. HomeCheck structures the property details and generates an itemized "What to Demand from the Builder" checklist so you know which documents to ask for before handing over a single rupee.',
   },
   {
     id: 'faq-4',
-    question: 'How does the platform handle regional document differences?',
-    answer: 'Property documentation varies significantly across India. HomeCheck automatically swaps checklist parameters — tracking 7/12 extracts and Index II in Maharashtra, A-Khata/B-Khata in Karnataka, or Patta Chitta in Tamil Nadu.',
+    question: 'Why doesn’t a bank home loan fund stamp duty and registration?',
+    answer: 'Under Reserve Bank of India (RBI) prudential guidelines, banks are strictly prohibited from including stamp duty, registration charges, and statutory taxes in the Loan-to-Value (LTV) ratio calculation. Banks only fund up to 80% of the property value — the remaining 20% down payment plus the entire ~7% government fee must come directly from your pocket in cash.',
   },
   {
     id: 'faq-5',
-    question: 'Is my personal and financial information secure?',
-    answer: 'Yes. All evaluations and financial numbers are stored in your secure workspace with row-level security. We never sell your contact details or shortlisted properties to real estate developers, brokers, or telecallers.',
+    question: 'Is HomeCheck affiliated with any broker or developer?',
+    answer: 'No. HomeCheck is 100% independent. We do not list properties for sale, accept developer advertising, or take broker referral cuts. We also never sell your contact information to pushy telecallers or marketing agencies.',
   },
 ];
 
@@ -51,11 +51,16 @@ export const FAQSection: React.FC = () => {
           
           {/* Left Column: Title & Have other question button */}
           <div className="lg:col-span-5 space-y-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-stone-200/80 text-stone-700 text-xs font-semibold">
+              <HelpCircle className="w-3.5 h-3.5 text-blue-600" />
+              <span>FREQUENTLY ASKED QUESTIONS</span>
+            </div>
+
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-stone-900 leading-[1.15]">
-              Frequently Asked Questions
+              Straight Answers to Real Buyer Doubts
             </h2>
-            <p className="text-sm text-stone-500 font-normal leading-relaxed">
-              Clear answers regarding our property verification methodology, lending formulas, and data privacy.
+            <p className="text-sm text-stone-600 font-normal leading-relaxed">
+              Clear, honest explanations about what our tool does, how our lending math works, and why we do not sell property.
             </p>
 
             <div className="pt-2">
@@ -63,13 +68,13 @@ export const FAQSection: React.FC = () => {
                 href="#full-intake"
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-stone-200 text-xs font-semibold text-stone-700 hover:border-blue-600 hover:text-blue-600 hover:bg-blue-50/50 transition-all shadow-sm"
               >
-                <span>Have other question?</span>
+                <span>Evaluate a Shortlisted Property</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </a>
             </div>
           </div>
 
-          {/* Right Column: Clean Accordion matching Roofin */}
+          {/* Right Column: Clean Accordion */}
           <div className="lg:col-span-7 space-y-3">
             {faqs.map((faq) => {
               const isOpen = openId === faq.id;
