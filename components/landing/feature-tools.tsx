@@ -3,172 +3,223 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useEvaluationStore, DEMO_PROPERTY } from '@/store/evaluation';
-import { ArrowRight, Calculator, ShieldCheck } from 'lucide-react';
+import { ArrowRight, AlertTriangle, ShieldCheck, Check, Sparkles } from 'lucide-react';
 
 export const FeatureToolsSection: React.FC = () => {
   const router = useRouter();
   const startNewEvaluation = useEvaluationStore((state) => state.startNewEvaluation);
 
-  const [propertyPrice, setPropertyPrice] = useState(6800000); // 68 Lakhs
-  const [personalSavings, setPersonalSavings] = useState(1400000); // 14 Lakhs
+  const [activeItem, setActiveItem] = useState<number | null>(null);
 
-  // Real calculations mirroring lib/calculations.ts
-  const stampDutyRate = 0.07; // 7% Stamp Duty + Registration
-  const stampDuty = propertyPrice * stampDutyRate;
-  const totalAcquisitionCost = propertyPrice + stampDuty;
-  const maxBankLoan = propertyPrice * 0.80; // 80% RBI LTV limit
-  const minimumDownPayment = propertyPrice * 0.20;
-  const totalCashRequired = minimumDownPayment + stampDuty;
-  const cashShortfall = Math.max(0, totalCashRequired - personalSavings);
+  const breakdownItems = [
+    {
+      label: 'Advertised Builder Price',
+      amount: '₹75,00,000',
+      tag: 'Only number the broker quoted',
+      isExtra: false,
+      detail: 'The base agreement value shown on hoardings and listings.',
+    },
+    {
+      label: 'Govt. Stamp Duty & Registration (7%)',
+      amount: '+ ₹5,25,000',
+      tag: 'Zero bank funding (100% Cash)',
+      isExtra: true,
+      detail: 'RBI strictly forbids banks from including stamp duty in home loans.',
+    },
+    {
+      label: 'Advance Society Maintenance & Corpus',
+      amount: '+ ₹2,50,000',
+      tag: 'Payable before possession',
+      isExtra: true,
+      detail: '24-36 months mandatory advance maintenance & society sinking fund.',
+    },
+    {
+      label: 'Covered Parking & Infrastructure Charges',
+      amount: '+ ₹3,75,000',
+      tag: 'Hidden in agreement fine print',
+      isExtra: true,
+      detail: 'Clubhouse, electricity substation, and dedicated car park fees.',
+    },
+  ];
 
-  const formatINR = (val: number) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      maximumFractionDigits: 0,
-    }).format(val);
-  };
-
-  const handleExplore = () => {
+  const handleStart = () => {
     const id = startNewEvaluation(DEMO_PROPERTY, true);
     router.push(`/evaluation/${id}/snapshot`);
   };
 
   return (
-    <section id="smart-tools" className="py-20 md:py-28 bg-[#FAF8F5] border-b border-stone-200/60">
+    <section id="smart-tools" className="py-20 md:py-28 bg-[#FAF8F5] border-b border-stone-200/60 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           
-          {/* Left Column: Heading + Copy + Action */}
-          <div className="lg:col-span-6 space-y-6">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold border border-blue-100">
-              <Calculator className="w-3.5 h-3.5" />
-              <span>THE FINANCIAL REALITY CHECK</span>
+          {/* Left Column: Bold Scannable Narrative */}
+          <div className="lg:col-span-5 space-y-6">
+            
+            {/* Eyebrow with animated pulse */}
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-50 border border-amber-200/80 text-amber-900 text-xs font-semibold">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+              </span>
+              <span>THE ACQUISITION COST REALITY</span>
             </div>
 
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-stone-900 leading-[1.15]">
-              Know Your Real Out-of-Pocket Cost Before Paying a Token
+            {/* Powerful, Scannable Headline */}
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-stone-900 leading-[1.12]">
+              Why a ₹75 Lakh Flat Really Costs <span className="underline decoration-blue-500 underline-offset-4">₹86.5 Lakhs</span>.
             </h2>
 
-            <p className="text-base sm:text-lg text-stone-600 leading-relaxed font-normal">
-              Banks only fund up to 80% of the base property price. Stamp duty and registration (approx. 7%) cannot be funded by home loans under RBI rules — they must come directly from your bank account in cash.
+            {/* Short Scannable Core Truth */}
+            <p className="text-base sm:text-lg text-stone-600 font-normal leading-relaxed">
+              Builders quote the base agreement rate. But RBI rules strictly prohibit banks from financing stamp duty, registration, or society deposits.
             </p>
 
-            <p className="text-sm text-stone-500 leading-relaxed">
-              HomeCheck pools your personal savings, family contributions, and company loans against the full cost of acquisition so you know your exact down payment shortfall before committing booking money.
-            </p>
+            {/* 3 Quick-Scan Fact Chips */}
+            <div className="space-y-3 pt-1">
+              <div className="flex items-start gap-3">
+                <div className="w-5 h-5 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 mt-0.5 font-bold text-xs">
+                  1
+                </div>
+                <div>
+                  <span className="text-xs font-bold text-stone-900 block">Banks Only Loan 80% of Base Price</span>
+                  <span className="text-xs text-stone-500">They never loan against stamp duty or amenities.</span>
+                </div>
+              </div>
 
-            <div className="pt-2">
+              <div className="flex items-start gap-3">
+                <div className="w-5 h-5 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center shrink-0 mt-0.5 font-bold text-xs">
+                  2
+                </div>
+                <div>
+                  <span className="text-xs font-bold text-stone-900 block">7% Stamp Duty is 100% Cash</span>
+                  <span className="text-xs text-stone-500">₹5.25L+ must leave your personal savings upfront.</span>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3">
+                <div className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0 mt-0.5 font-bold text-xs">
+                  3
+                </div>
+                <div>
+                  <span className="text-xs font-bold text-stone-900 block">Know Your Exact Gap in 60 Seconds</span>
+                  <span className="text-xs text-stone-500">HomeCheck pools your savings, family help &amp; loan limits.</span>
+                </div>
+              </div>
+            </div>
+
+            {/* CTA */}
+            <div className="pt-3">
               <button
                 type="button"
-                onClick={handleExplore}
-                className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-semibold text-sm shadow-lg shadow-blue-500/25 transition-all hover:shadow-blue-500/40 cursor-pointer"
+                onClick={handleStart}
+                className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-semibold text-xs tracking-wide shadow-lg shadow-blue-500/25 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
               >
-                <span>Calculate Your Exact Shortfall</span>
+                <span>Check Your True Capital Requirement</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>
+
           </div>
 
-          {/* Right Column: Live Interactive Math Card */}
-          <div className="lg:col-span-6">
-            <div className="relative rounded-3xl bg-white border border-stone-200 p-6 sm:p-8 shadow-xl shadow-stone-200/40 space-y-6">
+          {/* Right Column: Visual Teardown Receipt Card (No generic calculator, pure scannable intelligence) */}
+          <div className="lg:col-span-7">
+            <div className="relative rounded-3xl bg-white border border-stone-200/90 p-6 sm:p-8 shadow-2xl shadow-stone-200/50 space-y-6 transition-all">
               
-              {/* Header */}
+              {/* Card Header with Real Estate Context */}
               <div className="flex items-center justify-between pb-4 border-b border-stone-100">
-                <div>
-                  <span className="text-sm font-bold text-stone-800 tracking-tight">Out-of-Pocket Gap Simulation</span>
-                  <p className="text-xs text-stone-500">Based on RBI 80% LTV &amp; 7% Stamp Duty rules</p>
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-blue-600"></span>
+                  <span className="text-xs font-bold uppercase tracking-wider text-stone-700">
+                    Acquisition Teardown · 2 BHK Example
+                  </span>
                 </div>
-                <span className="text-[11px] font-semibold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-100">
-                  Live Formula
+                <span className="text-[11px] font-mono font-semibold text-stone-400">
+                  Ref: Metro Market Standard
                 </span>
               </div>
 
-              {/* Sliders for Property Price & Savings */}
-              <div className="space-y-4">
+              {/* Itemized Scannable Rows */}
+              <div className="space-y-3">
+                {breakdownItems.map((item, idx) => (
+                  <div
+                    key={idx}
+                    onMouseEnter={() => setActiveItem(idx)}
+                    onMouseLeave={() => setActiveItem(null)}
+                    className={`p-3.5 rounded-2xl border transition-all cursor-default ${
+                      item.isExtra
+                        ? activeItem === idx 
+                          ? 'bg-amber-50/80 border-amber-300 shadow-sm'
+                          : 'bg-stone-50/70 border-stone-200/70 hover:bg-stone-50'
+                        : 'bg-blue-50/40 border-blue-100'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between gap-3">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className={`text-xs font-bold ${item.isExtra ? 'text-stone-800' : 'text-blue-950 font-extrabold'}`}>
+                            {item.label}
+                          </span>
+                        </div>
+                        <span className={`text-[10px] font-medium tracking-wide ${
+                          item.isExtra ? 'text-amber-800 font-semibold' : 'text-blue-700'
+                        }`}>
+                          {item.tag}
+                        </span>
+                      </div>
+                      <span className={`text-sm sm:text-base font-mono font-bold shrink-0 ${
+                        item.isExtra ? 'text-stone-900' : 'text-blue-700'
+                      }`}>
+                        {item.amount}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Dashed Divider */}
+              <div className="border-t-2 border-dashed border-stone-200 my-4"></div>
+
+              {/* True Total Callout */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-4 rounded-2xl bg-stone-900 text-white">
                 <div>
-                  <div className="flex justify-between text-xs font-semibold text-stone-700 mb-1.5">
-                    <span>Quoted Property Price</span>
-                    <span className="text-stone-900 font-bold">{formatINR(propertyPrice)}</span>
-                  </div>
-                  <input
-                    type="range"
-                    min={3000000}
-                    max={20000000}
-                    step={200000}
-                    value={propertyPrice}
-                    onChange={(e) => setPropertyPrice(Number(e.target.value))}
-                    className="w-full h-1.5 bg-stone-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
-                  />
+                  <span className="text-[11px] uppercase tracking-wider font-semibold text-stone-400 block">
+                    Actual Cheque Outlay
+                  </span>
+                  <span className="text-2xl font-bold font-mono text-white">
+                    ₹86,50,000
+                  </span>
                 </div>
-
-                <div>
-                  <div className="flex justify-between text-xs font-semibold text-stone-700 mb-1.5">
-                    <span>Your Ready Savings</span>
-                    <span className="text-stone-900 font-bold">{formatINR(personalSavings)}</span>
-                  </div>
-                  <input
-                    type="range"
-                    min={500000}
-                    max={6000000}
-                    step={100000}
-                    value={personalSavings}
-                    onChange={(e) => setPersonalSavings(Number(e.target.value))}
-                    className="w-full h-1.5 bg-stone-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
-                  />
+                <div className="sm:text-right">
+                  <span className="inline-block px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-bold">
+                    + ₹11,50,000 Extra Over Quote
+                  </span>
                 </div>
               </div>
 
-              {/* Calculation Summary Table */}
-              <div className="rounded-2xl bg-stone-50 p-4 border border-stone-200/70 space-y-2.5 text-xs">
-                <div className="flex justify-between text-stone-600">
-                  <span>Base Property Value:</span>
-                  <span className="font-semibold text-stone-900">{formatINR(propertyPrice)}</span>
+              {/* Visual Gap Comparison: What You Expected vs What Actually Happens */}
+              <div className="p-4 rounded-2xl bg-[#FAF8F5] border border-stone-200 space-y-3">
+                <div className="flex justify-between text-xs">
+                  <span className="text-stone-600 font-medium">Bank Loan Coverage (80% of Base only):</span>
+                  <span className="font-bold text-stone-900 font-mono">₹60,00,000</span>
                 </div>
-                <div className="flex justify-between text-stone-600">
-                  <span>Stamp Duty &amp; Reg (7% un-fundable):</span>
-                  <span className="font-semibold text-stone-900">{formatINR(stampDuty)}</span>
+                
+                {/* Visual Bar representation */}
+                <div className="w-full h-3 rounded-full bg-stone-200 overflow-hidden flex">
+                  <div style={{ width: '69%' }} className="bg-blue-600 h-full" title="Bank Loan (69%)"></div>
+                  <div style={{ width: '31%' }} className="bg-amber-500 h-full" title="Your Cash Requirement (31%)"></div>
                 </div>
-                <div className="flex justify-between text-stone-600">
-                  <span>Max Bank Loan Possible (80% LTV):</span>
-                  <span className="font-semibold text-blue-600">{formatINR(maxBankLoan)}</span>
-                </div>
-                <div className="pt-2 border-t border-stone-200 flex justify-between font-bold text-stone-900 text-sm">
-                  <span>Total Cash You Must Bring:</span>
-                  <span>{formatINR(totalCashRequired)}</span>
+
+                <div className="flex items-center justify-between text-xs pt-1 border-t border-stone-200/60 font-semibold">
+                  <span className="text-amber-900">Your Actual Cash Requirement:</span>
+                  <span className="text-amber-900 font-bold font-mono text-sm">₹26,50,000 <span className="text-[10px] font-normal text-stone-500">(Not ₹15 Lakhs)</span></span>
                 </div>
               </div>
 
-              {/* Verdict Box */}
-              <div className={`p-4 rounded-2xl border ${
-                cashShortfall > 0 
-                  ? 'bg-amber-50/70 border-amber-200 text-amber-900' 
-                  : 'bg-emerald-50/70 border-emerald-200 text-emerald-900'
-              }`}>
-                <div className="flex items-start gap-2.5">
-                  <ShieldCheck className={`w-4 h-4 shrink-0 mt-0.5 ${cashShortfall > 0 ? 'text-amber-600' : 'text-emerald-600'}`} />
-                  <div>
-                    <span className="text-xs font-bold block">
-                      {cashShortfall > 0 ? `Funding Shortfall: ${formatINR(cashShortfall)}` : 'Fully Funded By Your Savings!'}
-                    </span>
-                    <p className="text-[11px] text-stone-600 mt-0.5 leading-relaxed">
-                      {cashShortfall > 0 
-                        ? 'You need this extra cash before registration. HomeCheck lets you map family funds or company loans to bridge it.'
-                        : 'Your ready savings comfortably cover both the 20% down payment and un-fundable 7% government stamp duty.'}
-                    </p>
-                  </div>
-                </div>
+              {/* Protective Takeaway note */}
+              <div className="flex items-center gap-2.5 text-xs text-stone-500 pt-1">
+                <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+                <span>HomeCheck catches this before you sign so you never face a cash emergency at registration.</span>
               </div>
-
-              {/* Action Button */}
-              <button
-                type="button"
-                onClick={handleExplore}
-                className="w-full py-3 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-semibold shadow-md shadow-blue-500/20 transition-all cursor-pointer text-center block"
-              >
-                Run Full Financial Check On Your Property →
-              </button>
 
             </div>
           </div>
