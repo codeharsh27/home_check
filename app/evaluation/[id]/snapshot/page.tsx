@@ -12,6 +12,7 @@ import { useEvaluationStore } from '@/store/evaluation';
 import { ArrowRight } from 'lucide-react';
 import { EvidenceStatus, PropertyDetails } from '@/types';
 import { calculateSnapshotCompleteness } from '@/lib/calculations';
+import { trackEvent } from '@/lib/analytics';
 
 function SnapshotPageContent() {
   const params = useParams();
@@ -74,6 +75,11 @@ function SnapshotPageContent() {
 
   const handleContinue = () => {
     markStepComplete(evalId, 'snapshot');
+    trackEvent('snapshot_confirmed', evalId, {
+      completenessPercent: completeness.percent,
+      propertyType: property.type,
+      price: property.price,
+    });
     router.push(`/evaluation/${evalId}/financial`);
   };
 

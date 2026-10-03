@@ -15,6 +15,7 @@ import {
   calculateSnapshotCompleteness,
   formatCurrency,
 } from '@/lib/calculations';
+import { trackEvent } from '@/lib/analytics';
 
 function DashboardPageContent() {
   const params = useParams();
@@ -66,6 +67,12 @@ function DashboardPageContent() {
               variant="outline"
               size="sm"
               onClick={() => {
+                trackEvent('report_exported', evalId, {
+                  verifiedChecks: receivedItems.length,
+                  totalChecks: checklist.length,
+                  fundingGap,
+                  completenessPercent: completeness.percent,
+                });
                 if (typeof window !== 'undefined') {
                   window.print();
                 }

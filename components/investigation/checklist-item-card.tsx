@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { uploadDocumentToSupabase } from '@/lib/supabase';
+import { trackEvent } from '@/lib/analytics';
 
 interface ChecklistItemCardProps {
   item: ChecklistItem;
@@ -46,6 +47,11 @@ export const ChecklistItemCard: React.FC<ChecklistItemCardProps> = ({
     let nextStatus: EvidenceStatus = item.status;
     if (nextReceived) {
       nextStatus = 'verified';
+      trackEvent('checklist_item_completed', evaluationId, {
+        itemId: item.id,
+        category: item.category,
+        title: item.title,
+      });
     } else if (item.requested) {
       nextStatus = 'user-provided';
     }
@@ -65,6 +71,13 @@ export const ChecklistItemCard: React.FC<ChecklistItemCardProps> = ({
           documents: updatedDocs,
           received: true,
           status: item.status === 'needs-pro' ? 'needs-pro' : 'user-provided',
+        });
+        trackEvent('document_uploaded', evaluationId, {
+          itemId: item.id,
+          fileName: file.name,
+          fileSize: file.size,
+          category: item.category,
+          isRemote: Boolean(evidence.fileUrl),
         });
       }
     } finally {
