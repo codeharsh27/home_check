@@ -18,7 +18,6 @@ import {
   formatCurrency,
 } from '@/lib/calculations';
 import { BuyerContext } from '@/types';
-import { trackEvent } from '@/lib/analytics';
 
 function FinancialPageContent() {
   const params = useParams();
@@ -51,15 +50,6 @@ function FinancialPageContent() {
 
   const handleContinue = () => {
     markStepComplete(evalId, 'financial');
-    if (property) {
-      trackEvent('financial_gap_calculated', evalId, {
-        propertyPrice: property.price,
-        effectiveFunds,
-        plannedLoan,
-        fundingGap,
-        hasGap: fundingGap > 0,
-      });
-    }
     router.push(`/evaluation/${evalId}/investigation`);
   };
 

@@ -10,6 +10,7 @@ import {
 } from '@/types';
 import { generateChecklist, generateQuestionsFromChecklist } from '@/lib/checklist-engine';
 import { syncEvaluationToSupabase, supabase } from '@/lib/supabase';
+import { trackEvent } from '@/lib/analytics';
 
 // Helper to trigger asynchronous cloud sync in background
 async function triggerCloudSync(evaluation: EvaluationSession) {
@@ -123,6 +124,11 @@ export const useEvaluationStore = create<EvaluationStore>()(
         }));
 
         triggerCloudSync(newSession);
+        trackEvent('evaluation_started', 'funnel', id, {
+          propertyType: property.type,
+          price: property.price,
+          isDemo,
+        });
 
         return id;
       },
@@ -145,6 +151,7 @@ export const useEvaluationStore = create<EvaluationStore>()(
           ) as EvaluationStep[];
           const updatedEval = { ...evalItem, completedSteps, updatedAt: new Date().toISOString() };
           triggerCloudSync(updatedEval);
+          trackEvent(`step_${step}_completed`, 'funnel', id, { step });
           return {
             currentEvaluation: state.currentEvaluation?.id === id ? updatedEval : state.currentEvaluation,
             evaluations: { ...state.evaluations, [id]: updatedEval },
@@ -202,6 +209,12 @@ export const useEvaluationStore = create<EvaluationStore>()(
             questions: updatedQuestions,
           };
           triggerCloudSync(updatedEval);
+          if (updates.received) {
+            trackEvent('checklist_item_received', 'engagement', id, { itemId });
+          }
+          if (updates.documents) {
+            trackEvent('document_attached', 'conversion', id, { itemId, docCount: updates.documents.length });
+          }
           return {
             currentEvaluation: state.currentEvaluation?.id === id ? updatedEval : state.currentEvaluation,
             evaluations: { ...state.evaluations, [id]: updatedEval },
@@ -222,6 +235,7 @@ export const useEvaluationStore = create<EvaluationStore>()(
             questions: updatedQuestions,
           };
           triggerCloudSync(updatedEval);
+          trackEvent('question_resolved', 'conversion', id, { questionId, status });
           return {
             currentEvaluation: state.currentEvaluation?.id === id ? updatedEval : state.currentEvaluation,
             evaluations: { ...state.evaluations, [id]: updatedEval },

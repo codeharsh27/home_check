@@ -1,5 +1,6 @@
 import React from "react";
-import { ShieldCheck } from "lucide-react";
+import Link from "next/link";
+import { ShieldCheck, BarChart3 } from "lucide-react";
 
 export const Footer: React.FC = () => {
   return (
@@ -10,7 +11,15 @@ export const Footer: React.FC = () => {
           <span className="font-semibold text-[#888888]">HomeCheck</span>
           <span>— Property evaluation & due-diligence workspace for India</span>
         </div>
-        <div>
+        <div className="flex items-center gap-4">
+          <Link
+            href="/admin"
+            className="flex items-center gap-1.5 text-[#888888] hover:text-[#5B8BDF] transition-colors"
+          >
+            <BarChart3 className="w-3.5 h-3.5" />
+            <span>PM & Founder Console</span>
+          </Link>
+          <span className="text-[#333333]">|</span>
           <span>© 2026 HomeCheck. Portfolio MVP.</span>
         </div>
       </div>

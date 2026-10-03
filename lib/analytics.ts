@@ -1,37 +1,96 @@
 import { supabase, isSupabaseConfigured } from './supabase';
 
-export type PMEventType =
-  | 'intake_completed'
-  | 'snapshot_confirmed'
-  | 'financial_gap_calculated'
-  | 'checklist_item_completed'
-  | 'document_uploaded'
-  | 'question_resolved'
-  | 'report_exported';
+export interface AnalyticsEvent {
+  id?: string;
+  sessionId: string;
+  eventName: string;
+  category: 'funnel' | 'engagement' | 'conversion' | 'risk';
+  properties?: Record<string, any>;
+  createdAt?: string;
+}
+
+// Local telemetry cache for immediate display & offline resilience
+const LOCAL_EVENTS_KEY = 'homecheck_telemetry_events';
+
+export function getLocalTelemetryEvents(): AnalyticsEvent[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    const raw = localStorage.getItem(LOCAL_EVENTS_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+export function saveLocalTelemetryEvent(event: AnalyticsEvent) {
+  if (typeof window === 'undefined') return;
+  try {
+    const events = getLocalTelemetryEvents();
+    const updated = [event, ...events].slice(0, 100); // keep last 100
+    localStorage.setItem(LOCAL_EVENTS_KEY, JSON.stringify(updated));
+  } catch {}
+}
 
 /**
- * Log a product telemetry event to Supabase analytics_events table.
- * Fails silently so it never interrupts the user experience.
+ * Track a product event to Supabase analytics_events table and local buffer
  */
 export async function trackEvent(
-  eventName: PMEventType,
-  evaluationId?: string,
+  eventName: string,
+  category: AnalyticsEvent['category'],
+  sessionId: string,
   properties: Record<string, any> = {}
-): Promise<void> {
-  if (!supabase || !isSupabaseConfigured) return;
+) {
+  const event: AnalyticsEvent = {
+    sessionId,
+    eventName,
+    category,
+    properties,
+    createdAt: new Date().toISOString(),
+  };
 
-  try {
-    const userRes = await supabase.auth.getUser();
-    const userId = userRes.data?.user?.id || null;
+  // 1. Save locally for instant rendering
+  saveLocalTelemetryEvent(event);
 
-    await supabase.from('analytics_events').insert({
-      event_name: eventName,
-      evaluation_id: evaluationId || null,
-      user_id: userId,
-      properties,
-    });
-  } catch (err) {
-    // Non-blocking telemetry
-    console.debug('[Telemetry]', eventName, err);
+  // 2. Transmit to Supabase asynchronously
+  if (supabase && isSupabaseConfigured) {
+    try {
+      await supabase.from('analytics_events').insert({
+        session_id: sessionId,
+        event_name: eventName,
+        category,
+        properties,
+        created_at: event.createdAt,
+      });
+    } catch (err) {
+      console.debug('[Analytics] Event send non-blocking fallback:', err);
+    }
   }
+}
+
+/**
+ * Fetch all analytics events from Supabase or fallback to local
+ */
+export async function fetchAllAnalyticsEvents(): Promise<AnalyticsEvent[]> {
+  if (supabase && isSupabaseConfigured) {
+    try {
+      const { data, error } = await supabase
+        .from('analytics_events')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(200);
+
+      if (!error && data && data.length > 0) {
+        return data.map((d: any) => ({
+          id: d.id,
+          sessionId: d.session_id,
+          eventName: d.event_name,
+          category: d.category,
+          properties: d.properties || {},
+          createdAt: d.created_at,
+        }));
+      }
+    } catch {}
+  }
+
+  return getLocalTelemetryEvents();
 }

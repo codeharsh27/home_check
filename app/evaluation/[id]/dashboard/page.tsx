@@ -67,11 +67,10 @@ function DashboardPageContent() {
               variant="outline"
               size="sm"
               onClick={() => {
-                trackEvent('report_exported', evalId, {
-                  verifiedChecks: receivedItems.length,
-                  totalChecks: checklist.length,
+                trackEvent('report_exported', 'conversion', evalId, {
+                  propertyName: property.name,
+                  propertyPrice: property.price,
                   fundingGap,
-                  completenessPercent: completeness.percent,
                 });
                 if (typeof window !== 'undefined') {
                   window.print();

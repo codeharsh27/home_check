@@ -6,7 +6,6 @@ import { Link2, Upload, Edit3, ArrowRight, FileText, CheckCircle2, Loader2, Aler
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useEvaluationStore, DEMO_PROPERTY } from '@/store/evaluation';
-import { trackEvent } from '@/lib/analytics';
 
 export const IntakeWidget: React.FC = () => {
   const router = useRouter();
@@ -46,18 +45,15 @@ export const IntakeWidget: React.FC = () => {
 
       if (data.property && Object.keys(data.property).length > 2) {
         const id = startNewEvaluation(data.property, false);
-        trackEvent('intake_completed', id, { method: 'url', parsed: true, sourceName: data.property.sourceName });
         router.push(`/evaluation/${id}/snapshot`);
       } else {
         if (data.error) setParseError(`${data.error} — you can fill in the details on the next screen.`);
         const id = startNewEvaluation({ sourceUrl: urlInput, sourceName: 'Listing URL' }, false);
-        trackEvent('intake_completed', id, { method: 'url', parsed: false });
         router.push(`/evaluation/${id}/snapshot`);
       }
     } catch {
       setParseError('Could not reach the URL. You can fill in details manually on the next screen.');
       const id = startNewEvaluation({ sourceUrl: urlInput, sourceName: 'Listing URL' }, false);
-      trackEvent('intake_completed', id, { method: 'url', parsed: false });
       router.push(`/evaluation/${id}/snapshot`);
     } finally {
       setIsLoading(false);
@@ -70,7 +66,6 @@ export const IntakeWidget: React.FC = () => {
       { sourceName: uploadedFile ? uploadedFile.name : 'Brochure document' },
       false
     );
-    trackEvent('intake_completed', id, { method: 'upload', hasFile: Boolean(uploadedFile) });
     router.push(`/evaluation/${id}/snapshot`);
   };
 
@@ -89,17 +84,11 @@ export const IntakeWidget: React.FC = () => {
       },
       false
     );
-    trackEvent('intake_completed', id, {
-      method: 'manual',
-      propertyType: manualData.type,
-      hasPrice: Boolean(manualData.price),
-    });
     router.push(`/evaluation/${id}/snapshot`);
   };
 
   const handleLoadDemo = () => {
     const id = startNewEvaluation(DEMO_PROPERTY, true);
-    trackEvent('intake_completed', id, { method: 'demo' });
     router.push(`/evaluation/${id}/snapshot`);
   };
 
