@@ -44,13 +44,43 @@ export const FieldRow: React.FC<FieldRowProps> = ({
 
         {isEditing ? (
           <div className="flex items-center gap-2 pt-1">
-            <input
-              type="text"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              className="bg-[#1C1C1C] border border-[#5B8BDF] text-xs text-[#EDEDED] px-2.5 py-1.5 rounded focus:outline-none w-48 font-mono"
-              autoFocus
-            />
+            {label === "Property Type" ? (
+              <select
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                className="bg-[#1C1C1C] border border-[#5B8BDF] text-xs text-[#EDEDED] px-2.5 py-1.5 rounded focus:outline-none w-48 font-mono"
+                autoFocus
+              >
+                <option value="Apartment">Apartment</option>
+                <option value="Villa">Villa</option>
+                <option value="Plot">Plot</option>
+                <option value="Independent House">Independent House</option>
+                <option value="Other">Other</option>
+              </select>
+            ) : label === "Possession Status" ? (
+              <select
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                className="bg-[#1C1C1C] border border-[#5B8BDF] text-xs text-[#EDEDED] px-2.5 py-1.5 rounded focus:outline-none w-48 font-mono"
+                autoFocus
+              >
+                <option value="Under construction">Under construction</option>
+                <option value="Ready to move">Ready to move</option>
+                <option value="Pre-launch">Pre-launch</option>
+              </select>
+            ) : (
+              <input
+                type="text"
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleSave();
+                  if (e.key === "Escape") handleCancel();
+                }}
+                className="bg-[#1C1C1C] border border-[#5B8BDF] text-xs text-[#EDEDED] px-2.5 py-1.5 rounded focus:outline-none w-48 font-mono"
+                autoFocus
+              />
+            )}
             <button
               onClick={handleSave}
               className="p-1 rounded bg-[#3F9E6C]/20 text-[#3F9E6C] hover:bg-[#3F9E6C]/30 cursor-pointer"

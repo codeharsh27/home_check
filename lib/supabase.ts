@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { EvaluationSession, DocumentEvidence } from '@/types';
+import { calculateFundingGap } from './calculations';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
@@ -31,9 +32,9 @@ export async function syncEvaluationToSupabase(
 
   try {
     const price = evaluation.property?.price || 0;
-    const funds = (evaluation.buyerContext?.availableFunds || 0) - (evaluation.buyerContext?.emergencyReserve || 0);
-    const loan = evaluation.buyerContext?.plannedLoanAmount || 0;
-    const fundingGap = Math.max(0, price * 1.07 - (Math.max(0, funds) + loan));
+    const fundingGap = evaluation.property
+      ? calculateFundingGap(evaluation.property, evaluation.buyerContext || {})
+      : 0;
 
     const payload = {
       id: evaluation.id,

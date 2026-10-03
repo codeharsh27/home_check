@@ -1,7 +1,7 @@
 import React from "react";
 import { ChecklistItem } from "@/types";
 import { ChecklistItemCard } from "./checklist-item-card";
-import { ShieldCheck, FileCheck, DollarSign, Building } from "lucide-react";
+import { ShieldCheck, FileCheck, DollarSign, Building, Wrench } from "lucide-react";
 
 interface CategorySectionProps {
   categoryKey: ChecklistItem["category"];
@@ -29,6 +29,8 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         return <FileCheck className="w-4 h-4 text-[#9B6FD6]" />;
       case "financial":
         return <DollarSign className="w-4 h-4 text-[#3F9E6C]" />;
+      case "condition":
+        return <Wrench className="w-4 h-4 text-[#E6832A]" />;
       case "costs":
         return <Building className="w-4 h-4 text-[#D4A017]" />;
       default:

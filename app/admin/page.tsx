@@ -24,7 +24,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useEvaluationStore, DEMO_PROPERTY, DEMO_BUYER_CONTEXT } from '@/store/evaluation';
-import { formatCurrency } from '@/lib/calculations';
+import { formatCurrency, calculateFundingGap } from '@/lib/calculations';
 import { fetchAllAnalyticsEvents, AnalyticsEvent } from '@/lib/analytics';
 import { fetchAllEvaluationsFromSupabase } from '@/lib/supabase';
 import { generateChecklist } from '@/lib/checklist-engine';
@@ -121,10 +121,8 @@ export default function AdminDashboardPage() {
     0
   );
   const totalFundingGaps = evaluationList.reduce((acc, curr) => {
-    const price = curr.property?.price || 0;
-    const funds = (curr.buyerContext?.availableFunds || 0) - (curr.buyerContext?.emergencyReserve || 0);
-    const loan = curr.buyerContext?.plannedLoanAmount || 0;
-    const gap = Math.max(0, price * 1.07 - (Math.max(0, funds) + loan));
+    if (!curr.property) return acc;
+    const gap = calculateFundingGap(curr.property, curr.buyerContext || {});
     return acc + gap;
   }, 0);
 

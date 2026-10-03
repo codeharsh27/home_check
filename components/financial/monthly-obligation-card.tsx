@@ -68,16 +68,38 @@ export const MonthlyObligationCard: React.FC<MonthlyObligationCardProps> = ({
           <p className="text-lg font-bold font-mono text-[#EDEDED]">
             ~₹{totalMonthlyDebt.toLocaleString("en-IN")}/mo
           </p>
-          <span className="text-[11px] text-[#888888]">
-            {debtToIncomeRatio}% of take-home income
+          <span className={`text-[11px] font-medium ${debtToIncomeRatio > 50 ? 'text-[#E6832A]' : 'text-[#3F9E6C]'}`}>
+            {debtToIncomeRatio}% FOIR / DTI ratio
           </span>
         </div>
       </div>
 
+      {/* Lender FOIR Risk Guidance */}
+      {monthlyIncome > 0 && (
+        <div className={`p-3 rounded-lg border text-xs flex items-start gap-2.5 ${
+          debtToIncomeRatio > 50
+            ? 'bg-[#E6832A]/10 border-[#E6832A]/30 text-[#E6832A]'
+            : 'bg-[#3F9E6C]/10 border-[#3F9E6C]/30 text-[#3F9E6C]'
+        }`}>
+          <Info className="w-4 h-4 shrink-0 mt-0.5" />
+          <div className="text-[11px] leading-relaxed">
+            {debtToIncomeRatio > 50 ? (
+              <span className="text-[#CCCCCC]">
+                <strong className="text-[#E6832A]">High Obligation Alert:</strong> At {debtToIncomeRatio}% of take-home income, your total monthly debt exceeds the recommended 45-50% lender threshold (FOIR). Most banks (SBI, HDFC, ICICI) may reduce your sanction amount or require a co-applicant.
+              </span>
+            ) : (
+              <span className="text-[#CCCCCC]">
+                <strong className="text-[#3F9E6C]">Healthy Loan Eligibility:</strong> Your total monthly debt is within the safe 50% FOIR threshold, qualifying for standard bank home loan processing.
+              </span>
+            )}
+          </div>
+        </div>
+      )}
+
       <div className="flex items-center gap-2 text-[11px] text-[#777777] bg-[#141414] p-3 rounded-lg border border-[#222222]">
         <Info className="w-3.5 h-3.5 text-[#555555] shrink-0" />
         <span>
-          Estimates are based on standard benchmark interest rates ({interestRate}% p.a.). Actual EMI will depend on bank eligibility and loan sanction terms.
+          Estimates are based on benchmark interest rates ({interestRate}% p.a.). Actual EMI will depend on bank CIBIL score checks and formal sanction letters.
         </span>
       </div>
     </div>
