@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useEvaluationStore, DEMO_PROPERTY } from '@/store/evaluation';
 
-export const IntakeWidget: React.FC = () => {
+export const IntakeWidget: React.FC<{ simplified?: boolean }> = ({ simplified = false }) => {
   const router = useRouter();
   const startNewEvaluation = useEvaluationStore((state) => state.startNewEvaluation);
 
@@ -98,8 +98,53 @@ export const IntakeWidget: React.FC = () => {
     { id: 'manual' as const, label: 'Enter manually', icon: <Edit3 className="w-3.5 h-3.5" /> },
   ];
 
+  // ── Simplified hero mode: just URL input + button ──
+  if (simplified) {
+    return (
+      <form onSubmit={handleStartWithUrl} className="w-full space-y-3">
+        <div className="flex flex-col sm:flex-row gap-3">
+          <input
+            type="url"
+            placeholder="Paste listing URL (MagicBricks, 99acres, Housing.com…)"
+            value={urlInput}
+            onChange={(e) => setUrlInput(e.target.value)}
+            className="flex-1 bg-[#141414] border border-[#2A2A2A] text-[#EDEDED] placeholder-[#444444] rounded-xl px-4 py-3 text-sm font-mono focus:outline-none focus:border-[#5B8BDF] focus:ring-1 focus:ring-[#5B8BDF]/30 transition-colors"
+          />
+          <button
+            type="submit"
+            disabled={isLoading || !urlInput.trim()}
+            className="shrink-0 flex items-center justify-center gap-2 bg-[#5B8BDF] hover:bg-[#4A78C8] text-white font-semibold rounded-xl px-6 py-3 text-sm disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            {isLoading ? (
+              <><Loader2 className="w-4 h-4 animate-spin" /><span>Analysing…</span></>
+            ) : (
+              <><span>Analyse Property</span><ArrowRight className="w-4 h-4" /></>
+            )}
+          </button>
+        </div>
+        {parseError && (
+          <div className="flex items-center gap-2 text-xs text-[#E6832A] bg-[#E6832A]/10 border border-[#E6832A]/20 p-2.5 rounded-lg">
+            <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+            <span>{parseError}</span>
+          </div>
+        )}
+        <div className="flex flex-wrap items-center gap-3 text-[11px] text-[#555555]">
+          <span>Or:</span>
+          <button type="button" onClick={handleLoadDemo} className="text-[#5B8BDF] hover:text-[#7EAAEE] hover:underline transition-colors cursor-pointer">
+            Load demo (Wakad, Pune · 2BHK · ₹68L)
+          </button>
+          <span className="text-[#333333]">·</span>
+          <a href="#full-intake" className="text-[#555555] hover:text-[#888888] hover:underline transition-colors">
+            Upload brochure / Enter manually ↓
+          </a>
+        </div>
+      </form>
+    );
+  }
+  // ──────────────────────────────────────────────────
+
   return (
-    <div className="w-full bg-[#121212] border border-[#252525] rounded-xl overflow-hidden shadow-2xl">
+    <div className="w-full bg-[#121212] border border-[#252525] rounded-xl overflow-hidden shadow-2xl" id="full-intake">
       {/* Tabs */}
       <div className="flex border-b border-[#222222] bg-[#0E0E0E]">
         {tabs.map((tab) => (

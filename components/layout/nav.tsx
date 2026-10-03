@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { ShieldCheck, LogOut, User as UserIcon, Globe, ChevronDown, Check, BarChart3 } from 'lucide-react';
+import { ShieldCheck, LogOut, User as UserIcon, Globe, ChevronDown, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { AuthModal } from '@/components/auth/auth-modal';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
@@ -58,22 +58,12 @@ export const Navbar: React.FC = () => {
             <span className="font-semibold tracking-tight text-base text-[#EDEDED] group-hover:text-white transition-colors">
               homecheck
             </span>
-            <span className="text-[10px] uppercase font-mono tracking-widest px-1.5 py-0.5 rounded bg-[#222222] text-[#888888] border border-[#2B2B2B]">
-              MVP
+            <span className="text-[10px] uppercase font-mono tracking-widest px-1.5 py-0.5 rounded bg-[#1A2A1A] text-[#3F9E6C]/80 border border-[#3F9E6C]/20">
+              Beta
             </span>
           </Link>
 
           <div className="flex items-center gap-2.5 sm:gap-3">
-            {/* PM & Founder Console Link for Recruiters */}
-            <Link
-              href="/admin"
-              className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#141414] hover:bg-[#1A1A1A] border border-[#262626] text-xs font-mono text-[#888888] hover:text-[#5B8BDF] transition-colors"
-              title="Product Metrics & Analytics"
-            >
-              <BarChart3 className="w-3.5 h-3.5 text-[#5B8BDF]" />
-              <span>PM Console</span>
-            </Link>
-
             {/* Regional Language / State Selector */}
             <div className="relative">
               <button
