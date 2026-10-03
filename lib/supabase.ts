@@ -30,9 +30,20 @@ export async function syncEvaluationToSupabase(
   if (!supabase) return { success: false, error: 'Supabase not configured' };
 
   try {
+    const price = evaluation.property?.price || 0;
+    const funds = (evaluation.buyerContext?.availableFunds || 0) - (evaluation.buyerContext?.emergencyReserve || 0);
+    const loan = evaluation.buyerContext?.plannedLoanAmount || 0;
+    const fundingGap = Math.max(0, price * 1.07 - (Math.max(0, funds) + loan));
+
     const payload = {
       id: evaluation.id,
       user_id: userId || null,
+      property_name: evaluation.property?.name || 'Untitled Property',
+      property_price: price,
+      property_type: evaluation.property?.type || 'Apartment',
+      city: evaluation.property?.city || evaluation.property?.location?.split(',')?.[0]?.trim() || null,
+      funding_gap: fundingGap,
+      completion_step: evaluation.step || 'snapshot',
       data: evaluation,
       updated_at: new Date().toISOString(),
     };
