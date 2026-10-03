@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navbar } from '@/components/layout/nav';
+import { StickyNavbar } from '@/components/layout/nav';
 import { HeroSection } from '@/components/landing/hero';
 import { ProblemSection } from '@/components/landing/problem-section';
 import { HowItWorksSection } from '@/components/landing/how-it-works';
@@ -15,8 +15,8 @@ import { BackToTop } from '@/components/layout/back-to-top';
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-[#FAF8F5] text-stone-900 flex flex-col font-sans selection:bg-blue-600/20 selection:text-blue-900 relative">
-      {/* Sticky Navigation Bar */}
-      <Navbar />
+      {/* Sticky Navigation Bar (Reveals smoothly on scroll) */}
+      <StickyNavbar />
 
       <main className="flex-1">
         {/* 1. Hero & 2. Value strip */}

@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Search, Loader2, AlertCircle, SlidersHorizontal, UploadCloud, Edit3, X, CheckCircle2 } from 'lucide-react';
 import { useEvaluationStore, DEMO_PROPERTY } from '@/store/evaluation';
+import { HeroNavbar } from '@/components/layout/nav';
 
 export const HeroSection: React.FC = () => {
   const router = useRouter();
@@ -125,6 +126,9 @@ export const HeroSection: React.FC = () => {
         >
           {/* Subtle Natural Daylight Gradient Overlay letting the sky blue shine through */}
           <div className="absolute inset-0 bg-gradient-to-b from-slate-950/45 via-blue-950/20 to-slate-950/50 pointer-events-none" />
+
+          {/* Floating Centered Navbar inside rounded rectangular hero image container */}
+          <HeroNavbar />
 
           {/* Hero Content - Centered */}
           <div className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-4 sm:px-6 pt-24 sm:pt-28 pb-4 max-w-4xl mx-auto w-full">
