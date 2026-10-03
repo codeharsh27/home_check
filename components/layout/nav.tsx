@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { ShieldCheck, LogOut, User as UserIcon, Globe, ChevronDown, Check } from 'lucide-react';
+import { ShieldCheck, LogOut, User as UserIcon, Globe, ChevronDown, Check, BarChart3 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { AuthModal } from '@/components/auth/auth-modal';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
@@ -64,6 +64,16 @@ export const Navbar: React.FC = () => {
           </Link>
 
           <div className="flex items-center gap-2.5 sm:gap-3">
+            {/* PM & Founder Console Link for Recruiters */}
+            <Link
+              href="/admin"
+              className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#141414] hover:bg-[#1A1A1A] border border-[#262626] text-xs font-mono text-[#888888] hover:text-[#5B8BDF] transition-colors"
+              title="Product Metrics & Analytics"
+            >
+              <BarChart3 className="w-3.5 h-3.5 text-[#5B8BDF]" />
+              <span>PM Console</span>
+            </Link>
+
             {/* Regional Language / State Selector */}
             <div className="relative">
               <button

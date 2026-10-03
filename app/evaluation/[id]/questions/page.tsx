@@ -16,14 +16,18 @@ function QuestionsPageContent() {
   const router = useRouter();
   const evalId = params.id as string;
 
-  const { evaluations, loadEvaluation, resolveQuestion, markStepComplete } = useEvaluationStore();
+  const { evaluations, loadEvaluation, resolveQuestion, markStepComplete, initializeQuestionsIfNeeded } = useEvaluationStore();
   const [aiModalType, setAiModalType] = useState<'seller' | 'lawyer' | null>(null);
   const [hasLoaded, setHasLoaded] = useState(false);
 
   useEffect(() => {
     const found = loadEvaluation(evalId);
     setHasLoaded(true);
-    if (!found) router.replace('/');
+    if (!found) {
+      router.replace('/');
+    } else {
+      initializeQuestionsIfNeeded(evalId);
+    }
   }, [evalId]);
 
   const evaluation = evaluations[evalId];

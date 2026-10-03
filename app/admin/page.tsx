@@ -23,9 +23,11 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useEvaluationStore } from '@/store/evaluation';
+import { useEvaluationStore, DEMO_PROPERTY, DEMO_BUYER_CONTEXT } from '@/store/evaluation';
 import { formatCurrency } from '@/lib/calculations';
 import { fetchAllAnalyticsEvents, AnalyticsEvent } from '@/lib/analytics';
+import { fetchAllEvaluationsFromSupabase } from '@/lib/supabase';
+import { generateChecklist } from '@/lib/checklist-engine';
 import { EvaluationSession } from '@/types';
 
 export default function AdminDashboardPage() {
@@ -36,6 +38,7 @@ export default function AdminDashboardPage() {
   const [activeTab, setActiveTab] = useState<'metrics' | 'funnel' | 'events' | 'pm_rationale'>('metrics');
 
   const { evaluations } = useEvaluationStore();
+  const [cloudEvaluations, setCloudEvaluations] = useState<EvaluationSession[]>([]);
   const [events, setEvents] = useState<AnalyticsEvent[]>([]);
 
   useEffect(() => {
@@ -46,12 +49,16 @@ export default function AdminDashboardPage() {
         setIsAuthenticated(true);
       }
     }
-    loadEvents();
+    loadData();
   }, []);
 
-  const loadEvents = async () => {
-    const list = await fetchAllAnalyticsEvents();
+  const loadData = async () => {
+    const [list, cloudEvals] = await Promise.all([
+      fetchAllAnalyticsEvents(),
+      fetchAllEvaluationsFromSupabase(),
+    ]);
     setEvents(list);
+    setCloudEvaluations(cloudEvals);
   };
 
   const handleLogin = (e: React.FormEvent) => {
@@ -79,8 +86,33 @@ export default function AdminDashboardPage() {
     localStorage.removeItem('homecheck_admin_auth');
   };
 
-  // Convert evaluations dict to array
-  const evaluationList: EvaluationSession[] = Object.values(evaluations);
+  // Merge cloud evaluations from Supabase with local client evaluations
+  const mergedMap = new Map<string, EvaluationSession>();
+  cloudEvaluations.forEach((e) => {
+    if (e && e.id) mergedMap.set(e.id, e);
+  });
+  Object.values(evaluations).forEach((e) => {
+    if (e && e.id) mergedMap.set(e.id, e);
+  });
+
+  let evaluationList: EvaluationSession[] = Array.from(mergedMap.values());
+
+  // If no evaluations yet in a fresh browser session, seed demo benchmark so portfolio reviewer sees rich metrics
+  if (evaluationList.length === 0) {
+    evaluationList = [
+      {
+        id: 'eval_demo_initial',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        step: 'dashboard',
+        completedSteps: ['snapshot', 'financial', 'investigation', 'questions', 'dashboard'],
+        property: DEMO_PROPERTY,
+        buyerContext: DEMO_BUYER_CONTEXT,
+        checklist: generateChecklist(DEMO_PROPERTY.type, DEMO_PROPERTY.possessionStatus),
+        isDemo: true,
+      },
+    ];
+  }
 
   // Compute PM Metrics
   const totalEvaluationsCount = Math.max(evaluationList.length, 1);
@@ -497,8 +529,8 @@ export default function AdminDashboardPage() {
                 <h3 className="text-sm font-semibold text-[#EDEDED]">Live User Action Stream</h3>
                 <p className="text-xs text-[#888888]">Real-time events recorded in Supabase telemetry</p>
               </div>
-              <Button size="sm" variant="outline" onClick={loadEvents} className="text-xs">
-                Refresh Log
+              <Button size="sm" variant="outline" onClick={loadData} className="text-xs">
+                Refresh Log & Metrics
               </Button>
             </div>
 

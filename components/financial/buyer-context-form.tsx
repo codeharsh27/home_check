@@ -23,7 +23,9 @@ export const BuyerContextForm: React.FC<BuyerContextFormProps> = ({ context, pro
   const [interestRate, setInterestRate] = useState(String(context.interestRate ?? 8.5));
   const [tenureYears, setTenureYears] = useState(String(context.tenureYears ?? 20));
   const [expectedFinancing, setExpectedFinancing] = useState<FinancingSource[]>(
-    context.expectedFinancing ?? []
+    context.expectedFinancing && context.expectedFinancing.length > 0
+      ? context.expectedFinancing
+      : ['Home loan']
   );
   const [isSaved, setIsSaved] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});

@@ -11,6 +11,8 @@ export const InvestigationProgress: React.FC<InvestigationProgressProps> = ({ ch
   const requestedCount = checklist.filter((i) => i.requested && !i.received).length;
   const missingCount = checklist.filter((i) => i.status === "missing" && !i.requested).length;
   const needsProCount = checklist.filter((i) => i.status === "needs-pro").length;
+  const safeTotal = Math.max(total, 1);
+  const progressPct = total > 0 ? Math.round((verifiedCount / total) * 100) : 0;
 
   return (
     <div className="bg-[#121212] border border-[#252525] rounded-xl p-5 space-y-4">
@@ -24,7 +26,7 @@ export const InvestigationProgress: React.FC<InvestigationProgressProps> = ({ ch
           </h3>
         </div>
         <span className="text-xs font-mono text-[#888888]">
-          {Math.round((verifiedCount / total) * 100)}% overall progress
+          {progressPct}% overall progress
         </span>
       </div>
 
@@ -33,22 +35,22 @@ export const InvestigationProgress: React.FC<InvestigationProgressProps> = ({ ch
         <div className="w-full h-3 bg-[#222222] rounded-full overflow-hidden flex">
           <div
             className="h-full bg-[#3F9E6C] transition-all duration-300"
-            style={{ width: `${(verifiedCount / total) * 100}%` }}
+            style={{ width: `${total > 0 ? (verifiedCount / safeTotal) * 100 : 0}%` }}
             title={`Verified/Received: ${verifiedCount}`}
           />
           <div
             className="h-full bg-[#5B8BDF] transition-all duration-300"
-            style={{ width: `${(requestedCount / total) * 100}%` }}
+            style={{ width: `${total > 0 ? (requestedCount / safeTotal) * 100 : 0}%` }}
             title={`Requested: ${requestedCount}`}
           />
           <div
             className="h-full bg-[#E6832A] transition-all duration-300"
-            style={{ width: `${(needsProCount / total) * 100}%` }}
+            style={{ width: `${total > 0 ? (needsProCount / safeTotal) * 100 : 0}%` }}
             title={`Needs Pro Review: ${needsProCount}`}
           />
           <div
             className="h-full bg-[#333333] transition-all duration-300"
-            style={{ width: `${(missingCount / total) * 100}%` }}
+            style={{ width: `${total > 0 ? (missingCount / safeTotal) * 100 : 0}%` }}
             title={`Missing: ${missingCount}`}
           />
         </div>

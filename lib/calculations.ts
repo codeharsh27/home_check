@@ -97,7 +97,18 @@ export function calculateSnapshotCompleteness(property: PropertyDetails): {
 }
 
 export function formatCurrency(amount: number): string {
-  if (amount >= 10000000) return `₹${(amount / 10000000).toFixed(2)}Cr`;
-  if (amount >= 100000) return `₹${(amount / 100000).toFixed(2)}L`;
-  return `₹${amount.toLocaleString('en-IN')}`;
+  if (amount === undefined || amount === null || typeof amount !== 'number' || isNaN(amount)) {
+    return '₹0';
+  }
+  const isNegative = amount < 0;
+  const absAmount = Math.abs(amount);
+  let formatted = '';
+  if (absAmount >= 10000000) {
+    formatted = `₹${(absAmount / 10000000).toFixed(2)}Cr`;
+  } else if (absAmount >= 100000) {
+    formatted = `₹${(absAmount / 100000).toFixed(2)}L`;
+  } else {
+    formatted = `₹${absAmount.toLocaleString('en-IN')}`;
+  }
+  return isNegative ? `-${formatted}` : formatted;
 }

@@ -181,3 +181,44 @@ export async function fetchUserEvaluationsFromSupabase(
     return [];
   }
 }
+
+/**
+ * Fetch all evaluations across all users for Founder & PM Analytics Console.
+ */
+export async function fetchAllEvaluationsFromSupabase(): Promise<EvaluationSession[]> {
+  if (!supabase) return [];
+
+  try {
+    const { data, error } = await supabase
+      .from('evaluations')
+      .select('data')
+      .order('updated_at', { ascending: false });
+
+    if (error || !data) return [];
+    return data.map((row: any) => row.data as EvaluationSession);
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Fetch a single evaluation from Supabase by ID.
+ */
+export async function fetchSingleEvaluationFromSupabase(
+  id: string
+): Promise<EvaluationSession | null> {
+  if (!supabase || !id) return null;
+
+  try {
+    const { data, error } = await supabase
+      .from('evaluations')
+      .select('data')
+      .eq('id', id)
+      .single();
+
+    if (error || !data) return null;
+    return (data.data as EvaluationSession) || null;
+  } catch {
+    return null;
+  }
+}

@@ -30,7 +30,7 @@ export const EvalSidebar: React.FC<EvalSidebarProps> = ({ evaluationId, property
   const progressPct = Math.round((completedCount / steps.length) * 100);
 
   return (
-    <aside className="w-full md:w-64 bg-[#0F0F0F] border-r border-[#1E1E1E] flex flex-col shrink-0 min-h-screen">
+    <aside className="w-full md:w-64 bg-[#0F0F0F] border-r border-[#1E1E1E] flex flex-col shrink-0 md:min-h-screen">
       <div className="p-4 border-b border-[#1E1E1E]">
         <Link href="/" className="flex items-center gap-2 text-xs font-semibold text-[#888888] hover:text-white transition-colors">
           <ShieldCheck className="w-4 h-4 text-[#5B8BDF]" />

@@ -184,6 +184,50 @@ export const useEvaluationStore = create<EvaluationStore>()(
           }));
           return true;
         }
+
+        // Demo fallback: Hydrate rich interactive evaluation if reviewer or user opens any demo link directly
+        if (id.includes('demo') || id === 'demo') {
+          const checklist = generateChecklist(DEMO_PROPERTY.type, DEMO_PROPERTY.possessionStatus);
+          const enrichedChecklist = checklist.map((item) => {
+            if (item.id === 'item_ownership_title') {
+              return { ...item, received: true, status: 'verified' as const };
+            }
+            if (item.id === 'item_rera_reg') {
+              return { ...item, received: true, status: 'verified' as const };
+            }
+            if (item.id === 'item_building_approval') {
+              return { ...item, requested: true, status: 'user-provided' as const };
+            }
+            if (item.id === 'item_commencement_cert') {
+              return { ...item, requested: true, status: 'user-provided' as const };
+            }
+            if (item.id === 'item_litigation') {
+              return { ...item, status: 'needs-pro' as const };
+            }
+            return item;
+          });
+          const questions = generateQuestionsFromChecklist(enrichedChecklist);
+          const demoSession: EvaluationSession = {
+            id,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            step: 'dashboard',
+            completedSteps: ['snapshot', 'financial', 'investigation', 'questions', 'dashboard'],
+            property: DEMO_PROPERTY,
+            buyerContext: DEMO_BUYER_CONTEXT,
+            checklist: enrichedChecklist,
+            questions,
+            isDemo: true,
+          };
+          const detectedRegion = detectRegionFromLocation(DEMO_PROPERTY.location || '');
+          set((state) => ({
+            currentEvaluation: demoSession,
+            evaluations: { ...state.evaluations, [id]: demoSession },
+            activeRegion: detectedRegion !== 'general' ? detectedRegion : state.activeRegion,
+          }));
+          return true;
+        }
+
         return false;
       },
 
@@ -231,6 +275,11 @@ export const useEvaluationStore = create<EvaluationStore>()(
             buyerContext: { ...evalItem.buyerContext, ...contextUpdates },
           };
           triggerCloudSync(updatedEval);
+          trackEvent('financial_profile_updated', 'engagement', id, {
+            monthlyIncome: contextUpdates.monthlyIncome,
+            availableFunds: contextUpdates.availableFunds,
+            hasLoan: contextUpdates.expectedFinancing?.includes('Home loan'),
+          });
           return {
             currentEvaluation: state.currentEvaluation?.id === id ? updatedEval : state.currentEvaluation,
             evaluations: { ...state.evaluations, [id]: updatedEval },
