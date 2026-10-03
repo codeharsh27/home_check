@@ -41,17 +41,18 @@ export const ProblemSection: React.FC = () => {
           </p>
         </div>
 
-        {/* 3 Simple Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* 3 Simple Cards with Inner Content Borders and Animation */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
           {problemCards.map((card, i) => {
             const Icon = card.icon;
             return (
               <div
                 key={i}
-                className="bg-white rounded-3xl p-7 sm:p-8 border border-stone-200 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between"
+                className="bg-white rounded-3xl p-7 sm:p-8 border-2 border-stone-200/90 shadow-sm hover:shadow-xl hover:border-blue-400/80 hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between group"
               >
-                <div className="space-y-4">
-                  <div className="w-10 h-10 rounded-2xl bg-stone-100 text-stone-800 flex items-center justify-center">
+                <div className="space-y-5">
+                  {/* Icon Box with Crisp Border */}
+                  <div className="w-12 h-12 rounded-2xl bg-stone-50 border-2 border-stone-200 text-stone-800 flex items-center justify-center group-hover:bg-blue-50 group-hover:border-blue-300 group-hover:text-blue-600 transition-all duration-300 group-hover:scale-105">
                     <Icon className="w-5 h-5 stroke-[2]" />
                   </div>
 
@@ -59,9 +60,15 @@ export const ProblemSection: React.FC = () => {
                     {card.title}
                   </h3>
 
-                  <p className="text-sm text-stone-600 leading-relaxed font-normal">
+                  {/* Inner Content Box with Distinct Border */}
+                  <div className="p-4 rounded-2xl bg-[#FAF8F5] border border-stone-200/90 text-sm text-stone-600 leading-relaxed font-normal">
                     {card.description}
-                  </p>
+                  </div>
+                </div>
+
+                <div className="mt-6 pt-3 border-t border-stone-100 flex items-center justify-between text-xs font-semibold text-stone-400 group-hover:text-blue-600 transition-colors">
+                  <span>Key Consideration</span>
+                  <span className="font-mono text-[11px] bg-stone-100 px-2 py-0.5 rounded border border-stone-200 text-stone-600">0{i + 1}</span>
                 </div>
               </div>
             );

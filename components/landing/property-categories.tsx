@@ -63,53 +63,61 @@ export const WhatWeCheckSection: React.FC = () => {
   };
 
   return (
-    <section id="what-we-check" className="py-20 md:py-24 bg-[#F5F2EB] border-b border-stone-200/60">
-      <div className="max-w-6xl mx-auto px-4 sm:px-8">
+    <section id="what-we-check" className="py-20 md:py-26 bg-[#0A1629] relative overflow-hidden border-y border-blue-950/80">
+      {/* Background ambient lighting */}
+      <div className="absolute top-1/2 left-0 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none -translate-y-1/2" />
+      <div className="absolute top-0 right-10 w-80 h-80 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none" />
+
+      <div className="max-w-6xl mx-auto px-4 sm:px-8 relative z-10">
         
         {/* Header */}
         <div className="max-w-3xl mb-12 sm:mb-14">
-          <span className="text-[11px] sm:text-xs font-bold uppercase tracking-[1.5px] text-blue-700 bg-blue-50 px-3.5 py-1 rounded-full border border-blue-100 inline-block mb-3">
+          <span className="text-[11px] sm:text-xs font-bold uppercase tracking-[1.5px] text-blue-400 bg-blue-950/90 px-3.5 py-1 rounded-full border border-blue-600/40 inline-block mb-3 backdrop-blur-sm">
             WHAT WE HELP YOU CHECK
           </span>
 
-          <h2 className="text-3xl sm:text-4xl lg:text-[40px] font-extrabold tracking-tight text-stone-900 leading-[1.12]">
+          <h2 className="text-3xl sm:text-4xl lg:text-[40px] font-extrabold tracking-tight text-white leading-[1.12]">
             The right checks for the property you&apos;re buying.
           </h2>
         </div>
 
-        {/* 3 Clean Cards */}
+        {/* 3 Blue Theme Cards with Inner Content Borders */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
           {propertyChecks.map((item) => {
             const Icon = item.icon;
             return (
               <div
                 key={item.title}
-                className="bg-white rounded-3xl p-7 sm:p-8 border border-stone-200 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between group"
+                className="bg-[#0F223D]/90 rounded-3xl p-7 sm:p-8 border-2 border-blue-800/60 shadow-xl shadow-black/30 flex flex-col justify-between group hover:border-blue-400/80 hover:bg-[#132A4B] hover:-translate-y-2 transition-all duration-300"
               >
                 <div className="space-y-4">
-                  {/* Icon */}
-                  <div className="w-12 h-12 rounded-2xl bg-stone-100 text-stone-800 flex items-center justify-center group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
+                  {/* Icon Box with Crisp Border */}
+                  <div className="w-12 h-12 rounded-2xl bg-[#091526] border border-blue-600/40 text-blue-400 flex items-center justify-center group-hover:bg-blue-600 group-hover:border-blue-400 group-hover:text-white transition-all duration-300 group-hover:scale-105">
                     <Icon className="w-6 h-6 stroke-[1.75]" />
                   </div>
 
                   <div>
-                    <h3 className="text-xl font-bold text-stone-900 tracking-tight">
+                    <h3 className="text-xl font-bold text-white tracking-tight group-hover:text-blue-200 transition-colors">
                       {item.title}
                     </h3>
-                    <p className="text-xs font-semibold text-blue-700 mt-1">
+                    {/* Tags in Inner Bordered Container */}
+                    <div className="mt-2 p-2 rounded-xl bg-[#091526]/80 border border-blue-900/70 text-xs font-semibold text-blue-300">
                       {item.tags}
-                    </p>
+                    </div>
                   </div>
 
-                  <p className="text-sm text-stone-600 leading-relaxed font-normal">
+                  <p className="text-sm text-blue-100/80 leading-relaxed font-normal">
                     {item.description}
                   </p>
 
-                  {/* Highlights list */}
-                  <div className="pt-2 border-t border-stone-100 space-y-2">
+                  {/* Highlights list with individual inner borders */}
+                  <div className="pt-3 border-t border-blue-800/60 space-y-2">
                     {item.highlights.map((point, idx) => (
-                      <div key={idx} className="flex items-center gap-2 text-xs text-stone-700 font-medium">
-                        <span className="w-1.5 h-1.5 rounded-full bg-blue-600 shrink-0" />
+                      <div
+                        key={idx}
+                        className="p-2 rounded-xl bg-[#091526]/60 border border-blue-900/60 flex items-center gap-2 text-xs text-slate-200 font-medium"
+                      >
+                        <span className="w-1.5 h-1.5 rounded-full bg-blue-400 shrink-0" />
                         <span>{point}</span>
                       </div>
                     ))}
@@ -120,10 +128,10 @@ export const WhatWeCheckSection: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => handleSelectType(item.type)}
-                    className="w-full py-3 px-4 rounded-xl border border-stone-200 text-stone-800 hover:border-blue-600 hover:text-blue-600 hover:bg-blue-50/30 text-xs font-semibold tracking-wide transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-sm"
+                    className="w-full py-3 px-4 rounded-xl border border-blue-500/50 bg-blue-600/20 text-blue-200 hover:bg-blue-600 hover:text-white text-xs font-semibold tracking-wide transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-md group-hover:border-blue-400"
                   >
                     <span>Check {item.type} Requirements</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </button>
                 </div>
               </div>
@@ -135,3 +143,5 @@ export const WhatWeCheckSection: React.FC = () => {
     </section>
   );
 };
+
+export const PropertyCategoriesSection = WhatWeCheckSection;

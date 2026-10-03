@@ -133,9 +133,9 @@ export const HeroSection: React.FC = () => {
           {/* Hero Content - Centered */}
           <div className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-4 sm:px-6 pt-24 sm:pt-28 pb-4 max-w-4xl mx-auto w-full">
             
-            {/* Small Eyebrow */}
+            {/* Small Eyebrow with Gentle Float Animation */}
             <div className="mb-3 sm:mb-4">
-              <span className="text-[11px] sm:text-xs font-bold uppercase tracking-[1.5px] text-blue-400 bg-blue-950/60 border border-blue-500/30 px-3.5 py-1 rounded-full backdrop-blur-md inline-block">
+              <span className="text-[11px] sm:text-xs font-bold uppercase tracking-[1.5px] text-blue-400 bg-blue-950/80 border border-blue-500/40 px-3.5 py-1 rounded-full backdrop-blur-md inline-block shadow-lg animate-float">
                 BEFORE YOU COMMIT
               </span>
             </div>
@@ -150,13 +150,13 @@ export const HeroSection: React.FC = () => {
               Understand what you can afford, what you still need to verify, and what to do next — before putting your money down.
             </p>
 
-            {/* Search Intake Pill */}
+            {/* Search Intake Pill with Interactive Focus Ring & Border */}
             <form
               id="hero-intake"
               onSubmit={handleStartEvaluation}
               className="mt-6 sm:mt-8 w-full max-w-2xl relative"
             >
-              <div className="bg-white rounded-full shadow-2xl p-1.5 sm:p-2 flex items-center gap-2 border border-white/60">
+              <div className="bg-white rounded-full shadow-2xl p-1.5 sm:p-2 flex items-center gap-2 border-2 border-white/90 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/25 transition-all duration-300">
                 
                 {/* Single Input */}
                 <div className="flex-1 px-4 sm:px-5">
@@ -177,7 +177,7 @@ export const HeroSection: React.FC = () => {
                     setOptionsModalOpen(true);
                   }}
                   title="Upload brochure or manual entry"
-                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-700 flex items-center justify-center transition-colors shrink-0 cursor-pointer shadow-sm"
+                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-700 flex items-center justify-center transition-all hover:scale-105 active:scale-95 shrink-0 cursor-pointer shadow-sm border border-stone-200/60"
                 >
                   <SlidersHorizontal className="w-4 h-4" />
                 </button>
@@ -186,21 +186,21 @@ export const HeroSection: React.FC = () => {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="px-4 sm:px-6 py-2.5 sm:py-3 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs sm:text-sm font-bold shadow-md shadow-blue-600/30 transition-all shrink-0 cursor-pointer flex items-center gap-1.5"
+                  className="px-4 sm:px-6 py-2.5 sm:py-3 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs sm:text-sm font-bold shadow-md shadow-blue-600/30 transition-all hover:scale-[1.02] shrink-0 cursor-pointer flex items-center gap-1.5 group"
                 >
                   {isLoading ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
                   ) : (
                     <>
                       <span>Evaluate Property</span>
-                      <Search className="w-3.5 h-3.5" />
+                      <Search className="w-3.5 h-3.5 group-hover:scale-110 transition-transform" />
                     </>
                   )}
                 </button>
               </div>
 
               {parseError && (
-                <div className="mt-3 flex items-center gap-2 text-xs text-amber-200 bg-slate-900/70 backdrop-blur-md px-4 py-2 rounded-full mx-auto w-fit">
+                <div className="mt-3 flex items-center gap-2 text-xs text-amber-200 bg-slate-950/80 border border-amber-500/30 backdrop-blur-md px-4 py-2 rounded-full mx-auto w-fit shadow-lg">
                   <AlertCircle className="w-3.5 h-3.5" />
                   <span>{parseError}</span>
                 </div>
@@ -212,7 +212,7 @@ export const HeroSection: React.FC = () => {
                 <button
                   type="button"
                   onClick={handleLoadDemo}
-                  className="text-white font-semibold underline underline-offset-4 hover:text-blue-200 cursor-pointer transition-colors"
+                  className="text-white font-semibold underline underline-offset-4 hover:text-blue-300 cursor-pointer transition-colors"
                 >
                   Start with a sample property →
                 </button>
@@ -221,13 +221,13 @@ export const HeroSection: React.FC = () => {
 
           </div>
 
-          {/* Hero Bottom Value Strip - Grounded Real Value, No Fabricated Numbers */}
-          <div className="relative z-10 w-full border-t border-white/20 bg-slate-950/40 backdrop-blur-md">
-            <div className="max-w-6xl mx-auto px-6 py-4 grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-white/20 text-center sm:text-left">
+          {/* Hero Bottom Value Strip - Grounded Real Value with Bordered Cards & Hover Lift */}
+          <div className="relative z-10 w-full border-t border-white/20 bg-slate-950/50 backdrop-blur-md p-3 sm:p-4">
+            <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 text-center sm:text-left">
               
               {/* Column 1 */}
-              <div className="py-2 sm:py-0 px-4 flex items-start gap-3">
-                <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center shrink-0 mt-0.5 text-blue-300">
+              <div className="p-3 sm:p-3.5 rounded-2xl bg-white/5 border border-white/10 hover:border-blue-400/40 hover:bg-white/10 hover:-translate-y-0.5 transition-all duration-300 flex items-start gap-3">
+                <div className="w-9 h-9 rounded-xl bg-blue-500/20 border border-blue-400/30 flex items-center justify-center shrink-0 text-blue-300">
                   <IndianRupee className="w-4 h-4" />
                 </div>
                 <div>
@@ -239,8 +239,8 @@ export const HeroSection: React.FC = () => {
               </div>
 
               {/* Column 2 */}
-              <div className="py-2 sm:py-0 px-4 flex items-start gap-3">
-                <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center shrink-0 mt-0.5 text-emerald-300">
+              <div className="p-3 sm:p-3.5 rounded-2xl bg-white/5 border border-white/10 hover:border-emerald-400/40 hover:bg-white/10 hover:-translate-y-0.5 transition-all duration-300 flex items-start gap-3">
+                <div className="w-9 h-9 rounded-xl bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center shrink-0 text-emerald-300">
                   <FileCheck2 className="w-4 h-4" />
                 </div>
                 <div>
@@ -252,8 +252,8 @@ export const HeroSection: React.FC = () => {
               </div>
 
               {/* Column 3 */}
-              <div className="py-2 sm:py-0 px-4 flex items-start gap-3">
-                <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center shrink-0 mt-0.5 text-amber-300">
+              <div className="p-3 sm:p-3.5 rounded-2xl bg-white/5 border border-white/10 hover:border-amber-400/40 hover:bg-white/10 hover:-translate-y-0.5 transition-all duration-300 flex items-start gap-3">
+                <div className="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-400/30 flex items-center justify-center shrink-0 text-amber-300">
                   <ArrowRightCircle className="w-4 h-4" />
                 </div>
                 <div>

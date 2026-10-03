@@ -33,7 +33,7 @@ export const CTABannerSection: React.FC = () => {
   return (
     <section id="full-intake" className="py-16 sm:py-24 bg-[#FAF8F5]">
       <div className="max-w-6xl mx-auto px-4 sm:px-8">
-        <div className="relative rounded-[32px] sm:rounded-[36px] overflow-hidden min-h-[260px] sm:min-h-[280px] flex items-center shadow-2xl border border-stone-200/80">
+        <div className="relative rounded-[32px] sm:rounded-[36px] overflow-hidden min-h-[280px] flex items-center shadow-2xl border-2 border-blue-600/40">
           
           {/* Background Image Container */}
           <div className="absolute inset-0 z-0">
@@ -41,18 +41,18 @@ export const CTABannerSection: React.FC = () => {
               src="/images/showcase.jpg"
               alt="HomeCheck Evaluation Backdrop"
               fill
-              className="object-cover brightness-90"
+              className="object-cover brightness-75 scale-105"
             />
-            {/* Ambient Dark Overlay for text readability */}
-            <div className="absolute inset-0 bg-gradient-to-r from-slate-950/85 via-slate-900/70 to-slate-950/80 backdrop-blur-[2px]" />
+            {/* Ambient Dark Navy Overlay for text readability */}
+            <div className="absolute inset-0 bg-gradient-to-r from-[#071324]/95 via-[#0B1A32]/85 to-[#071324]/95 backdrop-blur-[2px]" />
           </div>
 
           {/* Banner Content */}
-          <div className="relative z-10 w-full px-6 sm:px-12 py-10 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
+          <div className="relative z-10 w-full px-6 sm:px-12 py-12 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
             
             {/* Left Copy */}
-            <div className="max-w-xl space-y-3">
-              <span className="text-[11px] sm:text-xs font-bold uppercase tracking-[1.5px] text-blue-400 bg-blue-950/60 border border-blue-500/30 px-3.5 py-1 rounded-full backdrop-blur-md inline-block">
+            <div className="max-w-xl space-y-3.5">
+              <span className="text-[11px] sm:text-xs font-bold uppercase tracking-[1.5px] text-blue-400 bg-blue-950/80 border border-blue-500/40 px-3.5 py-1 rounded-full backdrop-blur-md inline-block shadow-sm">
                 READY TO START?
               </span>
 
@@ -60,43 +60,46 @@ export const CTABannerSection: React.FC = () => {
                 Have a property shortlisted? Start there.
               </h2>
 
-              <p className="text-sm sm:text-base text-white/80 font-normal leading-relaxed">
+              <p className="text-sm sm:text-base text-blue-100/80 font-normal leading-relaxed">
                 Add the listing or basic property details and start building your evaluation.
               </p>
             </div>
 
-            {/* Right Action / Input */}
-            <div className="w-full lg:max-w-md space-y-2">
+            {/* Right Action / Input with Inner Border */}
+            <div className="w-full lg:max-w-md space-y-2.5">
               <form
                 onSubmit={handleSubmit}
-                className="w-full bg-white rounded-full p-1.5 shadow-xl flex items-center justify-between border border-white/60"
+                className="w-full bg-[#091527]/90 rounded-full p-2 shadow-2xl flex items-center justify-between border-2 border-blue-500/50 focus-within:border-blue-400 focus-within:ring-4 focus-within:ring-blue-500/20 backdrop-blur-md transition-all"
               >
                 <input
                   type="text"
                   value={inputVal}
                   onChange={(e) => setInputVal(e.target.value)}
                   placeholder="Paste a property listing URL..."
-                  className="flex-1 px-4 py-2 text-xs sm:text-sm text-stone-800 placeholder-stone-400 outline-none bg-transparent font-normal"
+                  className="flex-1 px-4 py-2 text-xs sm:text-sm text-white placeholder-blue-200/50 outline-none bg-transparent font-normal"
                 />
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs sm:text-sm font-bold shadow-md transition-all shrink-0 cursor-pointer flex items-center gap-1.5"
+                  className="px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm font-bold shadow-lg shadow-blue-600/40 transition-all hover:scale-[1.02] shrink-0 cursor-pointer flex items-center gap-1.5 group"
                 >
                   {isLoading ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
                   ) : (
                     <>
                       <span>Evaluate My Property</span>
-                      <ArrowRight className="w-4 h-4" />
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </>
                   )}
                 </button>
               </form>
 
-              <p className="text-center sm:text-left text-[11px] sm:text-xs text-white/60 pl-4 font-normal">
-                Start with the information you already have.
-              </p>
+              <div className="flex items-center gap-2 pl-3">
+                <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
+                <p className="text-[11px] sm:text-xs text-blue-200/70 font-normal">
+                  Start with the information you already have.
+                </p>
+              </div>
             </div>
 
           </div>

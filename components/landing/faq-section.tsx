@@ -64,35 +64,47 @@ export const FAQSection: React.FC = () => {
           </h2>
         </div>
 
-        {/* Accordion List */}
-        <div className="space-y-3">
+        {/* Accordion List with Inner Content Borders & Transitions */}
+        <div className="space-y-4">
           {faqs.map((faq) => {
             const isOpen = openId === faq.id;
             return (
               <div
                 key={faq.id}
-                className="rounded-2xl border border-stone-200/90 overflow-hidden transition-all bg-white shadow-sm"
+                className={`rounded-2xl border-2 transition-all duration-300 bg-white shadow-sm overflow-hidden ${
+                  isOpen
+                    ? 'border-blue-500/80 shadow-md ring-2 ring-blue-500/10'
+                    : 'border-stone-200/90 hover:border-blue-300 hover:shadow-md'
+                }`}
               >
                 <button
                   type="button"
                   onClick={() => toggleFAQ(faq.id)}
-                  className="w-full flex items-center justify-between p-5 sm:p-6 text-left hover:bg-stone-50/60 transition-colors cursor-pointer"
+                  className="w-full flex items-center justify-between p-5 sm:p-6 text-left hover:bg-stone-50/60 transition-colors cursor-pointer group"
                 >
-                  <span className="text-sm sm:text-base font-bold text-stone-900 pr-4">
+                  <span className={`text-sm sm:text-base font-bold pr-4 transition-colors ${
+                    isOpen ? 'text-blue-700' : 'text-stone-900 group-hover:text-blue-600'
+                  }`}>
                     {faq.question}
                   </span>
-                  <span className="w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center shrink-0 text-stone-600">
+                  <span className={`w-8 h-8 rounded-full border flex items-center justify-center shrink-0 transition-all duration-300 ${
+                    isOpen
+                      ? 'bg-blue-600 border-blue-600 text-white rotate-180'
+                      : 'bg-stone-50 border-stone-200 text-stone-600 group-hover:border-blue-300'
+                  }`}>
                     {isOpen ? (
-                      <Minus className="w-4 h-4 text-blue-600" />
+                      <Minus className="w-4 h-4 stroke-[2.5]" />
                     ) : (
-                      <Plus className="w-4 h-4" />
+                      <Plus className="w-4 h-4 stroke-[2.5]" />
                     )}
                   </span>
                 </button>
 
                 {isOpen && (
-                  <div className="px-5 pb-6 sm:px-6 text-xs sm:text-sm text-stone-600 leading-relaxed border-t border-stone-100 pt-4">
-                    {faq.answer}
+                  <div className="px-5 pb-5 sm:px-6 pt-0 border-t border-stone-100">
+                    <div className="p-4 rounded-xl bg-[#FAF8F5] border border-stone-200/80 text-xs sm:text-sm text-stone-600 leading-relaxed font-normal">
+                      {faq.answer}
+                    </div>
                   </div>
                 )}
               </div>

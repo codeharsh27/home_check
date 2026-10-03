@@ -59,114 +59,134 @@ export const ProductShowcaseSection: React.FC = () => {
           {/* Product UI View - Authentic Screenshot & Structured Layout */}
           <div className="p-6 sm:p-8 space-y-6">
             
-            {/* Top Row: Property Snapshot */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-2xl bg-[#FAF8F5] border border-stone-200/80">
-              <div>
-                <span className="text-[11px] font-mono font-semibold text-stone-500 uppercase tracking-wider block">
+            {/* Top Row: Property Snapshot with Inner Bordered Containers */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 sm:p-6 rounded-2xl bg-[#FAF8F5] border-2 border-stone-200/90 shadow-sm">
+              <div className="space-y-1">
+                <span className="text-[11px] font-mono font-bold text-blue-700 uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-blue-50 border border-blue-200/70 inline-block">
                   Property Snapshot
                 </span>
-                <h3 className="text-xl font-bold text-stone-900 mt-0.5">
+                <h3 className="text-xl sm:text-2xl font-bold text-stone-900 mt-1">
                   Green Valley Residency · 2 BHK
                 </h3>
-                <p className="text-xs text-stone-600 mt-0.5">
+                <p className="text-xs sm:text-sm text-stone-600">
                   Wakad, Pune · 1,050 sqft Carpet · Quoted: ₹68,00,000
                 </p>
               </div>
 
-              <div className="text-left sm:text-right shrink-0">
+              <div className="p-3.5 rounded-xl bg-white border border-stone-200 shadow-sm text-left sm:text-right shrink-0">
                 <span className="text-[11px] font-medium text-stone-500 block">Expected Amount to Arrange</span>
-                <span className="text-xl font-extrabold text-stone-900 font-mono">
+                <span className="text-xl sm:text-2xl font-extrabold text-stone-900 font-mono">
                   ~₹18,36,000
                 </span>
-                <span className="text-[11px] text-amber-700 block font-medium">Down payment + Stamp duty</span>
+                <span className="text-[11px] text-amber-700 block font-medium mt-0.5">Down payment + Stamp duty</span>
               </div>
             </div>
 
-            {/* Middle Grid: The 4 Evaluation Blocks */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* Middle Grid: The 4 Evaluation Blocks with Inner Content Borders & Hover Lift */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
               
               {/* Block 1: Financial Summary */}
-              <div className="p-4 rounded-2xl border border-stone-200 bg-white space-y-2">
-                <div className="flex items-center gap-2 text-stone-700 font-bold text-xs uppercase tracking-wider">
-                  <IndianRupee className="w-4 h-4 text-blue-600" />
+              <div className="p-4 sm:p-5 rounded-2xl border-2 border-stone-200/90 bg-white space-y-3 shadow-sm hover:border-blue-400 hover:shadow-md hover:-translate-y-1 transition-all duration-300">
+                <div className="flex items-center gap-2 text-stone-800 font-bold text-xs uppercase tracking-wider pb-2 border-b border-stone-100">
+                  <div className="w-6 h-6 rounded-lg bg-blue-50 border border-blue-200 text-blue-600 flex items-center justify-center shrink-0">
+                    <IndianRupee className="w-3.5 h-3.5" />
+                  </div>
                   <span>Financial Picture</span>
                 </div>
-                <div className="space-y-1 text-xs text-stone-600">
-                  <div className="flex justify-between">
+                <div className="space-y-1.5 text-xs text-stone-600">
+                  <div className="p-2 rounded-lg bg-stone-50/80 border border-stone-100 flex justify-between">
                     <span>Base Price:</span>
-                    <span className="font-semibold text-stone-900">₹68.0L</span>
+                    <span className="font-semibold text-stone-900 font-mono">₹68.0L</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span>Stamp Duty &amp; Reg:</span>
-                    <span className="font-semibold text-stone-900">~₹4.76L</span>
+                  <div className="p-2 rounded-lg bg-stone-50/80 border border-stone-100 flex justify-between">
+                    <span>Stamp Duty (7%):</span>
+                    <span className="font-semibold text-stone-900 font-mono">~₹4.76L</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span>Expected Loan (80%):</span>
-                    <span className="font-semibold text-blue-600">₹54.4L</span>
+                  <div className="p-2 rounded-lg bg-blue-50/50 border border-blue-100 flex justify-between">
+                    <span className="text-blue-900 font-medium">Bank Loan (80%):</span>
+                    <span className="font-semibold text-blue-700 font-mono">₹54.4L</span>
                   </div>
                 </div>
               </div>
 
               {/* Block 2: Documents & Checks */}
-              <div className="p-4 rounded-2xl border border-stone-200 bg-white space-y-2">
-                <div className="flex items-center gap-2 text-stone-700 font-bold text-xs uppercase tracking-wider">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <div className="p-4 sm:p-5 rounded-2xl border-2 border-stone-200/90 bg-white space-y-3 shadow-sm hover:border-emerald-400 hover:shadow-md hover:-translate-y-1 transition-all duration-300">
+                <div className="flex items-center gap-2 text-stone-800 font-bold text-xs uppercase tracking-wider pb-2 border-b border-stone-100">
+                  <div className="w-6 h-6 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-600 flex items-center justify-center shrink-0">
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                  </div>
                   <span>Documents Checked</span>
                 </div>
-                <div className="space-y-1 text-xs text-stone-600">
-                  <p className="flex items-center gap-1.5 text-emerald-800 font-medium">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" /> RERA Registration
-                  </p>
-                  <p className="flex items-center gap-1.5 text-emerald-800 font-medium">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" /> Sanctioned Plan
-                  </p>
-                  <p className="flex items-center gap-1.5 text-emerald-800 font-medium">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" /> Commencement Cert (CC)
-                  </p>
+                <div className="space-y-1.5 text-xs">
+                  <div className="p-2 rounded-lg bg-emerald-50/60 border border-emerald-200/70 flex items-center gap-2 text-emerald-900 font-medium">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 shrink-0" />
+                    <span>RERA Registration</span>
+                  </div>
+                  <div className="p-2 rounded-lg bg-emerald-50/60 border border-emerald-200/70 flex items-center gap-2 text-emerald-900 font-medium">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 shrink-0" />
+                    <span>Sanctioned Plan</span>
+                  </div>
+                  <div className="p-2 rounded-lg bg-emerald-50/60 border border-emerald-200/70 flex items-center gap-2 text-emerald-900 font-medium">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 shrink-0" />
+                    <span>Commencement (CC)</span>
+                  </div>
                 </div>
               </div>
 
               {/* Block 3: Missing Information */}
-              <div className="p-4 rounded-2xl border border-stone-200 bg-white space-y-2">
-                <div className="flex items-center gap-2 text-stone-700 font-bold text-xs uppercase tracking-wider">
-                  <AlertCircle className="w-4 h-4 text-amber-600" />
+              <div className="p-4 sm:p-5 rounded-2xl border-2 border-stone-200/90 bg-white space-y-3 shadow-sm hover:border-amber-400 hover:shadow-md hover:-translate-y-1 transition-all duration-300">
+                <div className="flex items-center gap-2 text-stone-800 font-bold text-xs uppercase tracking-wider pb-2 border-b border-stone-100">
+                  <div className="w-6 h-6 rounded-lg bg-amber-50 border border-amber-200 text-amber-600 flex items-center justify-center shrink-0">
+                    <AlertCircle className="w-3.5 h-3.5" />
+                  </div>
                   <span>Still Missing</span>
                 </div>
-                <div className="space-y-1 text-xs text-stone-600">
-                  <p className="flex items-center gap-1.5 text-amber-800 font-medium">
-                    <span className="w-1.5 h-1.5 rounded-full bg-amber-600" /> Occupancy Cert (OC)
-                  </p>
-                  <p className="flex items-center gap-1.5 text-amber-800 font-medium">
-                    <span className="w-1.5 h-1.5 rounded-full bg-amber-600" /> Encumbrance Cert
-                  </p>
-                  <p className="flex items-center gap-1.5 text-amber-800 font-medium">
-                    <span className="w-1.5 h-1.5 rounded-full bg-amber-600" /> Society Maintenance Dues
-                  </p>
+                <div className="space-y-1.5 text-xs">
+                  <div className="p-2 rounded-lg bg-amber-50/60 border border-amber-200/70 flex items-center gap-2 text-amber-900 font-medium">
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-600 shrink-0" />
+                    <span>Occupancy Cert (OC)</span>
+                  </div>
+                  <div className="p-2 rounded-lg bg-amber-50/60 border border-amber-200/70 flex items-center gap-2 text-amber-900 font-medium">
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-600 shrink-0" />
+                    <span>Encumbrance Cert</span>
+                  </div>
+                  <div className="p-2 rounded-lg bg-amber-50/60 border border-amber-200/70 flex items-center gap-2 text-amber-900 font-medium">
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-600 shrink-0" />
+                    <span>Society Dues Statement</span>
+                  </div>
                 </div>
               </div>
 
               {/* Block 4: Next Steps */}
-              <div className="p-4 rounded-2xl border border-stone-200 bg-white space-y-2">
-                <div className="flex items-center gap-2 text-stone-700 font-bold text-xs uppercase tracking-wider">
-                  <Layers className="w-4 h-4 text-purple-600" />
+              <div className="p-4 sm:p-5 rounded-2xl border-2 border-stone-200/90 bg-white space-y-3 shadow-sm hover:border-purple-400 hover:shadow-md hover:-translate-y-1 transition-all duration-300">
+                <div className="flex items-center gap-2 text-stone-800 font-bold text-xs uppercase tracking-wider pb-2 border-b border-stone-100">
+                  <div className="w-6 h-6 rounded-lg bg-purple-50 border border-purple-200 text-purple-600 flex items-center justify-center shrink-0">
+                    <Layers className="w-3.5 h-3.5" />
+                  </div>
                   <span>Next Actions</span>
                 </div>
-                <div className="space-y-1 text-xs text-stone-600">
-                  <p className="text-stone-700">1. Ask seller for draft Agreement</p>
-                  <p className="text-stone-700">2. Request lawyer for title search</p>
-                  <p className="text-stone-700">3. Check lender pre-approval</p>
+                <div className="space-y-1.5 text-xs text-stone-700">
+                  <div className="p-2 rounded-lg bg-purple-50/40 border border-purple-200/60">
+                    <span className="font-semibold text-purple-900">1.</span> Ask seller for draft Agreement
+                  </div>
+                  <div className="p-2 rounded-lg bg-purple-50/40 border border-purple-200/60">
+                    <span className="font-semibold text-purple-900">2.</span> Request lawyer title search
+                  </div>
+                  <div className="p-2 rounded-lg bg-purple-50/40 border border-purple-200/60">
+                    <span className="font-semibold text-purple-900">3.</span> Check lender pre-approval
+                  </div>
                 </div>
               </div>
 
             </div>
 
             {/* Bottom Real Mockup Image Preview */}
-            <div className="relative w-full rounded-2xl overflow-hidden border border-stone-200 aspect-[16/8] sm:aspect-[21/9]">
+            <div className="relative w-full rounded-2xl overflow-hidden border-2 border-stone-200/90 shadow-md aspect-[16/8] sm:aspect-[21/9] group">
               <Image
                 src="/product-mockup.jpg"
                 alt="HomeCheck Evaluation Dashboard Interface"
                 fill
-                className="object-cover object-top"
+                className="object-cover object-top group-hover:scale-[1.01] transition-transform duration-500"
               />
             </div>
 
