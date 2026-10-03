@@ -1,4 +1,5 @@
 import { ChecklistItem, PropertyDetails } from '@/types';
+import { SupportedRegion, detectRegionFromLocation, getRegionalDocumentInfo } from './regional-documents';
 
 function makeItem(
   id: string,
@@ -332,8 +333,10 @@ export function generateQuestionsFromChecklist(
 
 export function generateSellerQuestions(
   property: PropertyDetails,
-  checklist: ChecklistItem[]
+  checklist: ChecklistItem[],
+  region?: SupportedRegion
 ): string[] {
+  const activeReg = region || detectRegionFromLocation(property.location || '');
   const sellerItems = checklist.filter(
     (i) => i.whoToContact === 'Seller / Developer' && !i.received
   );
@@ -343,15 +346,19 @@ export function generateSellerQuestions(
   }
 
   return sellerItems.map((item, idx) => {
-    return `${idx + 1}. ${item.title}: ${item.nextAction}.`
+    const regional = getRegionalDocumentInfo(item.id, activeReg);
+    const regionalBadge = regional ? ` [Ask for Local Record: ${regional.regionalTitle}]` : '';
+    return `${idx + 1}. ${item.title}${regionalBadge}: ${item.nextAction}.`
       + (item.whyItMatters ? ` Important because: ${item.whyItMatters.split('.')[0]}.` : '');
   });
 }
 
 export function generateLawyerQuestions(
   property: PropertyDetails,
-  checklist: ChecklistItem[]
+  checklist: ChecklistItem[],
+  region?: SupportedRegion
 ): string[] {
+  const activeReg = region || detectRegionFromLocation(property.location || '');
   const legalItems = checklist.filter(
     (i) =>
       i.whoToContact === 'Property Lawyer' ||
@@ -362,19 +369,51 @@ export function generateLawyerQuestions(
 
   const questions: string[] = [];
 
+  // Regional customized title search questions
+  if (activeReg === 'maharashtra') {
+    questions.push(
+      `1. Can you conduct an official 30-year search on the IGR Maharashtra e-Search portal and inspect the Sub-Registrar Index II (सूची २) and 7/12 Utara (सातबारा) mutation records for ${property.name} in ${property.location}?`
+    );
+    questions.push(
+      `2. Does the Nil Encumbrance Certificate / Form 15 show any unreleased bank mortgage or attachment on survey numbers?`
+    );
+  } else if (activeReg === 'karnataka') {
+    questions.push(
+      `1. Can you verify the Mother Deed chain and confirm if the property holds a legitimate unencumbered A-Khata with BBMP/BDA, and verify RTC / Pahani records on the Bhoomi portal?`
+    );
+    questions.push(
+      `2. Does Form 15 Encumbrance Certificate obtained from Kaveri portal verify complete non-encumbrance for past 30 years?`
+    );
+  } else if (activeReg === 'tamilNadu') {
+    questions.push(
+      `1. Can you verify the registered Parent Documents (Sale Deed), Patta / Chitta in the promoter's name on AnyServices portal, and Villangam Certificate for ${property.name} in ${property.location}?`
+    );
+    questions.push(
+      `2. Are CMDA / DTCP planning permissions and statutory setbacks fully compliant without building deviations?`
+    );
+  } else if (activeReg === 'delhiNcr') {
+    questions.push(
+      `1. Can you verify the registered Bainama (बैनामा) / Conveyance Deed, development authority allotment letter, and Tehsil Jamabandi / Khasra-Khatauni records?`
+    );
+    questions.push(
+      `2. Are there any pending authority dues or registry freeze orders issued by DDA / NOIDA / DTCP Haryana on this plot/project?`
+    );
+  } else {
+    questions.push(
+      `1. Can you conduct a 30-year title search at the sub-registrar office for ${property.name} in ${property.location} to verify an unbroken ownership chain?`
+    );
+    questions.push(
+      `2. Does the Encumbrance Certificate (EC) for this property show any registered mortgages, liens, or legal charges?`
+    );
+  }
+
   questions.push(
-    `1. Can you conduct a 30-year title search at the sub-registrar office for ${property.name} in ${property.location} to verify an unbroken ownership chain?`
-  );
-  questions.push(
-    `2. Does the Encumbrance Certificate (EC) for this property show any registered mortgages, liens, or legal charges that would affect transfer?`
-  );
-  questions.push(
-    `3. Are there any pending litigations, court stays, or disputes against the developer, seller, or the land parcel?`
+    `3. Are there any pending litigations, court stays, or civil disputes against the developer, seller, or the parent land parcel?`
   );
 
   if (property.type === 'Apartment') {
-    questions.push(`4. Are the RERA commitments in the Agreement for Sale compliant with buyer protection norms under RERA ${property.state || 'state'} regulations?`);
-    questions.push(`5. Is the developer's bank NOC specific to our flat unit, releasing it from any project-level mortgage?`);
+    questions.push(`4. Are the RERA commitments in the Agreement for Sale compliant with statutory buyer protection norms?`);
+    questions.push(`5. Is the developer's bank NOC specific to our flat unit number, releasing it from any project-level mortgage?`);
   }
 
   if (property.type === 'Plot') {
@@ -384,8 +423,10 @@ export function generateLawyerQuestions(
 
   legalItems
     .filter((item) => item.status === 'needs-pro' && !questions.some((q) => q.includes(item.title)))
-    .forEach((item, idx) => {
-      questions.push(`${questions.length + 1}. ${item.title}: ${item.nextAction}`);
+    .forEach((item) => {
+      const reg = getRegionalDocumentInfo(item.id, activeReg);
+      const regNote = reg ? ` (Verify ${reg.regionalTitle})` : '';
+      questions.push(`${questions.length + 1}. ${item.title}${regNote}: ${item.nextAction}`);
     });
 
   return questions;

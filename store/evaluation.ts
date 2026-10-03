@@ -9,8 +9,9 @@ import {
   EvaluationStep,
 } from '@/types';
 import { generateChecklist, generateQuestionsFromChecklist } from '@/lib/checklist-engine';
-import { syncEvaluationToSupabase, supabase } from '@/lib/supabase';
+import { syncEvaluationToSupabase, claimEvaluationInSupabase, supabase } from '@/lib/supabase';
 import { trackEvent } from '@/lib/analytics';
+import { SupportedRegion, SupportedLanguage, detectRegionFromLocation } from '@/lib/regional-documents';
 
 // Helper to trigger asynchronous cloud sync in background
 async function triggerCloudSync(evaluation: EvaluationSession) {
@@ -80,6 +81,16 @@ interface EvaluationStore {
   resolveQuestion: (id: string, questionId: string, status: OpenQuestion['status']) => void;
   initializeQuestionsIfNeeded: (id: string) => void;
 
+  // Regional & Vernacular Settings
+  activeRegion: SupportedRegion;
+  activeLanguage: SupportedLanguage;
+  setActiveRegion: (region: SupportedRegion) => void;
+  setActiveLanguage: (lang: SupportedLanguage) => void;
+
+  // Session & Auth isolation
+  clearUserSession: () => void;
+  claimEvaluation: (id: string, userId: string) => void;
+
   // Checklist regeneration when property type changes
   regenerateChecklist: (id: string) => void;
 }
@@ -90,14 +101,43 @@ export const useEvaluationStore = create<EvaluationStore>()(
       currentEvaluation: null,
       evaluations: {},
       hasHydrated: false,
+      activeRegion: 'general',
+      activeLanguage: 'en',
 
       setHasHydrated: (val) => set({ hasHydrated: val }),
+      setActiveRegion: (region) => set({ activeRegion: region }),
+      setActiveLanguage: (lang) => set({ activeLanguage: lang }),
+
+      clearUserSession: () => {
+        set({ currentEvaluation: null, evaluations: {} });
+      },
+
+      claimEvaluation: (id, userId) => {
+        set((state) => {
+          const evalItem = state.evaluations[id];
+          if (!evalItem) return state;
+          const updatedEval: EvaluationSession = {
+            ...evalItem,
+            userId,
+            updatedAt: new Date().toISOString(),
+          };
+          claimEvaluationInSupabase(id, userId);
+          triggerCloudSync(updatedEval);
+          return {
+            currentEvaluation: state.currentEvaluation?.id === id ? updatedEval : state.currentEvaluation,
+            evaluations: { ...state.evaluations, [id]: updatedEval },
+          };
+        });
+      },
 
       startNewEvaluation: (initialProperty, isDemo = false) => {
         const id = `eval_${Date.now()}`;
 
         const base = isDemo ? DEMO_PROPERTY : EMPTY_PROPERTY;
         const property: PropertyDetails = { ...base, ...initialProperty };
+
+        // Auto-detect region from property location if found
+        const detectedRegion = detectRegionFromLocation(property.location || '');
 
         // Generate property-type-aware checklist
         const checklist = generateChecklist(property.type, property.possessionStatus);
@@ -121,6 +161,7 @@ export const useEvaluationStore = create<EvaluationStore>()(
         set((state) => ({
           currentEvaluation: newSession,
           evaluations: { ...state.evaluations, [id]: newSession },
+          activeRegion: detectedRegion !== 'general' ? detectedRegion : state.activeRegion,
         }));
 
         triggerCloudSync(newSession);
@@ -136,7 +177,11 @@ export const useEvaluationStore = create<EvaluationStore>()(
       loadEvaluation: (id) => {
         const existing = get().evaluations[id];
         if (existing) {
-          set({ currentEvaluation: existing });
+          const detectedRegion = detectRegionFromLocation(existing.property?.location || '');
+          set((state) => ({
+            currentEvaluation: existing,
+            activeRegion: detectedRegion !== 'general' ? detectedRegion : state.activeRegion,
+          }));
           return true;
         }
         return false;

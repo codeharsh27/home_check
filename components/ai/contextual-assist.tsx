@@ -5,6 +5,7 @@ import { Sparkles, Copy, Check, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ChecklistItem, PropertyDetails } from '@/types';
 import { generateSellerQuestions, generateLawyerQuestions } from '@/lib/checklist-engine';
+import { useEvaluationStore } from '@/store/evaluation';
 
 interface ContextualAssistModalProps {
   type: 'seller' | 'lawyer';
@@ -18,13 +19,14 @@ export const ContextualAssistModal: React.FC<ContextualAssistModalProps> = ({
   type, property, checklist, isOpen, onClose,
 }) => {
   const [copied, setCopied] = useState(false);
+  const activeRegion = useEvaluationStore((state) => state.activeRegion);
 
   if (!isOpen) return null;
 
   const questionsList =
     type === 'seller'
-      ? generateSellerQuestions(property, checklist)
-      : generateLawyerQuestions(property, checklist);
+      ? generateSellerQuestions(property, checklist, activeRegion)
+      : generateLawyerQuestions(property, checklist, activeRegion);
 
   const title = type === 'seller'
     ? 'Questions to Ask Seller / Developer'

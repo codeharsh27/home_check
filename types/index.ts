@@ -101,4 +101,5 @@ export interface EvaluationSession {
   checklist?: ChecklistItem[];
   questions?: OpenQuestion[];
   isDemo?: boolean;
+  userId?: string;
 }

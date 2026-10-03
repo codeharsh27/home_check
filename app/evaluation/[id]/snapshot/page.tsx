@@ -12,14 +12,17 @@ import { useEvaluationStore } from '@/store/evaluation';
 import { ArrowRight } from 'lucide-react';
 import { EvidenceStatus, PropertyDetails } from '@/types';
 import { calculateSnapshotCompleteness } from '@/lib/calculations';
+import { AuthGateModal } from '@/components/auth/auth-gate-modal';
+import { supabase } from '@/lib/supabase';
 
 function SnapshotPageContent() {
   const params = useParams();
   const router = useRouter();
   const evalId = params.id as string;
 
-  const { evaluations, loadEvaluation, updateProperty, markStepComplete, regenerateChecklist } = useEvaluationStore();
+  const { evaluations, loadEvaluation, updateProperty, markStepComplete, regenerateChecklist, claimEvaluation } = useEvaluationStore();
   const [hasLoaded, setHasLoaded] = useState(false);
+  const [showAuthGate, setShowAuthGate] = useState(false);
 
   useEffect(() => {
     const found = loadEvaluation(evalId);
@@ -72,7 +75,23 @@ function SnapshotPageContent() {
     }
   };
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
+    // Check if user is authenticated in Supabase
+    if (supabase) {
+      try {
+        const { data } = await supabase.auth.getUser();
+        if (!data?.user) {
+          setShowAuthGate(true);
+          return;
+        }
+      } catch {
+        // Fallback gracefully
+      }
+    }
+    advanceToFinancial();
+  };
+
+  const advanceToFinancial = () => {
     markStepComplete(evalId, 'snapshot');
     router.push(`/evaluation/${evalId}/financial`);
   };
@@ -123,6 +142,20 @@ function SnapshotPageContent() {
           </Button>
         </div>
       </main>
+
+      <AuthGateModal
+        isOpen={showAuthGate}
+        evaluationId={evalId}
+        propertyName={property.name}
+        onClose={() => setShowAuthGate(false)}
+        onAuthenticated={(userId) => {
+          if (userId) {
+            claimEvaluation(evalId, userId);
+          }
+          setShowAuthGate(false);
+          advanceToFinancial();
+        }}
+      />
     </div>
   );
 }

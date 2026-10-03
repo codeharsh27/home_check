@@ -65,6 +65,29 @@ export async function syncEvaluationToSupabase(
 }
 
 /**
+ * Claim an anonymous evaluation session for an authenticated user.
+ */
+export async function claimEvaluationInSupabase(
+  evaluationId: string,
+  userId: string
+): Promise<{ success: boolean; error?: string }> {
+  if (!supabase) return { success: false, error: 'Supabase not configured' };
+
+  try {
+    const { error } = await supabase
+      .from('evaluations')
+      .update({ user_id: userId, updated_at: new Date().toISOString() })
+      .eq('id', evaluationId);
+
+    if (error) throw error;
+    return { success: true };
+  } catch (err: any) {
+    console.warn('[Supabase] Error claiming evaluation:', err?.message);
+    return { success: false, error: err?.message };
+  }
+}
+
+/**
  * Upload document to Supabase Storage bucket 'property-documents'.
  */
 export async function uploadDocumentToSupabase(

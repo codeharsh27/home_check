@@ -15,6 +15,8 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { uploadDocumentToSupabase } from '@/lib/supabase';
+import { useEvaluationStore } from '@/store/evaluation';
+import { getRegionalDocumentInfo, REGIONAL_METADATA } from '@/lib/regional-documents';
 
 interface ChecklistItemCardProps {
   item: ChecklistItem;
@@ -27,6 +29,8 @@ export const ChecklistItemCard: React.FC<ChecklistItemCardProps> = ({
   evaluationId = 'local',
   onUpdate,
 }) => {
+  const activeRegion = useEvaluationStore((state) => state.activeRegion);
+  const regionalInfo = getRegionalDocumentInfo(item.id, activeRegion);
   const [isExpanded, setIsExpanded] = useState(false);
   const [notesInput, setNotesInput] = useState(item.notes || '');
   const [isUploading, setIsUploading] = useState(false);
@@ -114,6 +118,14 @@ export const ChecklistItemCard: React.FC<ChecklistItemCardProps> = ({
               <StatusBadge status={item.status} />
             </div>
             <p className="text-xs text-[#888888]">{item.description}</p>
+            {regionalInfo && (
+              <div className="pt-1 flex items-center gap-1.5 flex-wrap">
+                <span className="inline-flex items-center gap-1 text-[11px] font-mono text-[#D4A017] bg-[#D4A017]/10 px-2 py-0.5 rounded border border-[#D4A017]/30">
+                  <span>📍 {REGIONAL_METADATA[activeRegion]?.name || 'Regional'} Term:</span>
+                  <strong className="text-white">{regionalInfo.regionalTitle}</strong>
+                </span>
+              </div>
+            )}
           </div>
         </div>
 
@@ -153,6 +165,21 @@ export const ChecklistItemCard: React.FC<ChecklistItemCardProps> = ({
             </span>
             <p className="text-[#AAAAAA] leading-relaxed">{item.whyItMatters}</p>
           </div>
+
+          {/* Regional Terminology & Guidance */}
+          {regionalInfo && (
+            <div className="p-3 bg-[#161616] rounded-lg border border-[#2A2A2A] space-y-1.5">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                <span className="font-mono text-[10px] uppercase tracking-wider text-[#D4A017] font-semibold flex items-center gap-1">
+                  <span>🏛️ Local Revenue Term ({regionalInfo.localScript})</span>
+                </span>
+                <span className="text-[10px] text-[#777777] font-mono">Issued by: {regionalInfo.authority}</span>
+              </div>
+              <p className="text-[#EDEDED] font-medium">{regionalInfo.regionalTitle}</p>
+              <p className="text-[#AAAAAA] leading-relaxed">{regionalInfo.legalContext}</p>
+              <p className="text-[#3F9E6C] text-[11px] pt-0.5">✓ Verification tip: {regionalInfo.verificationTip}</p>
+            </div>
+          )}
 
           {/* Action & Contact Info */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-[#999999]">
