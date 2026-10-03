@@ -1,12 +1,13 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { Sparkles, Copy, Check, X, HelpCircle, FileText } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { ChecklistItem, PropertyDetails } from "@/types";
+import React, { useState } from 'react';
+import { Sparkles, Copy, Check, X } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { ChecklistItem, PropertyDetails } from '@/types';
+import { generateSellerQuestions, generateLawyerQuestions } from '@/lib/checklist-engine';
 
 interface ContextualAssistModalProps {
-  type: "seller" | "lawyer";
+  type: 'seller' | 'lawyer';
   property: PropertyDetails;
   checklist: ChecklistItem[];
   isOpen: boolean;
@@ -14,44 +15,30 @@ interface ContextualAssistModalProps {
 }
 
 export const ContextualAssistModal: React.FC<ContextualAssistModalProps> = ({
-  type,
-  property,
-  checklist,
-  isOpen,
-  onClose,
+  type, property, checklist, isOpen, onClose,
 }) => {
   const [copied, setCopied] = useState(false);
 
   if (!isOpen) return null;
 
-  const missingItems = checklist.filter((i) => !i.received);
+  const questionsList =
+    type === 'seller'
+      ? generateSellerQuestions(property, checklist)
+      : generateLawyerQuestions(property, checklist);
 
-  const sellerQuestions = [
-    `1. What is the official RERA registration number and approved sanction plan for ${property.name}?`,
-    `2. Can you provide a copy of the Commencement Certificate (CC) and legal title chain deeds?`,
-    `3. Is the property or land currently mortgaged to any bank/financial institution? If so, will a Bank NOC be provided?`,
-    `4. What is the exact breakdown of one-time corpus fund, clubhouse charges, and monthly society maintenance?`,
-    `5. What is the exact payment schedule linked to construction milestones?`,
-  ];
+  const title = type === 'seller'
+    ? 'Questions to Ask Seller / Developer'
+    : 'Questions to Prepare for Property Lawyer';
 
-  const lawyerQuestions = [
-    `1. Can you conduct a 30-year search at the sub-registrar office to verify clear title chain for ${property.name}?`,
-    `2. Are there any registered mortgages, legal liens, or encumbrances recorded on Form 15/16 Encumbrance Certificate?`,
-    `3. Can you verify whether any pending litigation or court stay orders exist against the developer/landowner?`,
-    `4. Does the developer possess valid Commencement Certificate (CC) and Sanctioned Layout Plan approvals?`,
-    `5. Are the terms in the draft Agreement for Sale fully compliant with RERA buyer protection norms?`,
-  ];
-
-  const questionsList = type === "seller" ? sellerQuestions : lawyerQuestions;
-  const title = type === "seller" ? "Suggested Questions for Seller / Developer" : "Prepared Questions for Property Lawyer";
-  const subtitle =
-    type === "seller"
-      ? "AI generated from your missing property checklist items"
-      : "AI generated for professional legal title verification";
+  const subtitle = type === 'seller'
+    ? `Generated from ${checklist.filter((i) => i.whoToContact === 'Seller / Developer' && !i.received).length} pending seller-sourced items in your checklist`
+    : `Generated from ${checklist.filter((i) => i.status === 'needs-pro' || i.category === 'ownership').length} legal verification areas`;
 
   const handleCopy = () => {
-    const textToCopy = `${title}\nProperty: ${property.name}\n\n` + questionsList.join("\n\n");
-    navigator.clipboard.writeText(textToCopy);
+    navigator.clipboard.writeText(
+      `${title}\nProperty: ${property.name} — ${property.location}\n\n` +
+      questionsList.join('\n\n')
+    );
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -59,10 +46,7 @@ export const ContextualAssistModal: React.FC<ContextualAssistModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
       <div className="bg-[#141414] border border-[#2B2B2B] rounded-xl max-w-lg w-full p-6 space-y-5 shadow-2xl relative">
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 text-[#777777] hover:text-[#EDEDED] transition-colors cursor-pointer"
-        >
+        <button onClick={onClose} className="absolute top-4 right-4 text-[#777777] hover:text-[#EDEDED] cursor-pointer">
           <X className="w-4 h-4" />
         </button>
 
@@ -74,33 +58,25 @@ export const ContextualAssistModal: React.FC<ContextualAssistModalProps> = ({
           <p className="text-xs text-[#888888]">{subtitle}</p>
         </div>
 
-        <div className="bg-[#0C0C0C] border border-[#222222] rounded-lg p-4 space-y-3 max-h-80 overflow-y-auto font-sans text-xs">
-          {questionsList.map((q, idx) => (
-            <div key={idx} className="p-2.5 rounded bg-[#121212] border border-[#1F1F1F] text-[#EDEDED]">
-              {q}
-            </div>
-          ))}
+        <div className="bg-[#0C0C0C] border border-[#222222] rounded-lg p-4 space-y-3 max-h-80 overflow-y-auto text-xs">
+          {questionsList.length === 0 ? (
+            <p className="text-[#666666] italic">No pending items to generate questions from. Your checklist looks complete!</p>
+          ) : (
+            questionsList.map((q, idx) => (
+              <div key={idx} className="p-2.5 rounded bg-[#121212] border border-[#1F1F1F] text-[#EDEDED] leading-relaxed">
+                {q}
+              </div>
+            ))
+          )}
         </div>
 
         <div className="flex items-center justify-between pt-2 border-t border-[#202020]">
-          <span className="text-[11px] text-[#555555] font-mono">✦ AI Generated Assist</span>
+          <span className="text-[11px] text-[#555555] font-mono">✦ Generated from your checklist state</span>
           <div className="flex gap-2">
             <Button variant="outline" size="sm" onClick={handleCopy}>
-              {copied ? (
-                <>
-                  <Check className="w-3.5 h-3.5 text-[#3F9E6C]" />
-                  <span>Copied!</span>
-                </>
-              ) : (
-                <>
-                  <Copy className="w-3.5 h-3.5" />
-                  <span>Copy Questions</span>
-                </>
-              )}
+              {copied ? <><Check className="w-3.5 h-3.5 text-[#3F9E6C]" /><span>Copied!</span></> : <><Copy className="w-3.5 h-3.5" /><span>Copy</span></>}
             </Button>
-            <Button size="sm" onClick={onClose}>
-              Done
-            </Button>
+            <Button size="sm" onClick={onClose}>Done</Button>
           </div>
         </div>
       </div>

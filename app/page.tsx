@@ -1,28 +1,40 @@
-import { LandingHero } from "@/components/landing/hero";
-import { FeatureRow } from "@/components/landing/feature-row";
-import { SketchRow } from "@/components/landing/sketch-row";
-import { MissionStatement } from "@/components/landing/mission-statement";
-import { StatsRow } from "@/components/landing/stats-row";
+import React from "react";
+import { Navbar } from "@/components/layout/nav";
+import { HeroSection } from "@/components/landing/hero";
 import { HowItWorksSection } from "@/components/landing/how-it-works";
-import { TestimonialsSection } from "@/components/landing/testimonials";
-import { CtaSection } from "@/components/landing/cta-section";
-import { LandingFooter } from "@/components/landing/footer";
+import { WhatYouGetSection } from "@/components/landing/what-you-get";
+import { TrustSection } from "@/components/landing/trust-section";
+import { Footer } from "@/components/landing/footer";
+import { IntakeWidget } from "@/components/landing/intake-widget";
 
 export default function LandingPage() {
   return (
-    <div className="landing-root min-h-screen bg-[#F4F1EC] font-sans flex flex-col">
-      {/* ── Hero: full-screen image + transparent nav + search bar + stats ── */}
-      <LandingHero />
+    <div className="min-h-screen bg-[#0A0A0A] text-[#EDEDED] flex flex-col font-sans">
+      <Navbar />
 
-      {/* ── Below the fold: cream background sections ───────────── */}
-      <FeatureRow />
-      <SketchRow />
-      <MissionStatement />
-      <StatsRow />
-      <HowItWorksSection />
-      <TestimonialsSection />
-      <CtaSection />
-      <LandingFooter />
+      <main className="flex-1">
+        <HeroSection />
+        <HowItWorksSection />
+        <WhatYouGetSection />
+        <TrustSection />
+
+        {/* Second Intake Callout */}
+        <section className="py-16 md:py-20 bg-[#080808]">
+          <div className="max-w-3xl mx-auto px-4 text-center space-y-6">
+            <h2 className="text-2xl font-bold text-[#EDEDED]">
+              Ready to evaluate your shortlisted property?
+            </h2>
+            <p className="text-xs text-[#888888] max-w-lg mx-auto">
+              Start now with a listing URL, document brochure, or manual entry.
+            </p>
+            <div className="text-left">
+              <IntakeWidget />
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <Footer />
     </div>
   );
 }

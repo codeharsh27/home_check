@@ -1,123 +1,94 @@
-import { EvaluationSession, ChecklistItem, OpenQuestion } from "@/types";
+import { EvaluationSession } from '@/types';
+import {
+  calculatePlannedLoan,
+  calculateFundingGap,
+  formatCurrency,
+} from '@/lib/calculations';
 
 export interface NextActionItem {
   id: string;
   title: string;
   why: string;
-  who: "Seller / Developer" | "Lender / Bank" | "Property Lawyer" | "RERA / Govt" | "Self";
-  status: "Pending" | "In Progress" | "Resolved";
-  priority: "high" | "medium" | "low";
+  who: string;
+  status: 'Pending' | 'In Progress' | 'Resolved';
+  priority: 'high' | 'medium' | 'low';
 }
 
 export function generateNextActions(session: EvaluationSession): NextActionItem[] {
   const actions: NextActionItem[] = [];
-  const property = session.property;
-  const context = session.buyerContext;
-  const checklist = session.checklist || [];
+  const { property, buyerContext: context = {}, checklist = [] } = session;
 
-  // 1. Funding gap check
-  const effectiveFunds = Math.max(0, (context?.availableFunds || 0) - (context?.emergencyReserve || 0));
-  const plannedLoan = 4500000;
-  const gap = property.price - (effectiveFunds + plannedLoan);
-
+  // 1. Funding gap
+  const gap = calculateFundingGap(property, context);
   if (gap > 0) {
     actions.push({
-      id: "action_funding_gap",
-      title: `Resolve estimated ₹${(gap / 100000).toFixed(2)}L funding gap`,
-      why: "Current funds and planned home loan do not fully cover listed property price.",
-      who: "Self",
-      status: "Pending",
-      priority: "high",
+      id: 'action_funding_gap',
+      title: `Resolve estimated ${formatCurrency(gap)} funding gap`,
+      why: 'Current funds + planned loan does not cover the listed price plus ~7% transaction costs.',
+      who: 'Self',
+      status: 'Pending',
+      priority: 'high',
     });
   }
 
-  // 2. Ownership & Title action
-  const titleItem = checklist.find((i) => i.id === "item_ownership_title");
-  if (!titleItem || !titleItem.received) {
+  // 2. Critical ownership/approvals items
+  const criticalPending = checklist.filter(
+    (i) => !i.received && (i.category === 'ownership' || i.category === 'approvals') && i.status !== 'needs-pro'
+  );
+  for (const item of criticalPending.slice(0, 3)) {
     actions.push({
-      id: "action_ownership_docs",
-      title: "Request seller authority & allotment documents",
-      why: "Current information is insufficient to confirm seller's legal authority.",
-      who: "Seller / Developer",
-      status: titleItem?.requested ? "In Progress" : "Pending",
-      priority: "high",
+      id: `action_${item.id}`,
+      title: item.nextAction,
+      why: item.whyItMatters.split('.')[0] + '.',
+      who: item.whoToContact,
+      status: item.requested ? 'In Progress' : 'Pending',
+      priority: item.category === 'ownership' ? 'high' : 'medium',
     });
   }
 
-  // 3. Bank Loan sanction action
-  actions.push({
-    id: "action_loan_sanction",
-    title: "Obtain formal pre-approval / sanction letter from lender",
-    why: "Expected home loan amount is currently unconfirmed by a lender bank.",
-    who: "Lender / Bank",
-    status: "Pending",
-    priority: "high",
-  });
+  // 3. Home loan pre-approval — only if home loan is planned
+  const usesHomeLoan = context.expectedFinancing?.includes('Home loan') ?? false;
+  if (usesHomeLoan) {
+    const plannedLoan = calculatePlannedLoan(property, context);
+    if (plannedLoan > 0) {
+      actions.push({
+        id: 'action_loan_sanction',
+        title: `Obtain formal loan pre-approval for ${formatCurrency(plannedLoan)}`,
+        why: 'Loan eligibility is not confirmed by any lender. Pre-approval clarifies actual borrowing capacity.',
+        who: 'Lender / Bank',
+        status: 'Pending',
+        priority: 'high',
+      });
+    }
+  }
 
-  // 4. Professional Legal review action
-  const proItems = checklist.filter((i) => i.status === "needs-pro" || i.id === "item_litigation");
+  // 4. Professional legal review
+  const proItems = checklist.filter((i) => i.status === 'needs-pro' && !i.received);
   if (proItems.length > 0) {
     actions.push({
-      id: "action_lawyer_review",
-      title: "Arrange professional legal review for title & court searches",
-      why: "Litigation status and 30-year title chain require qualified legal verification.",
-      who: "Property Lawyer",
-      status: "Pending",
-      priority: "medium",
+      id: 'action_lawyer',
+      title: `Engage property lawyer for ${proItems.length} flagged area${proItems.length > 1 ? 's' : ''}`,
+      why: 'Litigation search, title verification, and encumbrance clearance require qualified legal review.',
+      who: 'Property Lawyer',
+      status: 'Pending',
+      priority: 'medium',
     });
   }
 
-  // 5. Encumbrance Certificate action
-  const ecItem = checklist.find((i) => i.id === "item_ec");
-  if (!ecItem || !ecItem.received) {
+  // 5. Financial checklist items
+  const financialPending = checklist.filter(
+    (i) => !i.received && i.category === 'financial' && i.status !== 'needs-pro'
+  );
+  for (const item of financialPending.slice(0, 2)) {
     actions.push({
-      id: "action_ec_certificate",
-      title: "Obtain Encumbrance Certificate (EC) for 13-30 years",
-      why: "Proves whether property has existing registered mortgages or legal liens.",
-      who: "RERA / Govt",
-      status: ecItem?.requested ? "In Progress" : "Pending",
-      priority: "medium",
+      id: `action_fin_${item.id}`,
+      title: item.nextAction,
+      why: item.whyItMatters.split('.')[0] + '.',
+      who: item.whoToContact,
+      status: item.requested ? 'In Progress' : 'Pending',
+      priority: 'medium',
     });
   }
 
   return actions;
-}
-
-export function generateDefaultQuestions(session: EvaluationSession): OpenQuestion[] {
-  const questions: OpenQuestion[] = [
-    {
-      id: "q_ownership",
-      category: "Ownership",
-      title: "Seller Authority & Ownership Title",
-      description: "Confirm seller has undisputed authority to sell without co-owner dispute.",
-      severity: "high",
-      status: "open",
-    },
-    {
-      id: "q_financing",
-      category: "Financing",
-      title: "Confirm Loan Eligibility & Rate",
-      description: "Verify bank loan sanction terms and exact interest rate options.",
-      severity: "high",
-      status: "open",
-    },
-    {
-      id: "q_encumbrance",
-      category: "Encumbrance",
-      title: "Verify Encumbrance & Mortgage Status",
-      description: "Ensure developer bank has issued NOC freeing flat from project mortgage.",
-      severity: "medium",
-      status: "open",
-    },
-    {
-      id: "q_maintenance",
-      category: "Costs",
-      title: "Confirm Society Maintenance Charges",
-      description: "Confirm recurring monthly maintenance rate and one-time corpus fund.",
-      severity: "low",
-      status: "open",
-    },
-  ];
-
-  return questions;
 }

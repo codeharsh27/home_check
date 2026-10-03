@@ -1,92 +1,54 @@
-import Link from "next/link";
+import React from "react";
+import { Card } from "@/components/ui/card";
 
-const STEPS = [
-  {
-    step: "01",
-    title: "Import Your Property",
-    description:
-      "Paste the listing URL from MagicBricks, 99acres, or NoBroker. Or upload the sales brochure PDF. HomeCheck extracts all available details automatically.",
-    tag: "Evidence capture",
-    bgClass: "bg-[#E8F0E8]",
-  },
-  {
-    step: "02",
-    title: "Map Your Financial Picture",
-    description:
-      "Enter your savings, loan eligibility, and income. HomeCheck calculates your funding gap, EMI obligation, and flags hidden costs like registration, stamp duty, and GST.",
-    tag: "Financial clarity",
-    bgClass: "bg-[#EEE8F0]",
-  },
-  {
-    step: "03",
-    title: "Run the Investigation Plan",
-    description:
-      "Work through a stage-aware due diligence checklist. Track RERA registration, EC, OC, title deed status — and attach documents as you collect them.",
-    tag: "Due diligence",
-    bgClass: "bg-[#F0EEE8]",
-  },
-  {
-    step: "04",
-    title: "Read Your Decision Dashboard",
-    description:
-      "See a final readiness score across financial, property info, and legal checks. Know exactly what's done, what's pending, and when you're ready to proceed.",
-    tag: "Readiness score",
-    bgClass: "bg-[#E8EEF0]",
-  },
-];
+export const HowItWorksSection: React.FC = () => {
+  const steps = [
+    {
+      step: "01",
+      title: "Bring your shortlisted property",
+      description:
+        "Paste a listing URL, upload a brochure, or enter details manually. HomeCheck constructs a structured, complete property snapshot with source tracking.",
+    },
+    {
+      step: "02",
+      title: "Map your financial context",
+      description:
+        "Enter approximate income, available funds, and financing plan. Instantly see your estimated funding gap and required monthly obligation.",
+    },
+    {
+      step: "03",
+      title: "Investigate systematically",
+      description:
+        "Execute a stage-aware due diligence checklist based on property type. Track requested vs received documents and unresolved open questions.",
+    },
+  ];
 
-export function HowItWorksSection() {
   return (
-    <section className="bg-[#F4F1EC] py-20">
-      <div className="max-w-7xl mx-auto px-5 sm:px-8">
-        {/* Section header */}
-        <div className="text-center mb-12">
-          <h2 className="text-[34px] sm:text-[40px] font-bold text-[#111111] tracking-tight mb-3">
-            How HomeCheck Works
+    <section className="py-16 md:py-24 border-b border-[#1A1A1A] bg-[#0C0C0C]">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6">
+        <div className="text-center space-y-2 mb-12">
+          <h2 className="text-xs font-mono uppercase tracking-widest text-[#5B8BDF]">
+            Evaluation Journey
           </h2>
-          <p className="text-[15px] text-[#888888] max-w-[480px] mx-auto leading-relaxed">
-            From listing URL to decision-readiness dashboard — structured,
-            evidence-based, in one place.
+          <p className="text-2xl sm:text-3xl font-semibold text-[#EDEDED]">
+            From shortlisted property to decision readiness
           </p>
         </div>
 
-        {/* Step cards grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          {STEPS.map((s) => (
-            <div
-              key={s.step}
-              className="bg-white rounded-[20px] border border-[#EEEAE2] p-7 flex flex-col gap-4 hover:shadow-md transition-shadow group"
-            >
-              <div className="flex items-start justify-between">
-                <span className="text-[11px] font-bold text-[#BBBBBB] tracking-[0.12em] uppercase">
-                  Step {s.step}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {steps.map((item, idx) => (
+            <Card key={idx} className="relative flex flex-col justify-between space-y-4">
+              <div className="space-y-3">
+                <span className="inline-block font-mono text-xs text-[#5B8BDF] bg-[#5B8BDF]/10 px-2.5 py-1 rounded border border-[#5B8BDF]/20">
+                  STEP {item.step}
                 </span>
-                <span
-                  className={`text-[11px] font-semibold text-[#2A5C2A] ${s.bgClass} px-3 py-1 rounded-full`}
-                >
-                  {s.tag}
-                </span>
+                <h3 className="text-base font-semibold text-[#EDEDED]">{item.title}</h3>
+                <p className="text-xs text-[#888888] leading-relaxed">{item.description}</p>
               </div>
-              <h3 className="text-[18px] font-bold text-[#111111] leading-snug">
-                {s.title}
-              </h3>
-              <p className="text-[13px] text-[#777777] leading-relaxed flex-1">
-                {s.description}
-              </p>
-            </div>
+            </Card>
           ))}
-        </div>
-
-        {/* CTA below */}
-        <div className="mt-10 text-center">
-          <Link
-            href="/evaluation/default/snapshot"
-            className="inline-flex items-center gap-2 bg-[#111111] text-white text-[14px] font-semibold px-7 py-3.5 rounded-full hover:bg-[#333333] transition-colors"
-          >
-            Start Your Evaluation →
-          </Link>
         </div>
       </div>
     </section>
   );
-}
+};

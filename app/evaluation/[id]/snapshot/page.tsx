@@ -1,121 +1,113 @@
-"use client";
+'use client';
 
-import React, { useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
-import { EvalSidebar } from "@/components/layout/eval-sidebar";
-import { PropertyHeaderCard } from "@/components/snapshot/property-card";
-import { CompletenessBar } from "@/components/snapshot/completeness-bar";
-import { FieldRow } from "@/components/snapshot/field-row";
-import { Button } from "@/components/ui/button";
-import { useEvaluationStore } from "@/store/evaluation";
-import { ArrowRight, CheckCircle2 } from "lucide-react";
-import { EvidenceStatus } from "@/types";
+import React, { useEffect, useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import { EvalSidebar } from '@/components/layout/eval-sidebar';
+import { PropertyHeaderCard } from '@/components/snapshot/property-card';
+import { CompletenessBar } from '@/components/snapshot/completeness-bar';
+import { FieldRow } from '@/components/snapshot/field-row';
+import { Button } from '@/components/ui/button';
+import { HydrationGuard } from '@/components/providers/hydration-guard';
+import { useEvaluationStore } from '@/store/evaluation';
+import { ArrowRight } from 'lucide-react';
+import { EvidenceStatus, PropertyDetails } from '@/types';
+import { calculateSnapshotCompleteness } from '@/lib/calculations';
 
-export default function PropertySnapshotPage() {
+function SnapshotPageContent() {
   const params = useParams();
   const router = useRouter();
-  const evalId = (params.id as string) || "demo";
+  const evalId = params.id as string;
 
-  const { currentEvaluation, loadEvaluation, updateProperty, startNewEvaluation } = useEvaluationStore();
+  const { evaluations, loadEvaluation, updateProperty, markStepComplete, regenerateChecklist } = useEvaluationStore();
+  const [hasLoaded, setHasLoaded] = useState(false);
 
   useEffect(() => {
-    if (evalId && evalId !== "demo") {
-      loadEvaluation(evalId);
-    } else if (!currentEvaluation) {
-      // Start fallback evaluation session for demo
-      const id = startNewEvaluation({});
-      router.replace(`/evaluation/${id}/snapshot`);
-    }
+    const found = loadEvaluation(evalId);
+    setHasLoaded(true);
+    if (!found) router.replace('/');
   }, [evalId]);
 
-  const property = currentEvaluation?.property || {
-    name: "Green Valley Residency",
-    type: "Apartment" as const,
-    price: 6800000,
-    location: "Wakad, Pune",
-    carpetArea: 1050,
-    bhk: "2 BHK",
-    developer: "XYZ Developers",
-    possessionStatus: "Under construction" as const,
-    sourceName: "Property listing (MagicBricks)",
+  const evaluation = evaluations[evalId];
+  const property = evaluation?.property;
+  const completeness = property ? calculateSnapshotCompleteness(property) : { known: 0, total: 12, percent: 0 };
+
+  const deriveStatus = (p: PropertyDetails, key: keyof PropertyDetails): EvidenceStatus => {
+    const val = p[key];
+    const hasValue = val !== undefined && val !== null && val !== '' && val !== 0;
+    if (!hasValue) return 'missing';
+    return p.sourceUrl ? 'source-derived' : 'user-provided';
   };
 
-  const fields: { key: keyof typeof property; label: string; unit?: string; defaultStatus: EvidenceStatus }[] = [
-    { key: "name", label: "Project / Property Name", defaultStatus: "source-derived" },
-    { key: "type", label: "Property Type", defaultStatus: "source-derived" },
-    { key: "price", label: "Listed Price", unit: "₹", defaultStatus: "source-derived" },
-    { key: "location", label: "Location", defaultStatus: "source-derived" },
-    { key: "carpetArea", label: "Carpet Area", unit: "sq ft", defaultStatus: "source-derived" },
-    { key: "bhk", label: "Configuration", defaultStatus: "source-derived" },
-    { key: "developer", label: "Developer / Builder", defaultStatus: "source-derived" },
-    { key: "possessionStatus", label: "Possession Status", defaultStatus: "source-derived" },
-    { key: "floor", label: "Floor Level", defaultStatus: "missing" },
-    { key: "reraId", label: "RERA Registration No.", defaultStatus: "missing" },
-    { key: "parking", label: "Parking Allocated", defaultStatus: "missing" },
-    { key: "sourceName", label: "Listing Source", defaultStatus: "user-provided" },
+  const fields: { key: keyof PropertyDetails; label: string; unit?: string }[] = [
+    { key: 'name', label: 'Project / Property Name' },
+    { key: 'type', label: 'Property Type' },
+    { key: 'price', label: 'Listed Price', unit: '₹' },
+    { key: 'location', label: 'Location' },
+    { key: 'carpetArea', label: 'Carpet Area', unit: 'sq ft' },
+    { key: 'bhk', label: 'Configuration (BHK)' },
+    { key: 'floor', label: 'Floor Level' },
+    { key: 'developer', label: 'Developer / Builder' },
+    { key: 'reraId', label: 'RERA Registration No.' },
+    { key: 'possessionStatus', label: 'Possession Status' },
+    { key: 'parking', label: 'Parking Allocated' },
+    { key: 'sourceName', label: 'Listing Source' },
   ];
 
-  const knownCount = fields.filter((f) => Boolean(property[f.key])).length;
-  const totalCount = fields.length;
+  const handleFieldUpdate = (key: keyof PropertyDetails, val: string) => {
+    const oldType = property?.type;
+    const oldPossession = property?.possessionStatus;
 
-  const handleFieldUpdate = (key: string, val: string) => {
-    if (evalId) {
-      let parsedVal: any = val;
-      if (key === "price" || key === "carpetArea") {
-        parsedVal = parseFloat(val) || 0;
-      }
-      updateProperty(evalId, { [key]: parsedVal });
+    let parsedVal: any = val || undefined;
+    if (key === 'price' || key === 'carpetArea' || key === 'builtUpArea') {
+      parsedVal = parseFloat(val) || undefined;
+    }
+
+    updateProperty(evalId, { [key]: parsedVal });
+
+    if (
+      (key === 'type' && val !== oldType) ||
+      (key === 'possessionStatus' && val !== oldPossession)
+    ) {
+      setTimeout(() => regenerateChecklist(evalId), 100);
     }
   };
 
   const handleContinue = () => {
+    markStepComplete(evalId, 'snapshot');
     router.push(`/evaluation/${evalId}/financial`);
   };
+
+  if (!hasLoaded || !evaluation || !property) return null;
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-[#EDEDED] flex flex-col md:flex-row">
       <EvalSidebar evaluationId={evalId} propertyName={property.name} />
-
       <main className="flex-1 p-4 sm:p-8 max-w-4xl space-y-6">
-        {/* Step Indicator Header */}
-        <div className="flex items-center justify-between border-b border-[#1E1E1E] pb-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#1E1E1E] pb-4">
           <div>
-            <span className="text-xs font-mono text-[#5B8BDF] uppercase tracking-wider">Screen 02</span>
-            <h1 className="text-xl sm:text-2xl font-bold text-[#EDEDED]">Property Snapshot</h1>
-            <p className="text-xs text-[#888888] mt-0.5">
-              Confirm or complete the structured profile of the property you are evaluating.
-            </p>
+            <span className="text-xs font-mono text-[#5B8BDF] uppercase tracking-wider">Property Snapshot</span>
+            <h1 className="text-xl sm:text-2xl font-bold text-[#EDEDED]">Confirm Property Profile</h1>
+            <p className="text-xs text-[#888888] mt-0.5">Review all fields. Missing data affects your investigation checklist.</p>
           </div>
           <Button onClick={handleContinue} size="md">
-            <span>Confirm & continue</span>
-            <ArrowRight className="w-4 h-4" />
+            <span>Confirm & continue</span><ArrowRight className="w-4 h-4" />
           </Button>
         </div>
 
-        {/* Property Header Card */}
         <PropertyHeaderCard property={property} />
+        <CompletenessBar knownCount={completeness.known} totalCount={completeness.total} />
 
-        {/* Completeness Counter */}
-        <CompletenessBar knownCount={knownCount} totalCount={totalCount} />
-
-        {/* Field Details List */}
         <div className="space-y-3 pt-2">
-          <h2 className="text-xs font-mono uppercase tracking-wider text-[#888888]">
-            Property Attributes & Evidence Status
-          </h2>
-
+          <h2 className="text-xs font-mono uppercase tracking-wider text-[#888888]">Property Attributes & Evidence Status</h2>
           <div className="space-y-2">
             {fields.map((f) => {
               const val = property[f.key];
-              const isValPresent = Boolean(val);
-              const status: EvidenceStatus = isValPresent ? f.defaultStatus : "missing";
-
               return (
                 <FieldRow
                   key={f.key}
                   label={f.label}
-                  value={val}
-                  status={status}
+                  value={val as string | number | undefined}
+                  status={deriveStatus(property, f.key)}
                   unit={f.unit}
                   onSave={(newVal) => handleFieldUpdate(f.key, newVal)}
                 />
@@ -124,17 +116,17 @@ export default function PropertySnapshotPage() {
           </div>
         </div>
 
-        {/* Action Bar */}
         <div className="pt-6 border-t border-[#1E1E1E] flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-[#666666]">
-            All fields can be updated at any point during your evaluation.
-          </p>
+          <p className="text-xs text-[#666666]">Changing Property Type or Possession Status regenerates your investigation checklist.</p>
           <Button onClick={handleContinue} size="md" className="w-full sm:w-auto">
-            <span>Confirm & continue to Financial Picture</span>
-            <ArrowRight className="w-4 h-4" />
+            <span>Confirm & Continue to Financial Picture</span><ArrowRight className="w-4 h-4" />
           </Button>
         </div>
       </main>
     </div>
   );
+}
+
+export default function PropertySnapshotPage() {
+  return <HydrationGuard><SnapshotPageContent /></HydrationGuard>;
 }
