@@ -31,7 +31,7 @@ export const CTABannerSection: React.FC = () => {
   };
 
   return (
-    <section id="full-intake" className="py-14 sm:py-20 bg-white">
+    <section id="full-intake" className="py-14 sm:py-20 bg-[#FAF8F5]">
       <div className="max-w-7xl mx-auto px-4 sm:px-8">
         <div className="relative rounded-3xl overflow-hidden min-h-[220px] sm:min-h-[240px] flex items-center shadow-xl">
           

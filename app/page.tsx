@@ -10,7 +10,7 @@ import { Footer } from '@/components/landing/footer';
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-white text-slate-900 flex flex-col font-sans selection:bg-blue-600/20 selection:text-blue-900">
+    <div className="min-h-screen bg-[#FAF8F5] text-stone-900 flex flex-col font-sans selection:bg-blue-600/20 selection:text-blue-900">
       <main className="flex-1">
         {/* Hero Section with Glass Navbar and Search Pill Bar */}
         <HeroSection />

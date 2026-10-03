@@ -65,17 +65,17 @@ export const PropertyCategoriesSection: React.FC = () => {
   };
 
   return (
-    <section id="categories" className="py-20 md:py-28 bg-[#F8FAFC] border-b border-slate-100">
+    <section id="categories" className="py-20 md:py-28 bg-[#F5F2EB] border-b border-stone-200/60">
       <div className="max-w-7xl mx-auto px-4 sm:px-8">
         
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-14">
           <div>
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-slate-900 leading-tight">
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-stone-900 leading-tight">
               Tailored Due Diligence by Property Type
             </h2>
           </div>
-          <p className="text-xs sm:text-sm text-slate-500 max-w-md font-normal leading-relaxed">
+          <p className="text-xs sm:text-sm text-stone-500 max-w-md font-normal leading-relaxed">
             Different property types carry entirely different financial and legal risks. Our engine selects the exact checklist automatically.
           </p>
         </div>
@@ -87,16 +87,16 @@ export const PropertyCategoriesSection: React.FC = () => {
             return (
               <div
                 key={cat.id}
-                className="bg-white rounded-3xl p-7 border border-slate-200/90 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group"
+                className="bg-white rounded-3xl p-7 border border-stone-200/90 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group"
               >
                 <div>
                   {/* Top Architectural Visual Block */}
-                  <div className="w-full aspect-[4/3] rounded-2xl bg-gradient-to-br from-slate-50 to-blue-50/50 border border-slate-100 flex flex-col items-center justify-center p-6 relative overflow-hidden mb-6">
-                    <div className="w-16 h-16 rounded-2xl bg-white shadow-md border border-slate-100 flex items-center justify-center text-blue-600 group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-full aspect-[4/3] rounded-2xl bg-gradient-to-br from-stone-50 to-blue-50/40 border border-stone-100 flex flex-col items-center justify-center p-6 relative overflow-hidden mb-6">
+                    <div className="w-16 h-16 rounded-2xl bg-white shadow-md border border-stone-100 flex items-center justify-center text-blue-600 group-hover:scale-110 transition-transform duration-300">
                       <Icon className="w-8 h-8 stroke-[1.75]" />
                     </div>
 
-                    <div className="mt-4 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white text-xs font-bold text-slate-700 shadow-sm border border-slate-100">
+                    <div className="mt-4 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white text-xs font-bold text-stone-700 shadow-sm border border-stone-100">
                       <span>{cat.checksCount}</span>
                     </div>
 
@@ -105,17 +105,17 @@ export const PropertyCategoriesSection: React.FC = () => {
                   </div>
 
                   {/* Title & Description */}
-                  <h3 className="text-xl font-bold text-slate-900 mb-2">
+                  <h3 className="text-xl font-bold text-stone-900 mb-2">
                     {cat.title}
                   </h3>
-                  <p className="text-xs text-slate-500 leading-relaxed font-normal mb-5">
+                  <p className="text-xs text-stone-500 leading-relaxed font-normal mb-5">
                     {cat.description}
                   </p>
 
                   {/* Check list pills */}
                   <div className="space-y-1.5 mb-6">
                     {cat.checks.map((check, idx) => (
-                      <div key={idx} className="flex items-center gap-2 text-xs text-slate-600 font-medium">
+                      <div key={idx} className="flex items-center gap-2 text-xs text-stone-600 font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-blue-600 shrink-0" />
                         <span>{check}</span>
                       </div>
@@ -127,7 +127,7 @@ export const PropertyCategoriesSection: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => handleSelectCategory(cat.type)}
-                  className="w-full py-3 px-4 rounded-xl border border-slate-200 text-slate-800 hover:border-blue-600 hover:text-blue-600 hover:bg-blue-50/30 text-xs font-semibold tracking-wide transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm"
+                  className="w-full py-3 px-4 rounded-xl border border-stone-200 text-stone-800 hover:border-blue-600 hover:text-blue-600 hover:bg-blue-50/30 text-xs font-semibold tracking-wide transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm"
                 >
                   <span>{cat.buttonText}</span>
                   <ArrowRight className="w-3.5 h-3.5" />

@@ -93,16 +93,16 @@ export const FeaturedPropertiesSection: React.FC = () => {
   };
 
   return (
-    <section id="featured-properties" className="py-20 md:py-28 bg-[#F8FAFC] border-b border-slate-100">
+    <section id="featured-properties" className="py-20 md:py-28 bg-[#F5F2EB] border-b border-stone-200/60">
       <div className="max-w-7xl mx-auto px-4 sm:px-8">
         
         {/* Header row with arrows matching Roofin */}
         <div className="flex items-center justify-between mb-10">
           <div>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-slate-900">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-stone-900">
               Recently Evaluated Properties
             </h2>
-            <p className="text-sm text-slate-500 font-normal mt-1">
+            <p className="text-sm text-stone-500 font-normal mt-1">
               Sample completed due diligence reports across major Indian markets
             </p>
           </div>
@@ -111,14 +111,14 @@ export const FeaturedPropertiesSection: React.FC = () => {
             <button
               type="button"
               aria-label="Previous"
-              className="w-9 h-9 rounded-full bg-white border border-slate-200 text-slate-600 flex items-center justify-center hover:bg-slate-50 hover:text-slate-900 shadow-sm transition-colors cursor-pointer"
+              className="w-9 h-9 rounded-full bg-white border border-stone-200 text-stone-600 flex items-center justify-center hover:bg-stone-50 hover:text-stone-900 shadow-sm transition-colors cursor-pointer"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
             <button
               type="button"
               aria-label="Next"
-              className="w-9 h-9 rounded-full bg-white border border-slate-200 text-slate-600 flex items-center justify-center hover:bg-slate-50 hover:text-slate-900 shadow-sm transition-colors cursor-pointer"
+              className="w-9 h-9 rounded-full bg-white border border-stone-200 text-stone-600 flex items-center justify-center hover:bg-stone-50 hover:text-stone-900 shadow-sm transition-colors cursor-pointer"
             >
               <ChevronRight className="w-4 h-4" />
             </button>
@@ -131,7 +131,7 @@ export const FeaturedPropertiesSection: React.FC = () => {
             <div
               key={prop.id}
               onClick={() => handleSelectProperty(prop)}
-              className="group bg-white rounded-3xl overflow-hidden border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-blue-200 transition-all duration-300 cursor-pointer flex flex-col justify-between"
+              className="group bg-white rounded-3xl overflow-hidden border border-stone-200/90 shadow-sm hover:shadow-xl hover:border-blue-300 transition-all duration-300 cursor-pointer flex flex-col justify-between"
             >
               {/* Image Container with Rating Pill */}
               <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-100">

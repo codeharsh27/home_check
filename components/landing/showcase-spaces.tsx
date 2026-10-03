@@ -23,23 +23,23 @@ export const ShowcaseSpacesSection: React.FC = () => {
   };
 
   return (
-    <section className="py-20 md:py-28 bg-white border-b border-slate-100">
+    <section className="py-20 md:py-28 bg-[#FAF8F5] border-b border-stone-200/60">
       <div className="max-w-7xl mx-auto px-4 sm:px-8">
         
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
           <div>
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-slate-900 leading-tight">
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-stone-900 leading-tight">
               Inspect Every Living Space Before Signing
             </h2>
           </div>
-          <p className="text-xs sm:text-sm text-slate-500 max-w-md font-normal leading-relaxed">
+          <p className="text-xs sm:text-sm text-stone-500 max-w-md font-normal leading-relaxed">
             Step into negotiations with verified carpet area, sanction plans, and structural due diligence before paying any non-refundable amount.
           </p>
         </div>
 
         {/* Large Wide Showcase Photo with Overlaid Detail Card */}
-        <div className="relative w-full rounded-3xl overflow-hidden aspect-[16/9] md:aspect-[21/9] min-h-[380px] bg-slate-900 shadow-xl">
+        <div className="relative w-full rounded-3xl overflow-hidden aspect-[16/9] md:aspect-[21/9] min-h-[380px] bg-stone-900 shadow-xl">
           <Image
             src="/images/showcase.jpg"
             alt="Verified Living Space Showcase"
@@ -51,12 +51,12 @@ export const ShowcaseSpacesSection: React.FC = () => {
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
 
           {/* Overlaid Floating Card - Bottom Left matching Roofin */}
-          <div className="absolute bottom-4 left-4 right-4 sm:right-auto sm:left-6 sm:bottom-6 sm:max-w-xl bg-white/95 backdrop-blur-md rounded-2xl p-5 sm:p-6 shadow-2xl border border-white/80">
+          <div className="absolute bottom-4 left-4 right-4 sm:right-auto sm:left-6 sm:bottom-6 sm:max-w-xl bg-white/95 backdrop-blur-md rounded-2xl p-5 sm:p-6 shadow-2xl border border-stone-200/80">
             <div className="space-y-2">
-              <h3 className="text-lg sm:text-xl font-bold text-slate-900">
+              <h3 className="text-lg sm:text-xl font-bold text-stone-900">
                 Lavender Hill Residency
               </h3>
-              <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">
+              <p className="text-xs text-stone-600 line-clamp-2 leading-relaxed">
                 This verified 3 BHK residence features RERA-compliant carpet area, dual-side ventilation, municipal water supply sanction, and zero encumbrance.
               </p>
             </div>
