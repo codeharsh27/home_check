@@ -9,6 +9,20 @@ import {
   EvaluationStep,
 } from '@/types';
 import { generateChecklist, generateQuestionsFromChecklist } from '@/lib/checklist-engine';
+import { syncEvaluationToSupabase, supabase } from '@/lib/supabase';
+
+// Helper to trigger asynchronous cloud sync in background
+async function triggerCloudSync(evaluation: EvaluationSession) {
+  try {
+    if (!supabase) return;
+    const userRes = await supabase.auth.getUser();
+    const userId = userRes.data?.user?.id;
+    await syncEvaluationToSupabase(evaluation, userId);
+  } catch (e) {
+    // Non-blocking sync error
+    console.debug('[Cloud Sync]', e);
+  }
+}
 
 // Demo property for the "Use demo listing" button only
 export const DEMO_PROPERTY: PropertyDetails = {
@@ -108,6 +122,8 @@ export const useEvaluationStore = create<EvaluationStore>()(
           evaluations: { ...state.evaluations, [id]: newSession },
         }));
 
+        triggerCloudSync(newSession);
+
         return id;
       },
 
@@ -128,6 +144,7 @@ export const useEvaluationStore = create<EvaluationStore>()(
             new Set([...evalItem.completedSteps, step])
           ) as EvaluationStep[];
           const updatedEval = { ...evalItem, completedSteps, updatedAt: new Date().toISOString() };
+          triggerCloudSync(updatedEval);
           return {
             currentEvaluation: state.currentEvaluation?.id === id ? updatedEval : state.currentEvaluation,
             evaluations: { ...state.evaluations, [id]: updatedEval },
@@ -144,6 +161,7 @@ export const useEvaluationStore = create<EvaluationStore>()(
             updatedAt: new Date().toISOString(),
             property: { ...evalItem.property, ...updates },
           };
+          triggerCloudSync(updatedEval);
           return {
             currentEvaluation: state.currentEvaluation?.id === id ? updatedEval : state.currentEvaluation,
             evaluations: { ...state.evaluations, [id]: updatedEval },
@@ -160,6 +178,7 @@ export const useEvaluationStore = create<EvaluationStore>()(
             updatedAt: new Date().toISOString(),
             buyerContext: { ...evalItem.buyerContext, ...contextUpdates },
           };
+          triggerCloudSync(updatedEval);
           return {
             currentEvaluation: state.currentEvaluation?.id === id ? updatedEval : state.currentEvaluation,
             evaluations: { ...state.evaluations, [id]: updatedEval },
@@ -182,6 +201,7 @@ export const useEvaluationStore = create<EvaluationStore>()(
             checklist: updatedChecklist,
             questions: updatedQuestions,
           };
+          triggerCloudSync(updatedEval);
           return {
             currentEvaluation: state.currentEvaluation?.id === id ? updatedEval : state.currentEvaluation,
             evaluations: { ...state.evaluations, [id]: updatedEval },
@@ -201,6 +221,7 @@ export const useEvaluationStore = create<EvaluationStore>()(
             updatedAt: new Date().toISOString(),
             questions: updatedQuestions,
           };
+          triggerCloudSync(updatedEval);
           return {
             currentEvaluation: state.currentEvaluation?.id === id ? updatedEval : state.currentEvaluation,
             evaluations: { ...state.evaluations, [id]: updatedEval },
@@ -217,6 +238,7 @@ export const useEvaluationStore = create<EvaluationStore>()(
             const current = state.evaluations[id];
             if (!current) return state;
             const updated = { ...current, questions, updatedAt: new Date().toISOString() };
+            triggerCloudSync(updated);
             return {
               currentEvaluation: state.currentEvaluation?.id === id ? updated : state.currentEvaluation,
               evaluations: { ...state.evaluations, [id]: updated },
@@ -245,6 +267,7 @@ export const useEvaluationStore = create<EvaluationStore>()(
             checklist: mergedChecklist,
             questions: updatedQuestions,
           };
+          triggerCloudSync(updatedEval);
           return {
             currentEvaluation: state.currentEvaluation?.id === id ? updatedEval : state.currentEvaluation,
             evaluations: { ...state.evaluations, [id]: updatedEval },
@@ -253,7 +276,7 @@ export const useEvaluationStore = create<EvaluationStore>()(
       },
     }),
     {
-      name: 'homecheck-v2-storage', // new key to avoid conflicts with old data
+      name: 'homecheck-v2-storage',
       storage: createJSONStorage(() => localStorage),
       onRehydrateStorage: () => (state) => {
         if (state) state.setHasHydrated(true);

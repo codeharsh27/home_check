@@ -7,6 +7,7 @@ interface CategorySectionProps {
   categoryKey: ChecklistItem["category"];
   title: string;
   items: ChecklistItem[];
+  evaluationId?: string;
   onUpdateItem: (itemId: string, updates: Partial<ChecklistItem>) => void;
 }
 
@@ -14,6 +15,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
   categoryKey,
   title,
   items,
+  evaluationId,
   onUpdateItem,
 }) => {
   const completedCount = items.filter((i) => i.received || i.status === "verified").length;
@@ -53,6 +55,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
           <ChecklistItemCard
             key={item.id}
             item={item}
+            evaluationId={evaluationId}
             onUpdate={(updates) => onUpdateItem(item.id, updates)}
           />
         ))}

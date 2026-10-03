@@ -77,6 +77,7 @@ function InvestigationPageContent() {
                 categoryKey={key}
                 title={title}
                 items={items}
+                evaluationId={evalId}
                 onUpdateItem={handleUpdateItem}
               />
             );

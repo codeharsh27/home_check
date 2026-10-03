@@ -61,12 +61,22 @@ function DashboardPageContent() {
             <h1 className="text-xl sm:text-2xl font-bold text-[#EDEDED]">Property Evaluation Status</h1>
             <p className="text-xs text-[#888888] mt-0.5">{property.name} · {property.location} · {formatCurrency(property.price)}</p>
           </div>
-          <div className="flex gap-2">
-            <Button variant="outline" size="sm" onClick={() => { setExported(true); setTimeout(() => setExported(false), 2000); }}>
-              <Download className="w-3.5 h-3.5" /><span>{exported ? 'Exported!' : 'Export PDF'}</span>
+          <div className="flex gap-2 no-print">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                if (typeof window !== 'undefined') {
+                  window.print();
+                }
+              }}
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span>Export PDF / Print</span>
             </Button>
             <Button variant="secondary" size="sm" onClick={() => router.push('/')}>
-              <RotateCcw className="w-3.5 h-3.5" /><span>New evaluation</span>
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span>New evaluation</span>
             </Button>
           </div>
         </div>

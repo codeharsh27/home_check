@@ -1,26 +1,42 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { ChecklistItem, DocumentEvidence, EvidenceStatus } from "@/types";
-import { StatusBadge } from "@/components/ui/badge";
-import { ChevronDown, ChevronUp, FileText, Check, Plus, Paperclip, AlertCircle, MessageSquare, Trash2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import React, { useState, useRef } from 'react';
+import { ChecklistItem, DocumentEvidence, EvidenceStatus } from '@/types';
+import { StatusBadge } from '@/components/ui/badge';
+import {
+  ChevronDown,
+  ChevronUp,
+  FileText,
+  Upload,
+  ExternalLink,
+  Trash2,
+  MessageSquare,
+  Loader2,
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { uploadDocumentToSupabase } from '@/lib/supabase';
 
 interface ChecklistItemCardProps {
   item: ChecklistItem;
+  evaluationId?: string;
   onUpdate: (updatedFields: Partial<ChecklistItem>) => void;
 }
 
-export const ChecklistItemCard: React.FC<ChecklistItemCardProps> = ({ item, onUpdate }) => {
+export const ChecklistItemCard: React.FC<ChecklistItemCardProps> = ({
+  item,
+  evaluationId = 'local',
+  onUpdate,
+}) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [notesInput, setNotesInput] = useState(item.notes || "");
-  const [showNotesInput, setShowNotesInput] = useState(Boolean(item.notes));
+  const [notesInput, setNotesInput] = useState(item.notes || '');
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleToggleRequested = () => {
     const nextRequested = !item.requested;
     let nextStatus: EvidenceStatus = item.status;
-    if (nextRequested && item.status === "missing") {
-      nextStatus = "user-provided";
+    if (nextRequested && item.status === 'missing') {
+      nextStatus = 'user-provided';
     }
     onUpdate({ requested: nextRequested, status: nextStatus });
   };
@@ -29,27 +45,32 @@ export const ChecklistItemCard: React.FC<ChecklistItemCardProps> = ({ item, onUp
     const nextReceived = !item.received;
     let nextStatus: EvidenceStatus = item.status;
     if (nextReceived) {
-      nextStatus = "verified";
+      nextStatus = 'verified';
     } else if (item.requested) {
-      nextStatus = "user-provided";
+      nextStatus = 'user-provided';
     }
     onUpdate({ received: nextReceived, status: nextStatus });
   };
 
-  const handleAttachMockDocument = () => {
-    const mockDoc: DocumentEvidence = {
-      id: `doc_${Date.now()}`,
-      fileName: `${item.id}_document.pdf`,
-      fileSize: 2450000,
-      uploadedAt: new Date().toLocaleDateString("en-IN"),
-    };
+  const handleFileInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
 
-    const updatedDocs = [...(item.documents || []), mockDoc];
-    onUpdate({
-      documents: updatedDocs,
-      received: true,
-      status: item.status === "needs-pro" ? "needs-pro" : "user-provided",
-    });
+    setIsUploading(true);
+    try {
+      const { evidence } = await uploadDocumentToSupabase(file, evaluationId, item.id);
+      if (evidence) {
+        const updatedDocs = [...(item.documents || []), evidence];
+        onUpdate({
+          documents: updatedDocs,
+          received: true,
+          status: item.status === 'needs-pro' ? 'needs-pro' : 'user-provided',
+        });
+      }
+    } finally {
+      setIsUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
   };
 
   const handleRemoveDocument = (docId: string) => {
@@ -63,7 +84,16 @@ export const ChecklistItemCard: React.FC<ChecklistItemCardProps> = ({ item, onUp
 
   return (
     <div className="bg-[#121212] border border-[#232323] hover:border-[#2E2E2E] rounded-xl transition-all overflow-hidden">
-      {/* Block Header Header */}
+      {/* Hidden file input */}
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleFileInputChange}
+        className="hidden"
+        accept=".pdf,.png,.jpg,.jpeg,.doc,.docx"
+      />
+
+      {/* Block Header */}
       <div className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="flex items-start gap-3 flex-1">
           <button
@@ -75,7 +105,10 @@ export const ChecklistItemCard: React.FC<ChecklistItemCardProps> = ({ item, onUp
 
           <div className="space-y-1">
             <div className="flex items-center gap-2 flex-wrap">
-              <h3 className="text-sm font-semibold text-[#EDEDED] cursor-pointer" onClick={() => setIsExpanded(!isExpanded)}>
+              <h3
+                className="text-sm font-semibold text-[#EDEDED] cursor-pointer"
+                onClick={() => setIsExpanded(!isExpanded)}
+              >
                 {item.title}
               </h3>
               <StatusBadge status={item.status} />
@@ -90,22 +123,22 @@ export const ChecklistItemCard: React.FC<ChecklistItemCardProps> = ({ item, onUp
             onClick={handleToggleRequested}
             className={`px-2.5 py-1 rounded-md text-xs font-mono transition-colors cursor-pointer ${
               item.requested
-                ? "bg-[#5B8BDF]/20 text-[#5B8BDF] border border-[#5B8BDF]/40"
-                : "bg-[#1A1A1A] text-[#777777] border border-[#262626] hover:text-[#EDEDED]"
+                ? 'bg-[#5B8BDF]/20 text-[#5B8BDF] border border-[#5B8BDF]/40'
+                : 'bg-[#1A1A1A] text-[#777777] border border-[#262626] hover:text-[#EDEDED]'
             }`}
           >
-            {item.requested ? "Requested ✓" : "+ Mark Requested"}
+            {item.requested ? 'Requested ✓' : '+ Mark Requested'}
           </button>
 
           <button
             onClick={handleToggleReceived}
             className={`px-2.5 py-1 rounded-md text-xs font-mono transition-colors cursor-pointer ${
               item.received
-                ? "bg-[#3F9E6C]/20 text-[#3F9E6C] border border-[#3F9E6C]/40"
-                : "bg-[#1A1A1A] text-[#777777] border border-[#262626] hover:text-[#EDEDED]"
+                ? 'bg-[#3F9E6C]/20 text-[#3F9E6C] border border-[#3F9E6C]/40'
+                : 'bg-[#1A1A1A] text-[#777777] border border-[#262626] hover:text-[#EDEDED]'
             }`}
           >
-            {item.received ? "Received ✓" : "+ Mark Received"}
+            {item.received ? 'Received ✓' : '+ Mark Received'}
           </button>
         </div>
       </div>
@@ -140,11 +173,22 @@ export const ChecklistItemCard: React.FC<ChecklistItemCardProps> = ({ item, onUp
                 Attached Documents ({item.documents?.length || 0})
               </span>
               <button
-                onClick={handleAttachMockDocument}
-                className="inline-flex items-center gap-1 text-[11px] text-[#5B8BDF] hover:underline cursor-pointer"
+                type="button"
+                disabled={isUploading}
+                onClick={() => fileInputRef.current?.click()}
+                className="inline-flex items-center gap-1.5 text-[11px] text-[#5B8BDF] hover:underline cursor-pointer disabled:opacity-50"
               >
-                <Paperclip className="w-3 h-3" />
-                <span>Upload document</span>
+                {isUploading ? (
+                  <>
+                    <Loader2 className="w-3 h-3 animate-spin" />
+                    <span>Uploading...</span>
+                  </>
+                ) : (
+                  <>
+                    <Upload className="w-3 h-3" />
+                    <span>Upload document</span>
+                  </>
+                )}
               </button>
             </div>
 
@@ -155,17 +199,32 @@ export const ChecklistItemCard: React.FC<ChecklistItemCardProps> = ({ item, onUp
                     key={doc.id}
                     className="flex items-center justify-between p-2 rounded bg-[#161616] border border-[#262626]"
                   >
-                    <div className="flex items-center gap-2">
-                      <FileText className="w-3.5 h-3.5 text-[#3F9E6C]" />
-                      <span className="font-mono text-[#EDEDED]">{doc.fileName}</span>
-                      <span className="text-[#666666] text-[10px]">({doc.uploadedAt})</span>
+                    <div className="flex items-center gap-2 truncate">
+                      <FileText className="w-3.5 h-3.5 text-[#3F9E6C] shrink-0" />
+                      <span className="font-mono text-[#EDEDED] truncate">{doc.fileName}</span>
+                      <span className="text-[#666666] text-[10px] shrink-0">({doc.uploadedAt})</span>
                     </div>
-                    <button
-                      onClick={() => handleRemoveDocument(doc.id)}
-                      className="text-[#666666] hover:text-[#D94F4F] transition-colors cursor-pointer"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
+
+                    <div className="flex items-center gap-2 shrink-0">
+                      {doc.fileUrl && (
+                        <a
+                          href={doc.fileUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          title="Open document"
+                          className="text-[#5B8BDF] hover:text-[#7CA5ED] p-1 cursor-pointer"
+                        >
+                          <ExternalLink className="w-3 h-3" />
+                        </a>
+                      )}
+                      <button
+                        onClick={() => handleRemoveDocument(doc.id)}
+                        title="Remove document"
+                        className="text-[#666666] hover:text-[#D94F4F] transition-colors p-1 cursor-pointer"
+                      >
+                        <Trash2 className="w-3 h-3" />
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
