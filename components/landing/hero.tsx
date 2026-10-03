@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Search, Loader2, AlertCircle, SlidersHorizontal, UploadCloud, Edit3, X, CheckCircle2, IndianRupee, FileCheck2, ArrowRightCircle } from 'lucide-react';
+import { Search, Loader2, AlertCircle, SlidersHorizontal, UploadCloud, Edit3, X, CheckCircle2 } from 'lucide-react';
 import { useEvaluationStore, DEMO_PROPERTY } from '@/store/evaluation';
 import { Navbar } from '@/components/layout/nav';
 
@@ -221,47 +221,30 @@ export const HeroSection: React.FC = () => {
 
           </div>
 
-          {/* Hero Bottom Value Strip - Grounded Real Value with Bordered Cards & Hover Lift */}
-          <div className="relative z-10 w-full border-t border-white/20 bg-slate-950/50 backdrop-blur-md p-3 sm:p-4">
-            <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 text-center sm:text-left">
+          {/* Hero Bottom Strip - Minimalist, Clean & Understated */}
+          <div className="relative z-10 w-full border-t border-white/15 bg-black/30 backdrop-blur-md py-3.5 px-6">
+            <div className="max-w-4xl mx-auto flex flex-wrap items-center justify-center gap-y-2 gap-x-6 sm:gap-x-10 text-xs text-white/90">
               
-              {/* Column 1 */}
-              <div className="p-3 sm:p-3.5 rounded-2xl bg-white/5 border border-white/10 hover:border-blue-400/40 hover:bg-white/10 hover:-translate-y-0.5 transition-all duration-300 flex items-start gap-3">
-                <div className="w-9 h-9 rounded-xl bg-blue-500/20 border border-blue-400/30 flex items-center justify-center shrink-0 text-blue-300">
-                  <IndianRupee className="w-4 h-4" />
-                </div>
-                <div>
-                  <p className="text-xs sm:text-sm font-bold text-white tracking-tight">Know your real cost</p>
-                  <p className="text-[11px] sm:text-xs text-white/70 font-normal mt-0.5">
-                    Understand the money you may need to arrange.
-                  </p>
-                </div>
+              <div className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-blue-300 shrink-0" />
+                <span className="font-semibold text-white tracking-tight">Know your real cost</span>
+                <span className="text-white/65 hidden sm:inline font-normal">— understand what to arrange</span>
               </div>
 
-              {/* Column 2 */}
-              <div className="p-3 sm:p-3.5 rounded-2xl bg-white/5 border border-white/10 hover:border-emerald-400/40 hover:bg-white/10 hover:-translate-y-0.5 transition-all duration-300 flex items-start gap-3">
-                <div className="w-9 h-9 rounded-xl bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center shrink-0 text-emerald-300">
-                  <FileCheck2 className="w-4 h-4" />
-                </div>
-                <div>
-                  <p className="text-xs sm:text-sm font-bold text-white tracking-tight">Know what to verify</p>
-                  <p className="text-[11px] sm:text-xs text-white/70 font-normal mt-0.5">
-                    See documents and information that still need checking.
-                  </p>
-                </div>
+              <span className="text-white/25 hidden sm:inline">·</span>
+
+              <div className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-300 shrink-0" />
+                <span className="font-semibold text-white tracking-tight">Know what to verify</span>
+                <span className="text-white/65 hidden sm:inline font-normal">— pending checks &amp; documents</span>
               </div>
 
-              {/* Column 3 */}
-              <div className="p-3 sm:p-3.5 rounded-2xl bg-white/5 border border-white/10 hover:border-amber-400/40 hover:bg-white/10 hover:-translate-y-0.5 transition-all duration-300 flex items-start gap-3">
-                <div className="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-400/30 flex items-center justify-center shrink-0 text-amber-300">
-                  <ArrowRightCircle className="w-4 h-4" />
-                </div>
-                <div>
-                  <p className="text-xs sm:text-sm font-bold text-white tracking-tight">Know your next step</p>
-                  <p className="text-[11px] sm:text-xs text-white/70 font-normal mt-0.5">
-                    Understand what to do before committing.
-                  </p>
-                </div>
+              <span className="text-white/25 hidden sm:inline">·</span>
+
+              <div className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-300 shrink-0" />
+                <span className="font-semibold text-white tracking-tight">Know your next step</span>
+                <span className="text-white/65 hidden sm:inline font-normal">— what to do before committing</span>
               </div>
 
             </div>

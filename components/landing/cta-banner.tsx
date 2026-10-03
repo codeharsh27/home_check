@@ -33,18 +33,18 @@ export const CTABannerSection: React.FC = () => {
   return (
     <section id="full-intake" className="py-16 sm:py-24 bg-[#FAF8F5]">
       <div className="max-w-6xl mx-auto px-4 sm:px-8">
-        <div className="relative rounded-[32px] sm:rounded-[36px] overflow-hidden min-h-[280px] flex items-center shadow-2xl border-2 border-blue-600/40">
+        <div className="relative rounded-[32px] sm:rounded-[36px] overflow-hidden min-h-[280px] flex items-center shadow-xl border border-stone-200/80">
           
-          {/* Background Image Container */}
+          {/* Background Image Container - Kept Natural */}
           <div className="absolute inset-0 z-0">
             <Image
               src="/images/showcase.jpg"
               alt="HomeCheck Evaluation Backdrop"
               fill
-              className="object-cover brightness-75 scale-105"
+              className="object-cover brightness-95 scale-100"
             />
-            {/* Ambient Hero-Matching Blue Overlay for text readability */}
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-950/90 via-blue-900/75 to-sky-950/85 backdrop-blur-[2px]" />
+            {/* Natural Neutral Dark Overlay for text legibility without any blue tint */}
+            <div className="absolute inset-0 bg-gradient-to-r from-stone-950/85 via-stone-900/60 to-black/35 backdrop-blur-[1px]" />
           </div>
 
           {/* Banner Content */}
@@ -52,7 +52,7 @@ export const CTABannerSection: React.FC = () => {
             
             {/* Left Copy */}
             <div className="max-w-xl space-y-3.5">
-              <span className="text-[11px] sm:text-xs font-bold uppercase tracking-[1.5px] text-blue-200 bg-blue-900/70 border border-blue-400/40 px-3.5 py-1 rounded-full backdrop-blur-md inline-block shadow-sm">
+              <span className="text-[11px] sm:text-xs font-bold uppercase tracking-[1.5px] text-white/90 bg-white/15 border border-white/25 px-3.5 py-1 rounded-full backdrop-blur-md inline-block shadow-sm">
                 READY TO START?
               </span>
 
@@ -60,16 +60,16 @@ export const CTABannerSection: React.FC = () => {
                 Have a property shortlisted? Start there.
               </h2>
 
-              <p className="text-sm sm:text-base text-blue-100/90 font-normal leading-relaxed">
+              <p className="text-sm sm:text-base text-white/85 font-normal leading-relaxed">
                 Add the listing or basic property details and start building your evaluation.
               </p>
             </div>
 
-            {/* Right Action / Input with Crisp Inner Form */}
+            {/* Right Action / Input with Clean Neutral Form */}
             <div className="w-full lg:max-w-md space-y-2.5">
               <form
                 onSubmit={handleSubmit}
-                className="w-full bg-white rounded-full p-1.5 sm:p-2 shadow-2xl flex items-center justify-between border-2 border-white/90 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/25 transition-all"
+                className="w-full bg-white rounded-full p-1.5 sm:p-2 shadow-2xl flex items-center justify-between border border-stone-200 focus-within:border-stone-400 focus-within:ring-2 focus-within:ring-stone-400/20 transition-all"
               >
                 <input
                   type="text"
@@ -81,7 +81,7 @@ export const CTABannerSection: React.FC = () => {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-bold shadow-lg shadow-blue-600/40 transition-all hover:scale-[1.02] shrink-0 cursor-pointer flex items-center gap-1.5 group"
+                  className="px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-stone-900 hover:bg-black text-white text-xs sm:text-sm font-bold shadow-md transition-all hover:scale-[1.02] shrink-0 cursor-pointer flex items-center gap-1.5 group"
                 >
                   {isLoading ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
@@ -95,8 +95,8 @@ export const CTABannerSection: React.FC = () => {
               </form>
 
               <div className="flex items-center gap-2 pl-3">
-                <span className="w-1.5 h-1.5 rounded-full bg-sky-300 animate-pulse" />
-                <p className="text-[11px] sm:text-xs text-blue-200/90 font-normal">
+                <span className="w-1.5 h-1.5 rounded-full bg-white/80 animate-pulse" />
+                <p className="text-[11px] sm:text-xs text-white/80 font-normal">
                   Start with the information you already have.
                 </p>
               </div>
