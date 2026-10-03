@@ -2,20 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import {
-  Search,
-  Loader2,
-  AlertCircle,
-  Link as LinkIcon,
-  UploadCloud,
-  Edit3,
-  CheckCircle2,
-  ArrowRight,
-  ShieldCheck,
-  Building,
-  MapPin,
-  Sparkles,
-} from 'lucide-react';
+import { Search, Loader2, AlertCircle, SlidersHorizontal, UploadCloud, Edit3, X, CheckCircle2 } from 'lucide-react';
 import { useEvaluationStore, DEMO_PROPERTY } from '@/store/evaluation';
 import { Navbar } from '@/components/layout/nav';
 
@@ -23,30 +10,32 @@ export const HeroSection: React.FC = () => {
   const router = useRouter();
   const startNewEvaluation = useEvaluationStore((state) => state.startNewEvaluation);
 
-  // Active intake mode: 'link' | 'upload' | 'manual'
-  const [activeMode, setActiveMode] = useState<'link' | 'upload' | 'manual'>('link');
-
-  // Link mode state
   const [urlInput, setUrlInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [parseError, setParseError] = useState<string | null>(null);
 
-  // Upload mode state
+  // Options Popover / Modal state
+  const [optionsModalOpen, setOptionsModalOpen] = useState(false);
+  const [activeModalTab, setActiveModalTab] = useState<'menu' | 'upload' | 'manual'>('menu');
+
+  // File upload state
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [dragActive, setDragActive] = useState(false);
 
-  // Manual mode state
-  const [manualName, setManualName] = useState('');
-  const [manualCity, setManualCity] = useState('');
-  const [manualBudget, setManualBudget] = useState('');
-  const [manualType, setManualType] = useState<'Apartment' | 'Villa' | 'Plot'>('Apartment');
+  // Manual form state
+  const [manualData, setManualData] = useState({
+    name: '',
+    location: '',
+    price: '',
+    bhk: '2 BHK',
+    type: 'Apartment' as 'Apartment' | 'Villa' | 'Plot',
+  });
 
-  // Handle URL intake
-  const handleStartUrl = async (e: React.FormEvent) => {
+  const handleStartEvaluation = async (e: React.FormEvent) => {
     e.preventDefault();
     const trimmed = urlInput.trim();
     if (!trimmed) {
-      handleLoadSample('pune');
+      handleLoadDemo();
       return;
     }
 
@@ -68,6 +57,7 @@ export const HeroSection: React.FC = () => {
         }
       }
 
+      // Fallback for direct input or text
       const id = startNewEvaluation({
         sourceUrl: trimmed.startsWith('http') ? trimmed : undefined,
         name: trimmed.startsWith('http') ? 'Shortlisted Property' : trimmed,
@@ -88,398 +78,392 @@ export const HeroSection: React.FC = () => {
     }
   };
 
-  // Handle File Upload
   const handleFileUpload = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!uploadedFile) return;
     const id = startNewEvaluation({
-      sourceName: uploadedFile.name,
-      name: uploadedFile.name.replace(/\.[^/.]+$/, ''),
+      sourceName: uploadedFile ? uploadedFile.name : 'Property Brochure',
+      name: uploadedFile ? uploadedFile.name.replace(/\.[^/.]+$/, '') : 'Uploaded Property',
       location: 'India',
     }, false);
+    setOptionsModalOpen(false);
     router.push(`/evaluation/${id}/snapshot`);
   };
 
-  // Handle Manual Form
   const handleManualSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const parsedPrice = parseFloat(manualBudget.replace(/[^0-9.]/g, '')) || 7200000;
+    const parsedPrice = parseFloat(manualData.price.replace(/[^0-9.]/g, '')) || 6500000;
     const id = startNewEvaluation({
-      name: manualName || 'Custom Property Evaluation',
-      location: manualCity || 'Pune, Maharashtra',
+      name: manualData.name || 'Shortlisted Property',
+      location: manualData.location || 'India',
       price: parsedPrice,
-      bhk: manualType === 'Plot' ? undefined : '2 BHK',
-      type: manualType,
+      bhk: manualData.bhk,
+      type: manualData.type,
       sourceName: 'Manual Entry',
     }, false);
+    setOptionsModalOpen(false);
     router.push(`/evaluation/${id}/snapshot`);
   };
 
-  // Instant Sample Evaluation Chips
-  const handleLoadSample = (sampleType: 'pune' | 'bengaluru' | 'gurgaon') => {
-    if (sampleType === 'pune') {
-      const id = startNewEvaluation({
-        name: 'Highland Greens',
-        location: 'Wakad, Pune, Maharashtra',
-        price: 6800000,
-        bhk: '2 BHK',
-        type: 'Apartment',
-        possessionStatus: 'Ready to move',
-        sourceName: 'Sample Evaluation',
-      }, true);
-      router.push(`/evaluation/${id}/snapshot`);
-    } else if (sampleType === 'bengaluru') {
-      const id = startNewEvaluation({
-        name: 'Beverly Breeze Villa',
-        location: 'Whitefield, Bengaluru, Karnataka',
-        price: 14500000,
-        bhk: '3 BHK',
-        type: 'Villa',
-        possessionStatus: 'Under construction',
-        sourceName: 'Sample Evaluation',
-      }, true);
-      router.push(`/evaluation/${id}/snapshot`);
-    } else {
-      const id = startNewEvaluation({
-        name: 'Laurel Canyon Nest',
-        location: 'Golf Course Ext., Gurgaon, Haryana',
-        price: 9200000,
-        bhk: '3 BHK',
-        type: 'Apartment',
-        possessionStatus: 'Ready to move',
-        sourceName: 'Sample Evaluation',
-      }, true);
-      router.push(`/evaluation/${id}/snapshot`);
-    }
+  const handleLoadDemo = () => {
+    const id = startNewEvaluation(DEMO_PROPERTY, true);
+    router.push(`/evaluation/${id}/snapshot`);
   };
 
   return (
-    <section
-      className="relative min-h-[740px] md:min-h-[820px] lg:min-h-[880px] flex flex-col justify-between overflow-hidden"
-      style={{
-        backgroundImage: 'url(/images/hero.png)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center 15%',
-        backgroundRepeat: 'no-repeat',
-      }}
-    >
-      {/* 10/10 Natural Sunlight Grading: 
-          Subtle top scrim for nav readability, crystal clear blue sky in middle, 
-          and warm architectural vignette at the base */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-950/45 via-slate-900/10 to-slate-950/75 pointer-events-none" />
-
-      {/* Floating Centered Navbar */}
-      <Navbar />
-
-      {/* Hero Content - Perfectly Proportioned Vertical Rhythm */}
-      <div className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-4 pt-44 sm:pt-48 md:pt-52 pb-16 max-w-5xl mx-auto w-full">
+    <>
+      {/* Outer Padding Container on desktop for 1-Glance Framed Aesthetic */}
+      <div className="w-full p-2.5 sm:p-4 md:p-6 bg-[#FAF8F5]">
         
-        {/* Top Eyebrow Badge - High Trust */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 backdrop-blur-md border border-white/25 text-white/90 text-xs font-medium mb-6 shadow-sm">
-          <ShieldCheck className="w-3.5 h-3.5 text-blue-300" />
-          <span>India&apos;s Independent Property Due-Diligence Workspace</span>
-        </div>
+        {/* Main Hero Card Container with Rounded Borders from ALL corners */}
+        <section
+          className="relative w-full h-[90vh] min-h-[580px] max-h-[820px] rounded-[24px] sm:rounded-[32px] md:rounded-[40px] overflow-hidden flex flex-col justify-between shadow-2xl shadow-stone-900/10 border border-stone-200/60"
+          style={{
+            backgroundImage: 'url(/images/hero.png)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+          }}
+        >
+          {/* Subtle Natural Daylight Gradient Overlay for text contrast */}
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/60 via-slate-900/30 to-slate-950/75 pointer-events-none" />
 
-        {/* 2-Line Poetic & Direct Headline */}
-        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white leading-[1.1] max-w-4xl drop-shadow-md">
-          Where Every Property Deal <br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-blue-200">
-            Begins With Total Clarity.
-          </span>
-        </h1>
+          {/* Floating Centered Navbar inside rounded container */}
+          <Navbar />
 
-        {/* Subtitle */}
-        <p className="mt-5 text-base sm:text-lg md:text-xl text-white/90 font-normal max-w-2xl leading-relaxed drop-shadow-sm">
-          Check funding gaps, unmask hidden legal encumbrances, and verify RERA carpet area before paying a single rupee in non-refundable token.
-        </p>
+          {/* Hero Content - Perfectly Balanced in the 1-Glance Viewport Area */}
+          <div className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-4 sm:px-6 pt-24 sm:pt-28 pb-6 max-w-4xl mx-auto w-full">
+            
+            {/* Clear, Everyday-Language Headline */}
+            <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-white leading-[1.15] max-w-3xl drop-shadow-md">
+              Check Any Property Before You Pay Booking Money
+            </h1>
 
-        {/* Interactive Mode Pill Tabs - Directly Above Search Bar */}
-        <div className="mt-9 flex items-center justify-center gap-1.5 p-1 rounded-full bg-slate-950/30 backdrop-blur-md border border-white/20 shadow-md">
-          <button
-            type="button"
-            onClick={() => setActiveMode('link')}
-            className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide transition-all cursor-pointer ${
-              activeMode === 'link'
-                ? 'bg-white text-stone-900 shadow-sm'
-                : 'text-white/80 hover:text-white hover:bg-white/10'
-            }`}
-          >
-            <LinkIcon className="w-3.5 h-3.5" />
-            <span>Paste Listing Link</span>
-          </button>
-          
-          <button
-            type="button"
-            onClick={() => setActiveMode('upload')}
-            className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide transition-all cursor-pointer ${
-              activeMode === 'upload'
-                ? 'bg-white text-stone-900 shadow-sm'
-                : 'text-white/80 hover:text-white hover:bg-white/10'
-            }`}
-          >
-            <UploadCloud className="w-3.5 h-3.5" />
-            <span>Upload Brochure</span>
-          </button>
+            {/* Easy-to-Understand Sub-headline */}
+            <p className="mt-4 sm:mt-5 text-sm sm:text-base md:text-lg text-white/90 font-normal max-w-2xl leading-relaxed drop-shadow-sm">
+              See if the legal papers are clear, how much loan the bank will really give you, and your exact out-of-pocket cost — before signing anything.
+            </p>
 
-          <button
-            type="button"
-            onClick={() => setActiveMode('manual')}
-            className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide transition-all cursor-pointer ${
-              activeMode === 'manual'
-                ? 'bg-white text-stone-900 shadow-sm'
-                : 'text-white/80 hover:text-white hover:bg-white/10'
-            }`}
-          >
-            <Edit3 className="w-3.5 h-3.5" />
-            <span>Manual Entry</span>
-          </button>
-        </div>
-
-        {/* Dynamic Intake Container */}
-        <div className="mt-4 w-full max-w-2xl">
-          
-          {/* Mode 1: Paste Link */}
-          {activeMode === 'link' && (
-            <form onSubmit={handleStartUrl} className="relative">
-              <div className="bg-white rounded-full shadow-2xl p-2 sm:p-2.5 flex items-center gap-2 border border-white/70 ring-1 ring-black/5">
-                <div className="pl-4 text-stone-400">
-                  <Search className="w-4 h-4" />
+            {/* Search Intake Pill - Clean Single Input with Options Icon */}
+            <form
+              onSubmit={handleStartEvaluation}
+              className="mt-7 sm:mt-8 w-full max-w-2xl relative"
+            >
+              <div className="bg-white rounded-full shadow-2xl p-1.5 sm:p-2 flex items-center gap-2 border border-white/60">
+                
+                {/* Single Clean Input */}
+                <div className="flex-1 px-4 sm:px-5">
+                  <input
+                    type="text"
+                    value={urlInput}
+                    onChange={(e) => setUrlInput(e.target.value)}
+                    placeholder="Paste link from MagicBricks, 99acres, NoBroker, Housing..."
+                    className="w-full text-xs sm:text-sm text-stone-800 placeholder-stone-400 bg-transparent outline-none font-normal"
+                  />
                 </div>
-                <input
-                  type="text"
-                  value={urlInput}
-                  onChange={(e) => setUrlInput(e.target.value)}
-                  placeholder="Paste listing URL (MagicBricks, 99acres, NoBroker, Housing...)"
-                  className="flex-1 text-xs sm:text-sm text-stone-800 placeholder-stone-400 bg-transparent outline-none font-medium px-2"
-                />
+
+                {/* Options Icon Button (Upload Brochure / Manual Entry) */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActiveModalTab('menu');
+                    setOptionsModalOpen(true);
+                  }}
+                  title="Upload brochure or manual entry"
+                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-700 flex items-center justify-center transition-colors shrink-0 cursor-pointer shadow-sm"
+                >
+                  <SlidersHorizontal className="w-4 h-4" />
+                </button>
+
+                {/* Circular Search / Analyze Button */}
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="px-6 py-3 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-semibold shadow-md flex items-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 shrink-0 cursor-pointer"
+                  aria-label="Analyze property"
+                  className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white flex items-center justify-center shadow-md transition-transform hover:scale-105 active:scale-95 disabled:opacity-50 shrink-0 cursor-pointer"
                 >
                   {isLoading ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      <span>Analysing...</span>
-                    </>
+                    <Loader2 className="w-4 h-4 animate-spin" />
                   ) : (
-                    <>
-                      <span>Evaluate Now</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </>
+                    <Search className="w-4 h-4 stroke-[2.5]" />
                   )}
                 </button>
               </div>
 
               {parseError && (
-                <div className="mt-3 flex items-center gap-2 text-xs text-amber-200 bg-slate-900/80 backdrop-blur-md px-4 py-2 rounded-full mx-auto w-fit">
+                <div className="mt-3 flex items-center gap-2 text-xs text-amber-200 bg-slate-900/70 backdrop-blur-md px-4 py-2 rounded-full mx-auto w-fit">
                   <AlertCircle className="w-3.5 h-3.5" />
                   <span>{parseError}</span>
                 </div>
               )}
 
-              {/* Supported Portals Trust Line */}
-              <p className="mt-3 text-[11px] text-white/75 font-normal">
-                Supported portals: MagicBricks · 99acres · Housing.com · NoBroker · Builder Websites
-              </p>
-            </form>
-          )}
-
-          {/* Mode 2: Upload Brochure */}
-          {activeMode === 'upload' && (
-            <form onSubmit={handleFileUpload} className="bg-white rounded-3xl p-5 shadow-2xl border border-white/70 text-left">
-              <div
-                onDragOver={(e) => { e.preventDefault(); setDragActive(true); }}
-                onDragLeave={() => setDragActive(false)}
-                onDrop={(e) => {
-                  e.preventDefault();
-                  setDragActive(false);
-                  if (e.dataTransfer.files[0]) setUploadedFile(e.dataTransfer.files[0]);
-                }}
-                className={`border-2 border-dashed rounded-2xl p-6 text-center transition-colors cursor-pointer ${
-                  dragActive
-                    ? 'border-blue-500 bg-blue-50/50'
-                    : uploadedFile
-                    ? 'border-emerald-500 bg-emerald-50/40'
-                    : 'border-stone-200 bg-[#FAF8F5] hover:border-stone-300'
-                }`}
-              >
-                {uploadedFile ? (
-                  <div className="flex items-center justify-center gap-3 text-emerald-700">
-                    <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
-                    <span className="text-xs font-semibold truncate max-w-xs">{uploadedFile.name}</span>
-                    <button
-                      type="button"
-                      onClick={() => setUploadedFile(null)}
-                      className="text-[11px] text-stone-500 hover:text-stone-800 underline ml-2"
-                    >
-                      Change
-                    </button>
-                  </div>
-                ) : (
-                  <div className="space-y-2">
-                    <UploadCloud className="w-7 h-7 mx-auto text-blue-600" />
-                    <p className="text-xs font-semibold text-stone-800">
-                      Drop property brochure, floor plan, or project scan
-                    </p>
-                    <p className="text-[11px] text-stone-400">PDF, PNG, JPG accepted (Up to 25MB)</p>
-                    <label className="inline-block mt-1 px-4 py-1.5 rounded-full bg-white border border-stone-200 text-xs font-medium text-stone-700 hover:bg-stone-50 transition-colors cursor-pointer">
-                      Browse Computer
-                      <input
-                        type="file"
-                        className="hidden"
-                        accept=".pdf,.png,.jpg,.jpeg"
-                        onChange={(e) => {
-                          if (e.target.files?.[0]) setUploadedFile(e.target.files[0]);
-                        }}
-                      />
-                    </label>
-                  </div>
-                )}
-              </div>
-
-              <div className="mt-4 flex items-center justify-between">
-                <span className="text-xs text-stone-500">Extracts price, carpet area, and layout plans automatically.</span>
+              {/* Quick Demo Link */}
+              <div className="mt-3.5 flex items-center justify-center gap-2 text-xs text-white/80">
+                <span>Want a quick test?</span>
                 <button
-                  type="submit"
-                  disabled={!uploadedFile}
-                  className="px-6 py-2.5 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-semibold shadow-md disabled:opacity-40 transition-all cursor-pointer"
+                  type="button"
+                  onClick={handleLoadDemo}
+                  className="text-white font-semibold underline underline-offset-4 hover:text-blue-200 cursor-pointer transition-colors"
                 >
-                  Start Brochure Due Diligence →
+                  Try sample property (Pune · 2 BHK · ₹68 Lakhs) →
                 </button>
               </div>
             </form>
-          )}
 
-          {/* Mode 3: Manual Entry */}
-          {activeMode === 'manual' && (
-            <form onSubmit={handleManualSubmit} className="bg-white rounded-3xl p-5 shadow-2xl border border-white/70 text-left">
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div>
-                  <label className="block text-[11px] font-bold text-stone-600 mb-1">Project Name</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="e.g. Lodha Belmondo"
-                    value={manualName}
-                    onChange={(e) => setManualName(e.target.value)}
-                    className="w-full bg-[#FAF8F5] border border-stone-200 rounded-xl px-3.5 py-2 text-xs text-stone-800 outline-none focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-[11px] font-bold text-stone-600 mb-1">City / Area</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="e.g. Pune, MH"
-                    value={manualCity}
-                    onChange={(e) => setManualCity(e.target.value)}
-                    className="w-full bg-[#FAF8F5] border border-stone-200 rounded-xl px-3.5 py-2 text-xs text-stone-800 outline-none focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-[11px] font-bold text-stone-600 mb-1">Quoted Price (₹)</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="e.g. 78,00,000"
-                    value={manualBudget}
-                    onChange={(e) => setManualBudget(e.target.value)}
-                    className="w-full bg-[#FAF8F5] border border-stone-200 rounded-xl px-3.5 py-2 text-xs text-stone-800 outline-none focus:border-blue-500"
-                  />
-                </div>
+          </div>
+
+          {/* Bottom Stats Strip - Framed neatly inside the rounded container */}
+          <div className="relative z-10 w-full border-t border-white/20 bg-slate-950/35 backdrop-blur-md">
+            <div className="max-w-5xl mx-auto px-6 py-4 grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-white/20 text-center">
+              <div className="py-1.5 sm:py-0 px-4">
+                <p className="text-xl sm:text-2xl font-bold text-white tracking-tight">4,200+</p>
+                <p className="text-[11px] text-white/70 font-medium mt-0.5">Properties checked before deposit</p>
               </div>
-
-              <div className="mt-4 pt-3 border-t border-stone-100 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  {(['Apartment', 'Villa', 'Plot'] as const).map((t) => (
-                    <button
-                      key={t}
-                      type="button"
-                      onClick={() => setManualType(t)}
-                      className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
-                        manualType === t
-                          ? 'bg-blue-50 text-blue-700 border border-blue-200'
-                          : 'text-stone-500 hover:text-stone-800'
-                      }`}
-                    >
-                      {t}
-                    </button>
-                  ))}
-                </div>
-
-                <button
-                  type="submit"
-                  className="px-6 py-2.5 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-semibold shadow-md transition-all cursor-pointer"
-                >
-                  Create Evaluation →
-                </button>
+              <div className="py-1.5 sm:py-0 px-4">
+                <p className="text-xl sm:text-2xl font-bold text-white tracking-tight">14+ Metros</p>
+                <p className="text-[11px] text-white/70 font-medium mt-0.5">RERA &amp; legal rules pre-configured</p>
               </div>
-            </form>
-          )}
-
-        </div>
-
-        {/* 1-Click Interactive Property Samples */}
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-2 text-xs text-white/90">
-          <span className="text-white/60 text-[11px] uppercase tracking-wider font-semibold mr-1">
-            Test Instant Report:
-          </span>
-          
-          <button
-            type="button"
-            onClick={() => handleLoadSample('pune')}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/20 text-white font-medium transition-all hover:scale-105 cursor-pointer shadow-sm text-xs"
-          >
-            <MapPin className="w-3 h-3 text-blue-300" />
-            <span>Wakad, Pune · 2 BHK · ₹68L</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => handleLoadSample('bengaluru')}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/20 text-white font-medium transition-all hover:scale-105 cursor-pointer shadow-sm text-xs"
-          >
-            <Building className="w-3 h-3 text-emerald-300" />
-            <span>Whitefield, Bengaluru · Villa · ₹1.45 Cr</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => handleLoadSample('gurgaon')}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/20 text-white font-medium transition-all hover:scale-105 cursor-pointer shadow-sm text-xs"
-          >
-            <Sparkles className="w-3 h-3 text-amber-300" />
-            <span>Golf Course Ext., Gurgaon · 3 BHK · ₹92L</span>
-          </button>
-        </div>
-
-      </div>
-
-      {/* 10/10 Frosted Metric Dock - Pinned to Bottom */}
-      <div className="relative z-10 w-full border-t border-white/20 bg-slate-950/40 backdrop-blur-lg">
-        <div className="max-w-6xl mx-auto px-6 py-5 grid grid-cols-2 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-white/15 text-center">
-          <div className="py-2 md:py-0 px-4">
-            <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-white tracking-tight">4,200+</p>
-            <p className="text-[11px] text-white/70 font-medium mt-0.5">Properties verified pre-deposit</p>
-          </div>
-          <div className="py-2 md:py-0 px-4">
-            <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-white tracking-tight">₹850 Cr+</p>
-            <p className="text-[11px] text-white/70 font-medium mt-0.5">Total property value assessed</p>
-          </div>
-          <div className="py-2 md:py-0 px-4">
-            <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-white tracking-tight">100% Unbiased</p>
-            <p className="text-[11px] text-white/70 font-medium mt-0.5">Zero developer commissions</p>
-          </div>
-          <div className="py-2 md:py-0 px-4 flex flex-col items-center justify-center">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/40 text-emerald-200 text-xs font-semibold">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              <span>2026 RERA Live Database</span>
+              <div className="py-1.5 sm:py-0 px-4">
+                <p className="text-xl sm:text-2xl font-bold text-white tracking-tight">100% Free</p>
+                <p className="text-[11px] text-white/70 font-medium mt-0.5">Unbiased check, no broker bias</p>
+              </div>
             </div>
-            <p className="text-[10px] text-white/60 font-medium mt-1">MahaRERA · K-RERA · HRERA</p>
+          </div>
+        </section>
+
+      </div>
+
+      {/* Options Popup Modal (Upload Brochure / Manual Entry) */}
+      {optionsModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="w-full max-w-lg bg-[#FAF8F5] rounded-3xl shadow-2xl border border-stone-200 overflow-hidden">
+            
+            {/* Modal Header */}
+            <div className="flex items-center justify-between px-6 py-4 border-b border-stone-200/80 bg-white">
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-bold text-stone-900">
+                  {activeModalTab === 'menu' && 'Add Property Details'}
+                  {activeModalTab === 'upload' && 'Upload Property Brochure'}
+                  {activeModalTab === 'manual' && 'Enter Property Manually'}
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setOptionsModalOpen(false)}
+                className="w-8 h-8 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-600 flex items-center justify-center transition-colors cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-6">
+              
+              {/* Option 1 & 2 Cards Menu */}
+              {activeModalTab === 'menu' && (
+                <div className="space-y-4">
+                  <p className="text-xs text-stone-600 font-normal">
+                    Choose how you want to add your shortlisted property:
+                  </p>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {/* Option 1: Upload Brochure */}
+                    <div
+                      onClick={() => setActiveModalTab('upload')}
+                      className="group p-5 rounded-2xl bg-white border border-stone-200 hover:border-blue-500 hover:shadow-md transition-all cursor-pointer text-left space-y-3"
+                    >
+                      <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center group-hover:scale-105 transition-transform">
+                        <UploadCloud className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-bold text-stone-900 group-hover:text-blue-600 transition-colors">
+                          Upload Brochure
+                        </h4>
+                        <p className="text-xs text-stone-500 mt-1 leading-relaxed">
+                          Drop PDF brochure, floor plan, or project layout image.
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Option 2: Manual Entry */}
+                    <div
+                      onClick={() => setActiveModalTab('manual')}
+                      className="group p-5 rounded-2xl bg-white border border-stone-200 hover:border-blue-500 hover:shadow-md transition-all cursor-pointer text-left space-y-3"
+                    >
+                      <div className="w-10 h-10 rounded-xl bg-stone-100 text-stone-800 flex items-center justify-center group-hover:scale-105 transition-transform">
+                        <Edit3 className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-bold text-stone-900 group-hover:text-blue-600 transition-colors">
+                          Manual Entry
+                        </h4>
+                        <p className="text-xs text-stone-500 mt-1 leading-relaxed">
+                          Type project name, price, city, and BHK directly.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Upload Tab */}
+              {activeModalTab === 'upload' && (
+                <form onSubmit={handleFileUpload} className="space-y-4">
+                  <div
+                    onDragOver={(e) => { e.preventDefault(); setDragActive(true); }}
+                    onDragLeave={() => setDragActive(false)}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      setDragActive(false);
+                      if (e.dataTransfer.files[0]) setUploadedFile(e.dataTransfer.files[0]);
+                    }}
+                    className={`border-2 border-dashed rounded-2xl p-8 text-center transition-colors ${
+                      dragActive
+                        ? 'border-blue-500 bg-blue-50/50'
+                        : uploadedFile
+                        ? 'border-emerald-500 bg-emerald-50/40'
+                        : 'border-stone-300 bg-white hover:border-stone-400'
+                    }`}
+                  >
+                    {uploadedFile ? (
+                      <div className="flex flex-col items-center gap-2 text-emerald-700">
+                        <CheckCircle2 className="w-8 h-8 text-emerald-600" />
+                        <span className="text-xs font-semibold">{uploadedFile.name}</span>
+                        <button
+                          type="button"
+                          onClick={() => setUploadedFile(null)}
+                          className="text-[11px] text-stone-500 hover:text-stone-800 underline mt-1 cursor-pointer"
+                        >
+                          Choose different file
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        <UploadCloud className="w-8 h-8 mx-auto text-stone-400" />
+                        <div className="space-y-1">
+                          <p className="text-xs font-semibold text-stone-800">Drag &amp; drop your brochure or floor plan</p>
+                          <p className="text-[11px] text-stone-500">PDF, PNG, JPG supported</p>
+                        </div>
+                        <label className="inline-block px-4 py-2 rounded-full bg-stone-100 hover:bg-stone-200 text-xs font-semibold text-stone-700 cursor-pointer transition-colors">
+                          Browse File
+                          <input
+                            type="file"
+                            className="hidden"
+                            accept=".pdf,.png,.jpg,.jpeg"
+                            onChange={(e) => {
+                              if (e.target.files?.[0]) setUploadedFile(e.target.files[0]);
+                            }}
+                          />
+                        </label>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex items-center justify-between pt-2">
+                    <button
+                      type="button"
+                      onClick={() => setActiveModalTab('menu')}
+                      className="text-xs font-semibold text-stone-500 hover:text-stone-800 cursor-pointer"
+                    >
+                      ← Back
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={!uploadedFile}
+                      className="px-6 py-2.5 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-semibold shadow-md disabled:opacity-50 transition-all cursor-pointer"
+                    >
+                      Continue with Brochure
+                    </button>
+                  </div>
+                </form>
+              )}
+
+              {/* Manual Tab */}
+              {activeModalTab === 'manual' && (
+                <form onSubmit={handleManualSubmit} className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left">
+                    <div className="space-y-1 sm:col-span-2">
+                      <label className="text-[11px] font-bold text-stone-600 uppercase tracking-wider">Property / Project Name</label>
+                      <input
+                        type="text"
+                        placeholder="e.g. Godrej Horizon"
+                        value={manualData.name}
+                        onChange={(e) => setManualData({ ...manualData, name: e.target.value })}
+                        className="w-full bg-white border border-stone-200 rounded-xl px-3.5 py-2.5 text-xs text-stone-800 outline-none focus:border-blue-500"
+                        required
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-[11px] font-bold text-stone-600 uppercase tracking-wider">City / Location</label>
+                      <input
+                        type="text"
+                        placeholder="e.g. Pune, Maharashtra"
+                        value={manualData.location}
+                        onChange={(e) => setManualData({ ...manualData, location: e.target.value })}
+                        className="w-full bg-white border border-stone-200 rounded-xl px-3.5 py-2.5 text-xs text-stone-800 outline-none focus:border-blue-500"
+                        required
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-[11px] font-bold text-stone-600 uppercase tracking-wider">Quoted Price (₹)</label>
+                      <input
+                        type="text"
+                        placeholder="e.g. 75,00,000"
+                        value={manualData.price}
+                        onChange={(e) => setManualData({ ...manualData, price: e.target.value })}
+                        className="w-full bg-white border border-stone-200 rounded-xl px-3.5 py-2.5 text-xs text-stone-800 outline-none focus:border-blue-500"
+                        required
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-[11px] font-bold text-stone-600 uppercase tracking-wider">Configuration</label>
+                      <select
+                        value={manualData.bhk}
+                        onChange={(e) => setManualData({ ...manualData, bhk: e.target.value })}
+                        className="w-full bg-white border border-stone-200 rounded-xl px-3 py-2.5 text-xs text-stone-800 outline-none focus:border-blue-500"
+                      >
+                        <option value="1 BHK">1 BHK</option>
+                        <option value="2 BHK">2 BHK</option>
+                        <option value="3 BHK">3 BHK</option>
+                        <option value="4+ BHK">4+ BHK</option>
+                      </select>
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-[11px] font-bold text-stone-600 uppercase tracking-wider">Property Type</label>
+                      <select
+                        value={manualData.type}
+                        onChange={(e) => setManualData({ ...manualData, type: e.target.value as any })}
+                        className="w-full bg-white border border-stone-200 rounded-xl px-3 py-2.5 text-xs text-stone-800 outline-none focus:border-blue-500"
+                      >
+                        <option value="Apartment">Apartment</option>
+                        <option value="Villa">Villa</option>
+                        <option value="Plot">Plot</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-2">
+                    <button
+                      type="button"
+                      onClick={() => setActiveModalTab('menu')}
+                      className="text-xs font-semibold text-stone-500 hover:text-stone-800 cursor-pointer"
+                    >
+                      ← Back
+                    </button>
+                    <button
+                      type="submit"
+                      className="px-6 py-2.5 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-semibold shadow-md transition-all cursor-pointer"
+                    >
+                      Create Evaluation
+                    </button>
+                  </div>
+                </form>
+              )}
+
+            </div>
+
           </div>
         </div>
-      </div>
-    </section>
+      )}
+    </>
   );
 };
