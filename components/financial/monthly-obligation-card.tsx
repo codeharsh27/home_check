@@ -29,46 +29,46 @@ export const MonthlyObligationCard: React.FC<MonthlyObligationCardProps> = ({
   const debtToIncomeRatio = monthlyIncome > 0 ? Math.round((totalMonthlyDebt / monthlyIncome) * 100) : 0;
 
   return (
-    <div className="bg-[#121212] border border-[#252525] rounded-xl p-5 space-y-4">
-      <div className="flex items-center justify-between border-b border-[#202020] pb-3">
+    <div className="bg-white border border-stone-200/90 rounded-2xl p-5 sm:p-6 space-y-4 shadow-xs">
+      <div className="flex items-center justify-between border-b border-stone-100 pb-3">
         <div className="flex items-center gap-2">
-          <Calculator className="w-4 h-4 text-[#5B8BDF]" />
-          <h3 className="text-base font-semibold text-[#EDEDED]">Estimated Monthly Obligation</h3>
+          <Calculator className="w-4 h-4 text-blue-600" />
+          <h3 className="text-base font-semibold text-stone-900">Estimated Monthly Obligation</h3>
         </div>
         <StatusBadge status="estimated" />
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        <div className="bg-[#181818] p-3.5 rounded-lg border border-[#262626] space-y-1">
-          <span className="text-[10px] font-mono uppercase tracking-wider text-[#888888] block">
+        <div className="bg-stone-50/80 p-4 rounded-xl border border-stone-200/80 space-y-1">
+          <span className="text-[11px] uppercase tracking-wider text-stone-500 font-semibold block">
             Existing EMIs
           </span>
-          <p className="text-lg font-bold font-mono text-[#EDEDED]">
-            ₹{existingObligations.toLocaleString("en-IN")}/mo
+          <p className="text-lg font-bold text-stone-900">
+            ₹{existingObligations.toLocaleString("en-IN")}<span className="text-xs font-normal text-stone-500">/mo</span>
           </p>
-          <span className="text-[11px] text-[#666666]">Declared obligations</span>
+          <span className="text-xs text-stone-500">Declared obligations</span>
         </div>
 
-        <div className="bg-[#181818] p-3.5 rounded-lg border border-[#262626] space-y-1">
-          <span className="text-[10px] font-mono uppercase tracking-wider text-[#5B8BDF] block">
+        <div className="bg-blue-50/50 p-4 rounded-xl border border-blue-100 space-y-1">
+          <span className="text-[11px] uppercase tracking-wider text-blue-700 font-semibold block">
             Estimated New EMI
           </span>
-          <p className="text-lg font-bold font-mono text-[#5B8BDF]">
-            ~₹{estimatedNewEmi.toLocaleString("en-IN")}/mo
+          <p className="text-lg font-bold text-blue-900">
+            ~₹{estimatedNewEmi.toLocaleString("en-IN")}<span className="text-xs font-normal text-blue-600">/mo</span>
           </p>
-          <span className="text-[11px] text-[#666666]">
+          <span className="text-xs text-blue-600/80">
             @ {interestRate}% for {tenureYears} yrs
           </span>
         </div>
 
-        <div className="bg-[#181818] p-3.5 rounded-lg border border-[#262626] space-y-1">
-          <span className="text-[10px] font-mono uppercase tracking-wider text-[#888888] block">
+        <div className="bg-stone-50/80 p-4 rounded-xl border border-stone-200/80 space-y-1">
+          <span className="text-[11px] uppercase tracking-wider text-stone-500 font-semibold block">
             Total Monthly Debt
           </span>
-          <p className="text-lg font-bold font-mono text-[#EDEDED]">
-            ~₹{totalMonthlyDebt.toLocaleString("en-IN")}/mo
+          <p className="text-lg font-bold text-stone-900">
+            ~₹{totalMonthlyDebt.toLocaleString("en-IN")}<span className="text-xs font-normal text-stone-500">/mo</span>
           </p>
-          <span className={`text-[11px] font-medium ${debtToIncomeRatio > 50 ? 'text-[#E6832A]' : 'text-[#3F9E6C]'}`}>
+          <span className={`text-xs font-semibold ${debtToIncomeRatio > 50 ? 'text-amber-700' : 'text-emerald-700'}`}>
             {debtToIncomeRatio}% FOIR / DTI ratio
           </span>
         </div>
@@ -76,30 +76,30 @@ export const MonthlyObligationCard: React.FC<MonthlyObligationCardProps> = ({
 
       {/* Lender FOIR Risk Guidance */}
       {monthlyIncome > 0 && (
-        <div className={`p-3 rounded-lg border text-xs flex items-start gap-2.5 ${
+        <div className={`p-3.5 rounded-xl border text-xs flex items-start gap-3 ${
           debtToIncomeRatio > 50
-            ? 'bg-[#E6832A]/10 border-[#E6832A]/30 text-[#E6832A]'
-            : 'bg-[#3F9E6C]/10 border-[#3F9E6C]/30 text-[#3F9E6C]'
+            ? 'bg-amber-50 border-amber-200 text-amber-950'
+            : 'bg-emerald-50 border-emerald-200 text-emerald-950'
         }`}>
           <Info className="w-4 h-4 shrink-0 mt-0.5" />
-          <div className="text-[11px] leading-relaxed">
+          <div className="text-xs leading-relaxed">
             {debtToIncomeRatio > 50 ? (
-              <span className="text-[#CCCCCC]">
-                <strong className="text-[#E6832A]">High Obligation Alert:</strong> At {debtToIncomeRatio}% of take-home income, your total monthly debt exceeds the recommended 45-50% lender threshold (FOIR). Most banks (SBI, HDFC, ICICI) may reduce your sanction amount or require a co-applicant.
+              <span>
+                <strong className="text-amber-900">High Obligation Notice:</strong> At {debtToIncomeRatio}% of take-home income, your total monthly debt exceeds the standard 45–50% lender threshold (FOIR). Most banks (SBI, HDFC, ICICI) may reduce your loan sanction or ask for a co-applicant.
               </span>
             ) : (
-              <span className="text-[#CCCCCC]">
-                <strong className="text-[#3F9E6C]">Healthy Loan Eligibility:</strong> Your total monthly debt is within the safe 50% FOIR threshold, qualifying for standard bank home loan processing.
+              <span>
+                <strong className="text-emerald-900">Comfortable Loan Eligibility:</strong> Your total monthly debt is within the recommended 50% FOIR threshold, qualifying for standard bank home loan processing.
               </span>
             )}
           </div>
         </div>
       )}
 
-      <div className="flex items-center gap-2 text-[11px] text-[#777777] bg-[#141414] p-3 rounded-lg border border-[#222222]">
-        <Info className="w-3.5 h-3.5 text-[#555555] shrink-0" />
+      <div className="flex items-center gap-2 text-xs text-stone-500 bg-stone-50 p-3 rounded-xl border border-stone-200/70">
+        <Info className="w-3.5 h-3.5 text-stone-400 shrink-0" />
         <span>
-          Estimates are based on benchmark interest rates ({interestRate}% p.a.). Actual EMI will depend on bank CIBIL score checks and formal sanction letters.
+          Estimates are based on benchmark interest rates ({interestRate}% p.a.). Actual EMI depends on the bank's final sanction and your credit profile.
         </span>
       </div>
     </div>

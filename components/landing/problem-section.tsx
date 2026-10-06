@@ -1,23 +1,26 @@
 'use client';
 
 import React from 'react';
-import { IndianRupee, FileSearch, Compass } from 'lucide-react';
+import { IndianRupee, ShieldAlert, TrendingDown } from 'lucide-react';
 
 const problemCards = [
   {
     icon: IndianRupee,
-    title: 'Can I actually afford it?',
-    description: 'Understand your expected down payment, loan requirement and additional purchase costs.',
+    title: 'The Hidden Handover Cash Drain',
+    description:
+      'Banks cap loans at 80% of the base agreement value only. Non-financeable costs — stamp duty, registration, 2-year advance society corpus, and essential fitouts — demand ₹15L–₹25L in liquid cash at possession.',
   },
   {
-    icon: FileSearch,
-    title: 'What do I need to verify?',
-    description: 'Know which documents, approvals and property details still need to be checked.',
+    icon: ShieldAlert,
+    title: 'Stage-Gated Legal & Title Blindspots',
+    description:
+      'Buyers routinely forfeit token deposits by signing booking forms before inspecting Commencement Certificates (CC), 30-year Nil Encumbrance records, bank mortgage NOCs, or unilateral penalty clauses.',
   },
   {
-    icon: Compass,
-    title: 'What should I do next?',
-    description: 'See what is missing, who you may need help from, and what to do before committing.',
+    icon: TrendingDown,
+    title: 'Micro-Market Pricing & Negotiation',
+    description:
+      'Developers quote low base rates then tack on ₹6L–₹10L in floor rise, PLC, and infra fees. You need live comparable transaction benchmarks within 2–4 km to negotiate with real leverage.',
   },
 ];
 
@@ -29,15 +32,15 @@ export const ProblemSection: React.FC = () => {
         {/* Header */}
         <div className="max-w-3xl mb-12 sm:mb-14">
           <span className="text-[11px] sm:text-xs font-bold uppercase tracking-[1.5px] text-blue-700 bg-blue-50 px-3.5 py-1 rounded-full border border-blue-100 inline-block mb-3">
-            BUYING A PROPERTY IS MORE THAN THE PRICE
+            BUYING A PROPERTY IS MORE THAN THE LISTED PRICE
           </span>
 
           <h2 className="text-3xl sm:text-4xl lg:text-[40px] font-extrabold tracking-tight text-stone-900 leading-[1.12]">
-            You found the property. Now what?
+            You found the property. What are you actually committing to?
           </h2>
 
           <p className="mt-4 text-base sm:text-lg text-stone-600 font-normal leading-relaxed">
-            A listing can tell you the price, area and amenities. It doesn&apos;t tell you whether you can comfortably fund the purchase, what documents you still need, or what should happen before you pay.
+            A listing portal gives you marketing photos, quoted rates, and amenities. It doesn&apos;t reveal your true out-of-pocket cash drain, whether you are overpaying versus the micro-market, or which legal documents must be verified before releasing your hard-earned token money.
           </p>
         </div>
 
@@ -67,7 +70,7 @@ export const ProblemSection: React.FC = () => {
                 </div>
 
                 <div className="mt-6 pt-3 border-t border-stone-100 flex items-center justify-between text-xs font-semibold text-stone-400 group-hover:text-blue-600 transition-colors">
-                  <span>Key Consideration</span>
+                  <span>Critical Risk Vector</span>
                   <span className="font-mono text-[11px] bg-stone-100 px-2 py-0.5 rounded border border-stone-200 text-stone-600">0{i + 1}</span>
                 </div>
               </div>

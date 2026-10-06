@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEvaluationStore, DEMO_PROPERTY } from '@/store/evaluation';
-import { ArrowRight, Loader2 } from 'lucide-react';
+import { ArrowRight, Loader2, Sparkles } from 'lucide-react';
 
 export const CTABannerSection: React.FC = () => {
   const router = useRouter();
@@ -12,22 +12,48 @@ export const CTABannerSection: React.FC = () => {
   const [inputVal, setInputVal] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!inputVal.trim()) {
+    const trimmed = inputVal.trim();
+    if (!trimmed) {
       const id = startNewEvaluation(DEMO_PROPERTY, true);
-      router.push(`/evaluation/${id}/snapshot`);
+      router.push(`/evaluation/${id}`);
       return;
     }
 
     setIsLoading(true);
-    const isUrl = inputVal.startsWith('http');
-    const id = startNewEvaluation({
-      sourceUrl: isUrl ? inputVal : undefined,
-      name: isUrl ? 'Shortlisted Property' : inputVal,
-      sourceName: 'Footer CTA Intake',
-    }, false);
-    router.push(`/evaluation/${id}/snapshot`);
+    try {
+      if (trimmed.startsWith('http')) {
+        const res = await fetch('/api/parse-url', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: trimmed }),
+        });
+        const data = await res.json();
+        if (data.property) {
+          const id = startNewEvaluation(data.property, false);
+          router.push(`/evaluation/${id}`);
+          return;
+        }
+      }
+      const id = startNewEvaluation({
+        sourceUrl: trimmed.startsWith('http') ? trimmed : undefined,
+        name: trimmed.startsWith('http') ? 'Shortlisted Property' : trimmed,
+        location: 'Prime Micro-Market',
+        price: 7500000,
+        sourceName: 'Footer CTA Intake',
+      }, false);
+      router.push(`/evaluation/${id}`);
+    } catch {
+      const id = startNewEvaluation({
+        name: trimmed,
+        location: 'Prime Micro-Market',
+        sourceName: 'Footer CTA Intake',
+      }, false);
+      router.push(`/evaluation/${id}`);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -35,7 +61,7 @@ export const CTABannerSection: React.FC = () => {
       <div className="max-w-6xl mx-auto px-4 sm:px-8">
         <div className="relative rounded-[32px] sm:rounded-[36px] overflow-hidden min-h-[280px] flex items-center shadow-xl border border-stone-200/80">
           
-          {/* Background Image Container - Kept Natural */}
+          {/* Background Image Container */}
           <div className="absolute inset-0 z-0">
             <Image
               src="/images/showcase.jpg"
@@ -43,7 +69,7 @@ export const CTABannerSection: React.FC = () => {
               fill
               className="object-cover brightness-95 scale-100"
             />
-            {/* Natural Neutral Dark Overlay for text legibility without any blue tint */}
+            {/* Natural Neutral Dark Overlay for text legibility */}
             <div className="absolute inset-0 bg-gradient-to-r from-stone-950/85 via-stone-900/60 to-black/35 backdrop-blur-[1px]" />
           </div>
 
@@ -53,15 +79,15 @@ export const CTABannerSection: React.FC = () => {
             {/* Left Copy */}
             <div className="max-w-xl space-y-3.5">
               <span className="text-[11px] sm:text-xs font-bold uppercase tracking-[1.5px] text-white/90 bg-white/15 border border-white/25 px-3.5 py-1 rounded-full backdrop-blur-md inline-block shadow-sm">
-                READY TO START?
+                READY TO AUDIT YOUR SHORTLIST?
               </span>
 
               <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight drop-shadow-sm">
-                Have a property shortlisted? Start there.
+                Have a property shortlisted? Start here.
               </h2>
 
               <p className="text-sm sm:text-base text-white/85 font-normal leading-relaxed">
-                Add the listing or basic property details and start building your evaluation.
+                Paste any listing URL from Housing, NoBroker, or 99acres to calculate your true handover cash drain and generate your 5-step decision dossier.
               </p>
             </div>
 
@@ -75,19 +101,19 @@ export const CTABannerSection: React.FC = () => {
                   type="text"
                   value={inputVal}
                   onChange={(e) => setInputVal(e.target.value)}
-                  placeholder="Paste a property listing URL..."
+                  placeholder="Paste property listing URL (Housing, NoBroker...)"
                   className="flex-1 px-4 py-2 text-xs sm:text-sm text-stone-800 placeholder-stone-400 outline-none bg-transparent font-normal"
                 />
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-stone-900 hover:bg-black text-white text-xs sm:text-sm font-bold shadow-md transition-all hover:scale-[1.02] shrink-0 cursor-pointer flex items-center gap-1.5 group"
+                  className="px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-bold shadow-md transition-all hover:scale-[1.02] shrink-0 cursor-pointer flex items-center gap-1.5 group"
                 >
                   {isLoading ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
                   ) : (
                     <>
-                      <span>Evaluate My Property</span>
+                      <span>Evaluate Now</span>
                       <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </>
                   )}
@@ -95,9 +121,9 @@ export const CTABannerSection: React.FC = () => {
               </form>
 
               <div className="flex items-center gap-2 pl-3">
-                <span className="w-1.5 h-1.5 rounded-full bg-white/80 animate-pulse" />
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                 <p className="text-[11px] sm:text-xs text-white/80 font-normal">
-                  Start with the information you already have.
+                  Automatic listing decoding • Works with Housing, NoBroker, 99acres & MagicBricks
                 </p>
               </div>
             </div>

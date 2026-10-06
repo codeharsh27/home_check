@@ -50,30 +50,34 @@ export const UnconfirmedInfoList: React.FC<UnconfirmedInfoListProps> = ({ proper
   ].filter((i) => i.show);
 
   return (
-    <div className="bg-[#121212] border border-[#252525] rounded-xl p-5 space-y-4">
-      <div className="flex items-center justify-between border-b border-[#202020] pb-3">
+    <div className="bg-white border border-stone-200/90 rounded-2xl p-5 sm:p-6 space-y-4 shadow-xs">
+      <div className="flex items-center justify-between border-b border-stone-100 pb-3">
         <div>
-          <h3 className="text-base font-semibold text-[#EDEDED]">Unconfirmed Financial Information</h3>
-          <p className="text-xs text-[#888888]">
-            Items to verify before committing
+          <h3 className="text-base font-semibold text-stone-900">Financial Items to Confirm</h3>
+          <p className="text-xs text-stone-500">
+            Verify these charges and conditions before paying token money
           </p>
         </div>
       </div>
-      <div className="space-y-4">
+      <div className="space-y-3.5">
         {items.map((item, idx) => (
-          <div key={idx} className="flex gap-3">
-            <div className="mt-0.5"><HelpCircle className="w-4 h-4 text-[#D4A017]" /></div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-medium text-[#EDEDED]">{item.title}</span>
-                <span className="text-[10px] bg-[#181818] border border-[#252525] px-1.5 py-0.5 rounded text-[#888888]">{item.who}</span>
+          <div key={idx} className="flex gap-3 items-start p-3 rounded-xl bg-stone-50/60 border border-stone-200/60">
+            <div className="mt-0.5">
+              <HelpCircle className="w-4 h-4 text-amber-600 shrink-0" />
+            </div>
+            <div className="space-y-0.5 flex-1">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-xs sm:text-sm font-semibold text-stone-900">{item.title}</span>
+                <span className="text-[10px] font-medium bg-white border border-stone-200 px-2 py-0.5 rounded text-stone-600 shadow-2xs">
+                  {item.who}
+                </span>
               </div>
-              <p className="text-xs text-[#888888] mt-0.5">{item.description}</p>
+              <p className="text-xs text-stone-600 leading-relaxed">{item.description}</p>
             </div>
           </div>
         ))}
         {items.length === 0 && (
-          <p className="text-xs text-[#888888]">No specific unconfirmed financial items at this time.</p>
+          <p className="text-xs text-stone-500">No specific unconfirmed financial items at this time.</p>
         )}
       </div>
     </div>

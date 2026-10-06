@@ -19,7 +19,7 @@ export const ShowcaseSpacesSection: React.FC = () => {
       bhk: '3 BHK',
       type: 'Apartment',
     }, false);
-    router.push(`/evaluation/${id}/snapshot`);
+    router.push(`/evaluation/${id}`);
   };
 
   return (

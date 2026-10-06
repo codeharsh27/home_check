@@ -84,7 +84,7 @@ export const FeaturedPropertiesSection: React.FC = () => {
       possessionStatus: 'Ready to move',
       sourceName: 'Sample Evaluation Report',
     }, false);
-    router.push(`/evaluation/${id}/snapshot`);
+    router.push(`/evaluation/${id}`);
   };
 
   return (

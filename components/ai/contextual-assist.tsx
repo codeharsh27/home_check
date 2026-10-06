@@ -46,37 +46,37 @@ export const ContextualAssistModal: React.FC<ContextualAssistModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-      <div className="bg-[#141414] border border-[#2B2B2B] rounded-xl max-w-lg w-full p-6 space-y-5 shadow-2xl relative">
-        <button onClick={onClose} className="absolute top-4 right-4 text-[#777777] hover:text-[#EDEDED] cursor-pointer">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/40 backdrop-blur-xs p-4">
+      <div className="bg-white border border-stone-200/90 rounded-2xl max-w-lg w-full p-6 space-y-5 shadow-2xl relative">
+        <button onClick={onClose} className="absolute top-4 right-4 text-stone-400 hover:text-stone-700 cursor-pointer p-1">
           <X className="w-4 h-4" />
         </button>
 
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-[#5B8BDF]" />
-            <h3 className="text-base font-semibold text-[#EDEDED]">{title}</h3>
+            <Sparkles className="w-4 h-4 text-blue-600" />
+            <h3 className="text-base font-bold text-stone-900">{title}</h3>
           </div>
-          <p className="text-xs text-[#888888]">{subtitle}</p>
+          <p className="text-xs text-stone-500">{subtitle}</p>
         </div>
 
-        <div className="bg-[#0C0C0C] border border-[#222222] rounded-lg p-4 space-y-3 max-h-80 overflow-y-auto text-xs">
+        <div className="bg-stone-50/80 border border-stone-200/80 rounded-xl p-4 space-y-2.5 max-h-80 overflow-y-auto text-xs">
           {questionsList.length === 0 ? (
-            <p className="text-[#666666] italic">No pending items to generate questions from. Your checklist looks complete!</p>
+            <p className="text-stone-400 italic">No pending items to generate questions from. Your checklist looks complete!</p>
           ) : (
             questionsList.map((q, idx) => (
-              <div key={idx} className="p-2.5 rounded bg-[#121212] border border-[#1F1F1F] text-[#EDEDED] leading-relaxed">
+              <div key={idx} className="p-3 rounded-xl bg-white border border-stone-200/80 text-stone-800 leading-relaxed shadow-2xs">
                 {q}
               </div>
             ))
           )}
         </div>
 
-        <div className="flex items-center justify-between pt-2 border-t border-[#202020]">
-          <span className="text-[11px] text-[#555555] font-mono">✦ Generated from your checklist state</span>
+        <div className="flex items-center justify-between pt-2 border-t border-stone-100">
+          <span className="text-[11px] text-stone-400">✦ Derived from your checklist</span>
           <div className="flex gap-2">
             <Button variant="outline" size="sm" onClick={handleCopy}>
-              {copied ? <><Check className="w-3.5 h-3.5 text-[#3F9E6C]" /><span>Copied!</span></> : <><Copy className="w-3.5 h-3.5" /><span>Copy</span></>}
+              {copied ? <><Check className="w-3.5 h-3.5 text-emerald-600 mr-1" /><span>Copied!</span></> : <><Copy className="w-3.5 h-3.5 mr-1" /><span>Copy</span></>}
             </Button>
             <Button size="sm" onClick={onClose}>Done</Button>
           </div>

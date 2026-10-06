@@ -59,7 +59,7 @@ export const WhatWeCheckSection: React.FC = () => {
       price: type === 'Plot' ? 3500000 : type === 'Villa' ? 12000000 : 6800000,
       sourceName: `${type} Evaluation`,
     }, false);
-    router.push(`/evaluation/${id}/snapshot`);
+    router.push(`/evaluation/${id}`);
   };
 
   return (

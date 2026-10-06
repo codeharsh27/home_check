@@ -28,16 +28,16 @@ export const GapAnalysisBar: React.FC<GapAnalysisBarProps> = ({
   const gapPct = Math.max(0, 100 - (fundsPct + loanPct));
 
   return (
-    <div className="bg-[#121212] border border-[#252525] rounded-xl p-5 space-y-5">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#202020] pb-3">
+    <div className="bg-white border border-stone-200/90 rounded-2xl p-5 sm:p-6 space-y-5 shadow-xs">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-stone-100 pb-4">
         <div>
-          <span className="text-xs font-mono uppercase tracking-wider text-[#5B8BDF]">
-            Total Acquisition & Funding Gap Breakdown
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-blue-600 block mb-0.5">
+            Total Acquisition & Funding Gap
           </span>
-          <h3 className="text-base font-semibold text-[#EDEDED] mt-0.5">
+          <h3 className="text-lg font-bold text-stone-900">
             Total Capital Outlay: {formatCurrency(totalOutlay)}
           </h3>
-          <p className="text-xs text-[#777777]">
+          <p className="text-xs text-stone-500 mt-0.5">
             Base Agreement: {formatCurrency(propertyPrice)} + ~7% Stamp Duty & Reg: {formatCurrency(estimatedStampDuty)}
           </p>
         </div>
@@ -46,20 +46,20 @@ export const GapAnalysisBar: React.FC<GapAnalysisBarProps> = ({
 
       {/* Visual Multi-Segment Bar */}
       <div className="space-y-2">
-        <div className="w-full h-4 bg-[#222222] rounded-full overflow-hidden flex">
+        <div className="w-full h-3.5 bg-stone-100 rounded-full overflow-hidden flex">
           <div
-            className="h-full bg-[#5B8BDF] transition-all duration-300"
+            className="h-full bg-blue-600 transition-all duration-300"
             style={{ width: `${fundsPct}%` }}
             title={`Direct Funds (Net of Reserve): ${formatCurrency(effectiveFunds)}`}
           />
           <div
-            className="h-full bg-[#3F9E6C] transition-all duration-300"
+            className="h-full bg-emerald-600 transition-all duration-300"
             style={{ width: `${loanPct}%` }}
             title={`Planned Bank Loan: ${formatCurrency(plannedLoan)}`}
           />
           {fundingGap > 0 && (
             <div
-              className="h-full bg-[#D94F4F] transition-all duration-300"
+              className="h-full bg-rose-500 transition-all duration-300"
               style={{ width: `${gapPct}%` }}
               title={`True Capital Shortfall: ${formatCurrency(fundingGap)}`}
             />
@@ -67,24 +67,24 @@ export const GapAnalysisBar: React.FC<GapAnalysisBarProps> = ({
         </div>
 
         {/* Bar Legend */}
-        <div className="flex flex-wrap items-center justify-between text-xs text-[#888888] pt-1">
+        <div className="flex flex-wrap items-center justify-between text-xs text-stone-600 pt-1 gap-2">
           <div className="flex flex-wrap items-center gap-3 sm:gap-4">
             <span className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#5B8BDF]" />
-              Down Payment: <strong className="text-[#EDEDED] font-mono">{formatCurrency(effectiveFunds)}</strong>
+              <span className="w-2.5 h-2.5 rounded-full bg-blue-600" />
+              Down Payment: <strong className="text-stone-900 font-mono">{formatCurrency(effectiveFunds)}</strong>
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#3F9E6C]" />
-              Bank Loan: <strong className="text-[#EDEDED] font-mono">{formatCurrency(plannedLoan)}</strong>
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-600" />
+              Bank Loan: <strong className="text-stone-900 font-mono">{formatCurrency(plannedLoan)}</strong>
             </span>
           </div>
           {fundingGap > 0 ? (
-            <span className="flex items-center gap-1.5 font-semibold text-[#D94F4F]">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#D94F4F]" />
+            <span className="flex items-center gap-1.5 font-semibold text-rose-600">
+              <span className="w-2.5 h-2.5 rounded-full bg-rose-500" />
               Unfunded Shortfall: <strong className="font-mono">{formatCurrency(fundingGap)}</strong>
             </span>
           ) : (
-            <span className="flex items-center gap-1.5 font-semibold text-[#3F9E6C]">
+            <span className="flex items-center gap-1.5 font-semibold text-emerald-700">
               <CheckCircle2 className="w-3.5 h-3.5" />
               100% Capital Covered
             </span>
@@ -93,36 +93,36 @@ export const GapAnalysisBar: React.FC<GapAnalysisBarProps> = ({
       </div>
 
       {/* Itemized Reality Table */}
-      <div className="p-3.5 bg-[#0F0F0F] border border-[#222222] rounded-xl space-y-2 text-xs">
-        <span className="text-[10px] uppercase font-mono tracking-wider text-[#888888] font-semibold block">
+      <div className="p-4 bg-stone-50/80 border border-stone-200/80 rounded-xl space-y-2.5 text-xs">
+        <span className="text-[11px] uppercase tracking-wider text-stone-500 font-semibold block">
           Transparent Capital Flow Summary
         </span>
-        <div className="space-y-1.5 font-mono">
-          <div className="flex justify-between text-[#CCCCCC]">
+        <div className="space-y-2 font-mono">
+          <div className="flex justify-between text-stone-700">
             <span>1. Listed Agreement Price</span>
-            <span>{formatCurrency(propertyPrice)}</span>
+            <span className="font-semibold text-stone-900">{formatCurrency(propertyPrice)}</span>
           </div>
-          <div className="flex justify-between text-[#D4A017]">
+          <div className="flex justify-between text-amber-800">
             <span>2. Government Stamp Duty & Registration (~7%)</span>
-            <span>+ {formatCurrency(estimatedStampDuty)}</span>
+            <span className="font-semibold">+ {formatCurrency(estimatedStampDuty)}</span>
           </div>
-          <div className="flex justify-between text-white font-semibold pt-1 border-t border-[#1C1C1C]">
-            <span>Total Capital Needed to Take Possession</span>
-            <span className="text-[#5B8BDF]">{formatCurrency(totalOutlay)}</span>
+          <div className="flex justify-between text-stone-900 font-bold pt-2 border-t border-stone-200">
+            <span>Total Capital Needed for Possession</span>
+            <span className="text-blue-700 font-bold">{formatCurrency(totalOutlay)}</span>
           </div>
-          <div className="flex justify-between text-[#888888] pt-1 border-t border-[#1C1C1C]">
-            <span>Less: Personal Savings Committed (Net of {formatCurrency(emergencyReserve)} reserve)</span>
-            <span className="text-[#EDEDED]">- {formatCurrency(effectiveFunds)}</span>
+          <div className="flex justify-between text-stone-600 pt-1.5 border-t border-stone-200">
+            <span>Less: Personal Savings (Net of {formatCurrency(emergencyReserve)} reserve)</span>
+            <span className="text-stone-900 font-semibold">- {formatCurrency(effectiveFunds)}</span>
           </div>
-          <div className="flex justify-between text-[#888888]">
-            <span>Less: Bank Home Loan (Capped at 80% LTV Agreement Value)</span>
-            <span className="text-[#EDEDED]">- {formatCurrency(plannedLoan)}</span>
+          <div className="flex justify-between text-stone-600">
+            <span>Less: Bank Loan (Capped at 80% LTV Agreement Value)</span>
+            <span className="text-stone-900 font-semibold">- {formatCurrency(plannedLoan)}</span>
           </div>
-          <div className="flex justify-between font-bold pt-1.5 border-t border-[#262626]">
-            <span className={fundingGap > 0 ? 'text-[#D94F4F]' : 'text-[#3F9E6C]'}>
+          <div className="flex justify-between font-bold pt-2 border-t border-stone-300">
+            <span className={fundingGap > 0 ? 'text-rose-700' : 'text-emerald-700'}>
               Net Funding Gap / Shortfall to Arrange
             </span>
-            <span className={fundingGap > 0 ? 'text-[#D94F4F]' : 'text-[#3F9E6C]'}>
+            <span className={fundingGap > 0 ? 'text-rose-700' : 'text-emerald-700'}>
               {fundingGap > 0 ? formatCurrency(fundingGap) : '₹0 (Fully Covered)'}
             </span>
           </div>
@@ -131,25 +131,25 @@ export const GapAnalysisBar: React.FC<GapAnalysisBarProps> = ({
 
       {/* Decision-Ready Outcome Callout */}
       {fundingGap > 0 ? (
-        <div className="bg-[#D94F4F]/10 border border-[#D94F4F]/30 rounded-lg p-3.5 flex items-start gap-3 text-xs text-[#E58888]">
-          <AlertTriangle className="w-4 h-4 text-[#D94F4F] shrink-0 mt-0.5" />
+        <div className="bg-rose-50 border border-rose-200 rounded-xl p-4 flex items-start gap-3 text-xs text-rose-950">
+          <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
           <div className="space-y-1">
-            <p className="font-medium text-[#EDEDED]">
+            <p className="font-semibold text-rose-900">
               Estimated {formatCurrency(fundingGap)} capital shortfall identified before booking
             </p>
-            <p className="text-[#AAAAAA] leading-relaxed">
+            <p className="text-rose-800/90 leading-relaxed font-sans">
               <strong>Crucial Buyer Decision Factor:</strong> Under RBI guidelines, Indian banks only fund up to 80% of the base agreement value ({formatCurrency(plannedLoan)} max here). Banks <strong>do not finance government stamp duty and registration fees</strong> ({formatCurrency(estimatedStampDuty)}). You must arrange this additional {formatCurrency(fundingGap)} from personal reserves, family funds, or negotiate price before paying token money.
             </p>
           </div>
         </div>
       ) : (
-        <div className="bg-[#3F9E6C]/10 border border-[#3F9E6C]/30 rounded-lg p-3.5 flex items-start gap-3 text-xs text-[#7BC59C]">
-          <CheckCircle2 className="w-4 h-4 text-[#3F9E6C] shrink-0 mt-0.5" />
+        <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 flex items-start gap-3 text-xs text-emerald-950">
+          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
           <div className="space-y-1">
-            <p className="font-medium text-[#EDEDED]">
+            <p className="font-semibold text-emerald-900">
               Planned capital fully covers base price and transaction costs
             </p>
-            <p className="text-[#AAAAAA] leading-relaxed">
+            <p className="text-emerald-800/90 leading-relaxed font-sans">
               Your committed personal funds ({formatCurrency(effectiveFunds)}) plus planned home loan ({formatCurrency(plannedLoan)}) safely cover the full {formatCurrency(totalOutlay)} acquisition outlay while safeguarding your {formatCurrency(emergencyReserve)} emergency reserve.
             </p>
           </div>

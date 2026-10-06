@@ -24,15 +24,15 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
   const getCategoryIcon = () => {
     switch (categoryKey) {
       case "ownership":
-        return <ShieldCheck className="w-4 h-4 text-[#5B8BDF]" />;
+        return <ShieldCheck className="w-4 h-4 text-blue-600" />;
       case "approvals":
-        return <FileCheck className="w-4 h-4 text-[#9B6FD6]" />;
+        return <FileCheck className="w-4 h-4 text-indigo-600" />;
       case "financial":
-        return <DollarSign className="w-4 h-4 text-[#3F9E6C]" />;
+        return <DollarSign className="w-4 h-4 text-emerald-600" />;
       case "condition":
-        return <Wrench className="w-4 h-4 text-[#E6832A]" />;
+        return <Wrench className="w-4 h-4 text-amber-600" />;
       case "costs":
-        return <Building className="w-4 h-4 text-[#D4A017]" />;
+        return <Building className="w-4 h-4 text-stone-600" />;
       default:
         return null;
     }
@@ -41,12 +41,12 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
   return (
     <div className="space-y-3">
       {/* Category Header Bar */}
-      <div className="flex items-center justify-between border-b border-[#202020] pb-2">
+      <div className="flex items-center justify-between border-b border-stone-200/80 pb-2.5">
         <div className="flex items-center gap-2">
           {getCategoryIcon()}
-          <h2 className="text-sm font-semibold text-[#EDEDED]">{title}</h2>
+          <h2 className="text-sm font-bold text-stone-900">{title}</h2>
         </div>
-        <span className="text-xs font-mono text-[#888888] bg-[#161616] px-2.5 py-0.5 rounded border border-[#252525]">
+        <span className="text-xs font-medium text-stone-500 bg-stone-100 px-2.5 py-0.5 rounded-full border border-stone-200/80">
           {completedCount} / {totalCount} completed
         </span>
       </div>

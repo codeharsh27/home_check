@@ -9,48 +9,53 @@ interface PropertyCardProps {
 
 export const PropertyHeaderCard: React.FC<PropertyCardProps> = ({ property }) => {
   return (
-    <div className="bg-[#121212] border border-[#252525] rounded-xl p-5 space-y-4">
-      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
-        <div className="space-y-1">
+    <div className="bg-white border border-stone-200/90 rounded-2xl p-5 sm:p-6 space-y-4 shadow-xs">
+      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+        <div className="space-y-1.5">
           <div className="flex items-center gap-2">
-            <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-[#222222] text-[#5B8BDF] border border-[#2B2B2B]">
+            <span className="px-2.5 py-0.5 rounded-md text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-100">
               {property.type}
             </span>
             {property.bhk && (
-              <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-[#222222] text-[#888888] border border-[#2B2B2B]">
+              <span className="px-2.5 py-0.5 rounded-md text-xs font-medium bg-stone-100 text-stone-600 border border-stone-200">
                 {property.bhk}
               </span>
             )}
+            {property.possessionStatus && (
+              <span className="px-2.5 py-0.5 rounded-md text-xs font-medium bg-stone-100 text-stone-600 border border-stone-200">
+                {property.possessionStatus}
+              </span>
+            )}
           </div>
-          <h1 className="text-xl sm:text-2xl font-bold text-[#EDEDED]">
+          <h1 className="text-xl sm:text-2xl font-bold text-stone-900 tracking-tight">
             {property.name}
           </h1>
-          <p className="text-xs text-[#888888] flex items-center gap-1.5">
-            <MapPin className="w-3.5 h-3.5 text-[#666666]" />
+          <p className="text-xs sm:text-sm text-stone-500 flex items-center gap-1.5">
+            <MapPin className="w-4 h-4 text-stone-400 shrink-0" />
             <span>{property.location}</span>
           </p>
         </div>
 
-        <div className="sm:text-right space-y-1 bg-[#181818] p-3 rounded-lg border border-[#282828] shrink-0">
-          <span className="text-[10px] uppercase font-mono tracking-wider text-[#777777] block">
+        <div className="sm:text-right space-y-0.5 bg-stone-50/80 p-3.5 rounded-xl border border-stone-200/80 shrink-0">
+          <span className="text-[11px] uppercase tracking-wider text-stone-500 font-semibold block">
             Listed Price
           </span>
-          <p className="text-xl font-bold text-[#EDEDED] font-mono">
+          <p className="text-xl sm:text-2xl font-bold text-stone-900 tracking-tight">
             ₹{(property.price / 100000).toFixed(2)}L
           </p>
-          <span className="text-[11px] text-[#666666] font-mono block">
+          <span className="text-xs text-stone-500 font-mono block">
             ₹{property.price.toLocaleString("en-IN")}
           </span>
         </div>
       </div>
 
       {property.sourceName && (
-        <div className="pt-3 border-t border-[#1E1E1E] flex items-center justify-between text-xs text-[#777777]">
+        <div className="pt-3 border-t border-stone-100 flex items-center justify-between text-xs text-stone-500">
           <div className="flex items-center gap-2">
-            <Globe className="w-3.5 h-3.5 text-[#555555]" />
-            <span>Source: <strong className="text-[#AAAAAA]">{property.sourceName}</strong></span>
+            <Globe className="w-3.5 h-3.5 text-stone-400" />
+            <span>Found from: <strong className="font-medium text-stone-700">{property.sourceName}</strong></span>
           </div>
-          <StatusBadge status="source-derived" />
+          <span className="text-xs text-stone-400 font-normal">Pre-filled from listing</span>
         </div>
       )}
     </div>

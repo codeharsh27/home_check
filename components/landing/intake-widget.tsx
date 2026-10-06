@@ -6,6 +6,7 @@ import { Link2, Upload, Edit3, ArrowRight, FileText, CheckCircle2, Loader2, Aler
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useEvaluationStore, DEMO_PROPERTY } from '@/store/evaluation';
+import { ExtractionOverlay } from '@/components/landing/extraction-overlay';
 
 export const IntakeWidget: React.FC<{ simplified?: boolean }> = ({ simplified = false }) => {
   const router = useRouter();
@@ -45,16 +46,16 @@ export const IntakeWidget: React.FC<{ simplified?: boolean }> = ({ simplified = 
 
       if (data.property && Object.keys(data.property).length > 2) {
         const id = startNewEvaluation(data.property, false);
-        router.push(`/evaluation/${id}/snapshot`);
+        router.push(`/evaluation/${id}`);
       } else {
         if (data.error) setParseError(`${data.error} — you can fill in the details on the next screen.`);
         const id = startNewEvaluation({ sourceUrl: urlInput, sourceName: 'Listing URL' }, false);
-        router.push(`/evaluation/${id}/snapshot`);
+        router.push(`/evaluation/${id}`);
       }
     } catch {
       setParseError('Could not reach the URL. You can fill in details manually on the next screen.');
       const id = startNewEvaluation({ sourceUrl: urlInput, sourceName: 'Listing URL' }, false);
-      router.push(`/evaluation/${id}/snapshot`);
+      router.push(`/evaluation/${id}`);
     } finally {
       setIsLoading(false);
     }
@@ -66,7 +67,7 @@ export const IntakeWidget: React.FC<{ simplified?: boolean }> = ({ simplified = 
       { sourceName: uploadedFile ? uploadedFile.name : 'Brochure document' },
       false
     );
-    router.push(`/evaluation/${id}/snapshot`);
+    router.push(`/evaluation/${id}`);
   };
 
   const handleStartManual = (e: React.FormEvent) => {
@@ -84,12 +85,12 @@ export const IntakeWidget: React.FC<{ simplified?: boolean }> = ({ simplified = 
       },
       false
     );
-    router.push(`/evaluation/${id}/snapshot`);
+    router.push(`/evaluation/${id}`);
   };
 
   const handleLoadDemo = () => {
     const id = startNewEvaluation(DEMO_PROPERTY, true);
-    router.push(`/evaluation/${id}/snapshot`);
+    router.push(`/evaluation/${id}`);
   };
 
   const tabs = [
@@ -294,6 +295,7 @@ export const IntakeWidget: React.FC<{ simplified?: boolean }> = ({ simplified = 
           </form>
         )}
       </div>
+      <ExtractionOverlay isOpen={isLoading} url={urlInput} />
     </div>
   );
 };

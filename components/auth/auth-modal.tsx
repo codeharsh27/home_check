@@ -79,37 +79,37 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4">
-      <div className="bg-[#121212] border border-[#262626] rounded-2xl max-w-sm w-full p-6 space-y-5 shadow-2xl relative">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/40 backdrop-blur-xs p-4">
+      <div className="bg-white border border-stone-200/90 rounded-2xl max-w-sm w-full p-6 sm:p-7 space-y-5 shadow-2xl relative">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-[#777777] hover:text-[#EDEDED] cursor-pointer"
+          className="absolute top-4 right-4 text-stone-400 hover:text-stone-700 cursor-pointer p-1 rounded-lg hover:bg-stone-50"
         >
           <X className="w-4 h-4" />
         </button>
 
         <div className="space-y-1">
-          <h2 className="text-lg font-bold text-[#EDEDED]">
+          <h2 className="text-xl font-bold text-stone-900 tracking-tight">
             {mode === 'signin' && 'Sign in to HomeCheck'}
             {mode === 'signup' && 'Create your account'}
             {mode === 'magiclink' && 'Sign in with Magic Link'}
           </h2>
-          <p className="text-xs text-[#888888]">
-            {mode === 'signin' && 'Sync and protect your property evaluation sessions'}
-            {mode === 'signup' && 'Save evaluations securely across all devices'}
+          <p className="text-xs text-stone-500">
+            {mode === 'signin' && 'Access and sync your saved property evaluation dossiers'}
+            {mode === 'signup' && 'Save evaluations and legal roadmaps securely'}
             {mode === 'magiclink' && 'We will send a secure sign-in link to your email'}
           </p>
         </div>
 
         {error && (
-          <div className="p-3 bg-[#D94F4F]/10 border border-[#D94F4F]/30 rounded-lg flex items-start gap-2 text-xs text-[#D94F4F]">
+          <div className="p-3 bg-rose-50 border border-rose-200 rounded-xl flex items-start gap-2 text-xs text-rose-700">
             <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
             <span>{error}</span>
           </div>
         )}
 
         {successMessage && (
-          <div className="p-3 bg-[#3F9E6C]/10 border border-[#3F9E6C]/30 rounded-lg flex items-start gap-2 text-xs text-[#3F9E6C]">
+          <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl flex items-start gap-2 text-xs text-emerald-700">
             <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5" />
             <span>{successMessage}</span>
           </div>
@@ -123,7 +123,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="you@example.com"
-            className="text-xs"
+            className="text-xs bg-stone-50/50 border-stone-200"
           />
 
           {mode !== 'magiclink' && (
@@ -134,11 +134,11 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
-              className="text-xs"
+              className="text-xs bg-stone-50/50 border-stone-200"
             />
           )}
 
-          <Button type="submit" size="md" className="w-full" disabled={loading}>
+          <Button type="submit" size="md" className="w-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-semibold shadow-sm" disabled={loading}>
             {loading ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -154,7 +154,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
           </Button>
         </form>
 
-        <div className="pt-2 border-t border-[#202020] space-y-2 text-center text-xs text-[#777777]">
+        <div className="pt-2 border-t border-stone-100 space-y-2 text-center text-xs text-stone-500">
           {mode === 'signin' && (
             <>
               <p>
@@ -162,7 +162,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
                 <button
                   type="button"
                   onClick={() => { setMode('signup'); setError(null); setSuccessMessage(null); }}
-                  className="text-[#5B8BDF] hover:underline cursor-pointer"
+                  className="text-blue-600 font-semibold hover:underline cursor-pointer"
                 >
                   Sign up
                 </button>
@@ -172,7 +172,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
                 <button
                   type="button"
                   onClick={() => { setMode('magiclink'); setError(null); setSuccessMessage(null); }}
-                  className="text-[#888888] hover:text-[#EDEDED] underline cursor-pointer"
+                  className="text-stone-500 hover:text-stone-800 underline cursor-pointer"
                 >
                   Email me a login link
                 </button>
@@ -186,7 +186,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
               <button
                 type="button"
                 onClick={() => { setMode('signin'); setError(null); setSuccessMessage(null); }}
-                className="text-[#5B8BDF] hover:underline cursor-pointer"
+                className="text-blue-600 font-semibold hover:underline cursor-pointer"
               >
                 Sign in
               </button>
@@ -199,7 +199,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
               <button
                 type="button"
                 onClick={() => { setMode('signin'); setError(null); setSuccessMessage(null); }}
-                className="text-[#5B8BDF] hover:underline cursor-pointer"
+                className="text-blue-600 font-semibold hover:underline cursor-pointer"
               >
                 Email and password sign in
               </button>

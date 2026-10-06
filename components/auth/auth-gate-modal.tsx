@@ -83,46 +83,46 @@ export const AuthGateModal: React.FC<AuthGateModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-      <div className="bg-[#121212] border border-[#2A2A2A] rounded-2xl max-w-md w-full p-6 sm:p-8 space-y-6 shadow-2xl relative">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/40 backdrop-blur-xs p-4">
+      <div className="bg-white border border-stone-200/90 rounded-2xl max-w-md w-full p-6 sm:p-8 space-y-6 shadow-2xl relative">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-[#777777] hover:text-[#EDEDED] cursor-pointer"
+          className="absolute top-4 right-4 text-stone-400 hover:text-stone-700 cursor-pointer p-1"
         >
           <X className="w-4 h-4" />
         </button>
 
         {/* Header with security icon */}
         <div className="space-y-2 text-center">
-          <div className="w-12 h-12 rounded-xl bg-[#5B8BDF]/10 border border-[#5B8BDF]/30 flex items-center justify-center text-[#5B8BDF] mx-auto">
-            <Lock className="w-6 h-6" />
+          <div className="w-12 h-12 rounded-xl bg-blue-50 border border-blue-200 text-blue-600 flex items-center justify-center mx-auto shadow-xs">
+            <Lock className="w-5 h-5" />
           </div>
-          <h2 className="text-xl font-bold text-white tracking-tight">
-            Save & Unlock Financial Picture
+          <h2 className="text-xl font-bold text-stone-900 tracking-tight">
+            Save Your Property Decision Dossier
           </h2>
-          <p className="text-xs text-[#888888] leading-relaxed">
-            Create an account to protect your private income details and unlock the personalized funding gap for <strong className="text-[#EDEDED]">{propertyName}</strong>.
+          <p className="text-xs text-stone-500 leading-relaxed">
+            Securely save your calculated handover cash drain, multi-source funding structure, and verification roadmap for <strong className="text-stone-800">{propertyName}</strong>.
           </p>
         </div>
 
         {/* Benefits list */}
-        <div className="p-3.5 bg-[#161616] border border-[#232323] rounded-xl space-y-2 text-xs">
-          <div className="flex items-center gap-2 text-[#CCCCCC]">
-            <CheckCircle2 className="w-4 h-4 text-[#3F9E6C] shrink-0" />
-            <span>Private & encrypted financial calculations (zero data leak)</span>
+        <div className="p-3.5 bg-stone-50/90 border border-stone-200/80 rounded-xl space-y-2.5 text-xs">
+          <div className="flex items-center gap-2 text-stone-700">
+            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+            <span><strong>Zero Broker Spam:</strong> We never share your data with builders or sales reps.</span>
           </div>
-          <div className="flex items-center gap-2 text-[#CCCCCC]">
-            <CheckCircle2 className="w-4 h-4 text-[#3F9E6C] shrink-0" />
-            <span>Saves your due-diligence checklist across all devices</span>
+          <div className="flex items-center gap-2 text-stone-700">
+            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+            <span><strong>Multi-Device Access:</strong> Review this dossier anytime on your phone or laptop.</span>
           </div>
-          <div className="flex items-center gap-2 text-[#CCCCCC]">
-            <CheckCircle2 className="w-4 h-4 text-[#3F9E6C] shrink-0" />
-            <span>Downloadable decision readiness report for your family & lawyer</span>
+          <div className="flex items-center gap-2 text-stone-700">
+            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+            <span><strong>Lawyer Briefing:</strong> Save your 3-stage document checklist for advocate review.</span>
           </div>
         </div>
 
         {error && (
-          <div className="p-3 bg-[#D94F4F]/10 border border-[#D94F4F]/30 rounded-lg flex items-start gap-2 text-xs text-[#D94F4F]">
+          <div className="p-3 bg-rose-50 border border-rose-200 rounded-lg flex items-start gap-2 text-xs text-rose-700">
             <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
             <span>{error}</span>
           </div>
@@ -136,7 +136,7 @@ export const AuthGateModal: React.FC<AuthGateModalProps> = ({
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="name@example.com"
-            className="text-xs"
+            className="text-xs bg-stone-50/50 border-stone-200"
           />
 
           <Input
@@ -146,31 +146,31 @@ export const AuthGateModal: React.FC<AuthGateModalProps> = ({
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="••••••••"
-            className="text-xs"
+            className="text-xs bg-stone-50/50 border-stone-200"
           />
 
-          <Button type="submit" size="md" className="w-full" disabled={loading}>
+          <Button type="submit" size="md" className="w-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-semibold shadow-sm" disabled={loading}>
             {loading ? (
               <>
-                <Loader2 className="w-4 h-4 animate-spin" />
+                <Loader2 className="w-4 h-4 animate-spin mr-1.5" />
                 <span>Securing your evaluation...</span>
               </>
             ) : (
               <span>
-                {mode === 'signup' ? 'Create Account & Continue' : 'Sign In & Continue'}
+                {mode === 'signup' ? 'Create Account & Save Dossier' : 'Sign In & Save Dossier'}
               </span>
             )}
           </Button>
         </form>
 
-        <div className="text-center text-xs text-[#777777]">
+        <div className="text-center text-xs text-stone-500">
           {mode === 'signup' ? (
             <p>
               Already have an account?{' '}
               <button
                 type="button"
                 onClick={() => { setMode('signin'); setError(null); }}
-                className="text-[#5B8BDF] hover:underline cursor-pointer"
+                className="text-blue-600 hover:text-blue-700 font-semibold hover:underline cursor-pointer"
               >
                 Sign in
               </button>
@@ -181,7 +181,7 @@ export const AuthGateModal: React.FC<AuthGateModalProps> = ({
               <button
                 type="button"
                 onClick={() => { setMode('signup'); setError(null); }}
-                className="text-[#5B8BDF] hover:underline cursor-pointer"
+                className="text-blue-600 hover:text-blue-700 font-semibold hover:underline cursor-pointer"
               >
                 Create free account
               </button>
@@ -189,17 +189,14 @@ export const AuthGateModal: React.FC<AuthGateModalProps> = ({
           )}
         </div>
 
-        {/* Recruiter & Hiring Manager 1-Click Guest Bypass */}
-        <div className="pt-3 border-t border-[#202020] text-center">
+        {/* 1-Click Guest Bypass */}
+        <div className="pt-3 border-t border-stone-100 text-center">
           <button
             type="button"
             onClick={handleGuestBypass}
-            className="inline-flex items-center gap-1.5 text-xs text-[#888888] hover:text-[#EDEDED] transition-colors cursor-pointer group"
+            className="inline-flex items-center gap-1.5 text-xs text-stone-500 hover:text-stone-800 transition-colors cursor-pointer group"
           >
-            <Sparkles className="w-3.5 h-3.5 text-[#5B8BDF]" />
-            <span className="underline decoration-[#444444] group-hover:decoration-white">
-              Evaluating this portfolio? Continue as Guest Reviewer →
-            </span>
+            <span>Or continue as guest without saving (stored in this browser) →</span>
           </button>
         </div>
       </div>

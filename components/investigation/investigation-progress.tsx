@@ -15,62 +15,62 @@ export const InvestigationProgress: React.FC<InvestigationProgressProps> = ({ ch
   const progressPct = total > 0 ? Math.round((verifiedCount / total) * 100) : 0;
 
   return (
-    <div className="bg-[#121212] border border-[#252525] rounded-xl p-5 space-y-4">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#202020] pb-3">
+    <div className="bg-white border border-stone-200/90 rounded-2xl p-5 sm:p-6 space-y-4 shadow-xs">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-stone-100 pb-3">
         <div>
-          <span className="text-xs font-mono uppercase tracking-wider text-[#5B8BDF]">
-            Due Diligence Status Tracker
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-blue-600 block mb-0.5">
+            Due Diligence Status
           </span>
-          <h3 className="text-base font-semibold text-[#EDEDED] mt-0.5">
-            {verifiedCount} of {total} verification items completed
+          <h3 className="text-base font-bold text-stone-900">
+            {verifiedCount} of {total} checks completed
           </h3>
         </div>
-        <span className="text-xs font-mono text-[#888888]">
-          {progressPct}% overall progress
+        <span className="text-xs text-stone-500 font-medium">
+          {progressPct}% completed
         </span>
       </div>
 
       {/* Segmented Progress Bar */}
       <div className="space-y-2">
-        <div className="w-full h-3 bg-[#222222] rounded-full overflow-hidden flex">
+        <div className="w-full h-3 bg-stone-100 rounded-full overflow-hidden flex">
           <div
-            className="h-full bg-[#3F9E6C] transition-all duration-300"
+            className="h-full bg-emerald-600 transition-all duration-300"
             style={{ width: `${total > 0 ? (verifiedCount / safeTotal) * 100 : 0}%` }}
             title={`Verified/Received: ${verifiedCount}`}
           />
           <div
-            className="h-full bg-[#5B8BDF] transition-all duration-300"
+            className="h-full bg-blue-600 transition-all duration-300"
             style={{ width: `${total > 0 ? (requestedCount / safeTotal) * 100 : 0}%` }}
             title={`Requested: ${requestedCount}`}
           />
           <div
-            className="h-full bg-[#E6832A] transition-all duration-300"
+            className="h-full bg-amber-500 transition-all duration-300"
             style={{ width: `${total > 0 ? (needsProCount / safeTotal) * 100 : 0}%` }}
             title={`Needs Pro Review: ${needsProCount}`}
           />
           <div
-            className="h-full bg-[#333333] transition-all duration-300"
+            className="h-full bg-stone-200 transition-all duration-300"
             style={{ width: `${total > 0 ? (missingCount / safeTotal) * 100 : 0}%` }}
             title={`Missing: ${missingCount}`}
           />
         </div>
 
         {/* Legend */}
-        <div className="flex flex-wrap items-center justify-between text-xs text-[#888888] pt-1">
+        <div className="flex flex-wrap items-center justify-between text-xs text-stone-600 pt-1 gap-2">
           <span className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#3F9E6C]" />
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-600" />
             Received ({verifiedCount})
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#5B8BDF]" />
+            <span className="w-2.5 h-2.5 rounded-full bg-blue-600" />
             Requested ({requestedCount})
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#E6832A]" />
+            <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
             Needs Pro ({needsProCount})
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#333333]" />
+            <span className="w-2.5 h-2.5 rounded-full bg-stone-300" />
             Missing ({missingCount})
           </span>
         </div>

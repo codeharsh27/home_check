@@ -11,21 +11,21 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="w-full space-y-1.5">
         {label && (
-          <label className="block text-xs font-medium text-[#888888] uppercase tracking-wider">
+          <label className="block text-xs font-semibold text-stone-700">
             {label}
           </label>
         )}
         <input
           ref={ref}
-          className={`w-full bg-[#181818] border border-[#2B2B2B] text-[#EDEDED] placeholder-[#555555] rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:border-[#5B8BDF] focus:ring-1 focus:ring-[#5B8BDF] transition-colors ${
-            error ? "border-[#D94F4F]" : ""
+          className={`w-full bg-white border border-stone-300 text-stone-900 placeholder:text-stone-400 rounded-lg px-3.5 py-2 text-sm focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 shadow-2xs transition-colors ${
+            error ? "border-rose-500 focus:border-rose-500 focus:ring-rose-500" : ""
           } ${className}`}
           {...props}
         />
         {helperText && !error && (
-          <p className="text-xs text-[#666666]">{helperText}</p>
+          <p className="text-xs text-stone-500">{helperText}</p>
         )}
-        {error && <p className="text-xs text-[#D94F4F]">{error}</p>}
+        {error && <p className="text-xs text-rose-600 font-medium">{error}</p>}
       </div>
     );
   }

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Search, Loader2, AlertCircle, SlidersHorizontal, UploadCloud, Edit3, X, CheckCircle2 } from 'lucide-react';
 import { useEvaluationStore, DEMO_PROPERTY } from '@/store/evaluation';
 import { HeroNavbar } from '@/components/layout/nav';
+import { ExtractionOverlay } from '@/components/landing/extraction-overlay';
 
 export const HeroSection: React.FC = () => {
   const router = useRouter();
@@ -50,9 +51,9 @@ export const HeroSection: React.FC = () => {
           body: JSON.stringify({ url: trimmed }),
         });
         const data = await res.json();
-        if (data.property && Object.keys(data.property).length > 2) {
+        if (data.property && (data.property.name || data.property.price || data.property.location)) {
           const id = startNewEvaluation(data.property, false);
-          router.push(`/evaluation/${id}/snapshot`);
+          router.push(`/evaluation/${id}`);
           return;
         }
       }
@@ -65,14 +66,14 @@ export const HeroSection: React.FC = () => {
         price: 6800000,
         sourceName: 'Search Intake',
       }, false);
-      router.push(`/evaluation/${id}/snapshot`);
+      router.push(`/evaluation/${id}`);
     } catch {
       const id = startNewEvaluation({
         name: trimmed || 'Shortlisted Property',
         location: 'India',
         sourceName: 'Direct Search',
       }, false);
-      router.push(`/evaluation/${id}/snapshot`);
+      router.push(`/evaluation/${id}`);
     } finally {
       setIsLoading(false);
     }
@@ -86,7 +87,7 @@ export const HeroSection: React.FC = () => {
       location: 'India',
     }, false);
     setOptionsModalOpen(false);
-    router.push(`/evaluation/${id}/snapshot`);
+    router.push(`/evaluation/${id}`);
   };
 
   const handleManualSubmit = (e: React.FormEvent) => {
@@ -101,12 +102,12 @@ export const HeroSection: React.FC = () => {
       sourceName: 'Manual Entry',
     }, false);
     setOptionsModalOpen(false);
-    router.push(`/evaluation/${id}/snapshot`);
+    router.push(`/evaluation/${id}`);
   };
 
   const handleLoadDemo = () => {
     const id = startNewEvaluation(DEMO_PROPERTY, true);
-    router.push(`/evaluation/${id}/snapshot`);
+    router.push(`/evaluation/${id}`);
   };
 
   return (
@@ -116,7 +117,7 @@ export const HeroSection: React.FC = () => {
         
         {/* Main Hero Card Container with Rounded Borders from ALL corners */}
         <section
-          className="relative w-full h-[92vh] min-h-[600px] max-h-[820px] rounded-[24px] sm:rounded-[32px] md:rounded-[40px] overflow-hidden flex flex-col justify-between shadow-2xl shadow-stone-900/10 border border-stone-200/60"
+          className="relative w-full min-h-[580px] sm:min-h-[640px] lg:h-[92vh] max-h-[840px] rounded-[24px] sm:rounded-[32px] md:rounded-[40px] overflow-hidden flex flex-col justify-between shadow-2xl shadow-stone-900/10 border border-stone-200/60"
           style={{
             backgroundImage: 'url(/images/hero.png)',
             backgroundSize: 'cover',
@@ -131,40 +132,40 @@ export const HeroSection: React.FC = () => {
           <HeroNavbar />
 
           {/* Hero Content - Centered */}
-          <div className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-4 sm:px-6 pt-24 sm:pt-28 pb-4 max-w-4xl mx-auto w-full">
+          <div className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-3 sm:px-6 pt-20 sm:pt-28 pb-4 max-w-4xl mx-auto w-full">
             
             {/* Small Eyebrow with Gentle Float Animation */}
             <div className="mb-3 sm:mb-4">
-              <span className="text-[11px] sm:text-xs font-bold uppercase tracking-[1.5px] text-blue-400 bg-blue-950/80 border border-blue-500/40 px-3.5 py-1 rounded-full backdrop-blur-md inline-block shadow-lg animate-float">
-                BEFORE YOU COMMIT
+              <span className="text-[10px] sm:text-xs font-bold uppercase tracking-[1.5px] text-blue-400 bg-blue-950/80 border border-blue-500/40 px-3 sm:px-3.5 py-1 rounded-full backdrop-blur-md inline-block shadow-lg animate-float">
+                BEFORE YOU PAY TOKEN MONEY
               </span>
             </div>
 
             {/* Main Headline */}
-            <h1 className="text-3xl sm:text-5xl md:text-[56px] font-extrabold tracking-tight text-white leading-[1.08] max-w-3xl drop-shadow-md">
-              Check a Property Before You Commit
+            <h1 className="text-2xl sm:text-5xl md:text-[56px] font-extrabold tracking-tight text-white leading-[1.12] sm:leading-[1.08] max-w-3xl drop-shadow-md">
+              Never Commit to a Property Blindly.
             </h1>
 
             {/* Supporting Text */}
-            <p className="mt-4 sm:mt-5 text-sm sm:text-base md:text-lg text-white/90 font-normal max-w-2xl leading-relaxed drop-shadow-sm">
-              Understand what you can afford, what you still need to verify, and what to do next — before putting your money down.
+            <p className="mt-3 sm:mt-5 text-xs sm:text-base md:text-lg text-white/90 font-normal max-w-2xl leading-relaxed drop-shadow-sm px-2">
+              Buying a home is your life’s largest investment. Uncover the true possession cash drain, stage-gated legal risks, and micro-market transaction reality before signing away your savings.
             </p>
 
             {/* Search Intake Pill with Interactive Focus Ring & Border */}
             <form
               id="hero-intake"
               onSubmit={handleStartEvaluation}
-              className="mt-6 sm:mt-8 w-full max-w-2xl relative"
+              className="mt-5 sm:mt-8 w-full max-w-2xl relative"
             >
-              <div className="bg-white rounded-full shadow-2xl p-1.5 sm:p-2 flex items-center gap-2 border-2 border-white/90 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/25 transition-all duration-300">
+              <div className="bg-white rounded-full shadow-2xl p-1 sm:p-2 flex items-center gap-1.5 sm:gap-2 border-2 border-white/90 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/25 transition-all duration-300">
                 
                 {/* Single Input */}
-                <div className="flex-1 px-4 sm:px-5">
+                <div className="flex-1 px-3 sm:px-5">
                   <input
                     type="text"
                     value={urlInput}
                     onChange={(e) => setUrlInput(e.target.value)}
-                    placeholder="Paste a property listing URL (MagicBricks, 99acres, Housing...)"
+                    placeholder="Paste listing URL (Housing, NoBroker, 99acres...)"
                     className="w-full text-xs sm:text-sm text-stone-800 placeholder-stone-400 bg-transparent outline-none font-normal"
                   />
                 </div>
@@ -177,22 +178,22 @@ export const HeroSection: React.FC = () => {
                     setOptionsModalOpen(true);
                   }}
                   title="Upload brochure or manual entry"
-                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-700 flex items-center justify-center transition-all hover:scale-105 active:scale-95 shrink-0 cursor-pointer shadow-sm border border-stone-200/60"
+                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-700 flex items-center justify-center transition-all hover:scale-105 active:scale-95 shrink-0 cursor-pointer shadow-sm border border-stone-200/60"
                 >
-                  <SlidersHorizontal className="w-4 h-4" />
+                  <SlidersHorizontal className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 </button>
 
                 {/* Primary CTA Button */}
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="px-4 sm:px-6 py-2.5 sm:py-3 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs sm:text-sm font-bold shadow-md shadow-blue-600/30 transition-all hover:scale-[1.02] shrink-0 cursor-pointer flex items-center gap-1.5 group"
+                  className="px-3.5 sm:px-6 py-2 sm:py-3 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs sm:text-sm font-bold shadow-md shadow-blue-600/30 transition-all hover:scale-[1.02] shrink-0 cursor-pointer flex items-center gap-1.5 group"
                 >
                   {isLoading ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
                   ) : (
                     <>
-                      <span>Evaluate Property</span>
+                      <span>Audit <span className="hidden sm:inline">This Property</span></span>
                       <Search className="w-3.5 h-3.5 group-hover:scale-110 transition-transform" />
                     </>
                   )}
@@ -227,24 +228,24 @@ export const HeroSection: React.FC = () => {
               
               <div className="flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-blue-300 shrink-0" />
-                <span className="font-semibold text-white tracking-tight">Know your real cost</span>
-                <span className="text-white/65 hidden sm:inline font-normal">— understand what to arrange</span>
+                <span className="font-semibold text-white tracking-tight">Handover Cash Drain</span>
+                <span className="text-white/65 hidden sm:inline font-normal">— Down payment + Stamp duty + Corpus</span>
               </div>
 
               <span className="text-white/25 hidden sm:inline">·</span>
 
               <div className="flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-300 shrink-0" />
-                <span className="font-semibold text-white tracking-tight">Know what to verify</span>
-                <span className="text-white/65 hidden sm:inline font-normal">— pending checks &amp; documents</span>
+                <span className="font-semibold text-white tracking-tight">Stage-Gated Verification</span>
+                <span className="text-white/65 hidden sm:inline font-normal">— Token, Agreement &amp; Handover</span>
               </div>
 
               <span className="text-white/25 hidden sm:inline">·</span>
 
               <div className="flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-amber-300 shrink-0" />
-                <span className="font-semibold text-white tracking-tight">Know your next step</span>
-                <span className="text-white/65 hidden sm:inline font-normal">— what to do before committing</span>
+                <span className="font-semibold text-white tracking-tight">Nearby Comparables</span>
+                <span className="text-white/65 hidden sm:inline font-normal">— Benchmarked within 2-4 km</span>
               </div>
 
             </div>
@@ -485,6 +486,9 @@ export const HeroSection: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Awaiting Extraction Scanning Animation Overlay */}
+      <ExtractionOverlay isOpen={isLoading} url={urlInput} />
     </>
   );
 };

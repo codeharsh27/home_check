@@ -93,6 +93,10 @@ interface EvaluationStore {
 
   // Checklist regeneration when property type changes
   regenerateChecklist: (id: string) => void;
+
+  // Progressive Workflow Navigation
+  setStepIndex: (id: string, stepIndex: number) => void;
+  setAlternatives: (id: string, alternatives: import('@/types').AlternativeProperty[]) => void;
 }
 
 export const useEvaluationStore = create<EvaluationStore>()(
@@ -150,6 +154,7 @@ export const useEvaluationStore = create<EvaluationStore>()(
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
           step: 'snapshot',
+          currentStepIndex: 1,
           completedSteps: [],
           property,
           buyerContext: isDemo ? DEMO_BUYER_CONTEXT : undefined,
@@ -211,8 +216,9 @@ export const useEvaluationStore = create<EvaluationStore>()(
             id,
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
-            step: 'dashboard',
-            completedSteps: ['snapshot', 'financial', 'investigation', 'questions', 'dashboard'],
+            step: 'snapshot',
+            currentStepIndex: 1,
+            completedSteps: [],
             property: DEMO_PROPERTY,
             buyerContext: DEMO_BUYER_CONTEXT,
             checklist: enrichedChecklist,
@@ -376,6 +382,38 @@ export const useEvaluationStore = create<EvaluationStore>()(
             questions: updatedQuestions,
           };
           triggerCloudSync(updatedEval);
+          return {
+            currentEvaluation: state.currentEvaluation?.id === id ? updatedEval : state.currentEvaluation,
+            evaluations: { ...state.evaluations, [id]: updatedEval },
+          };
+        });
+      },
+
+      setStepIndex: (id, stepIndex) => {
+        set((state) => {
+          const evalItem = state.evaluations[id];
+          if (!evalItem) return state;
+          const updatedEval: EvaluationSession = {
+            ...evalItem,
+            currentStepIndex: stepIndex,
+            updatedAt: new Date().toISOString(),
+          };
+          return {
+            currentEvaluation: state.currentEvaluation?.id === id ? updatedEval : state.currentEvaluation,
+            evaluations: { ...state.evaluations, [id]: updatedEval },
+          };
+        });
+      },
+
+      setAlternatives: (id, alternatives) => {
+        set((state) => {
+          const evalItem = state.evaluations[id];
+          if (!evalItem) return state;
+          const updatedEval: EvaluationSession = {
+            ...evalItem,
+            alternatives,
+            updatedAt: new Date().toISOString(),
+          };
           return {
             currentEvaluation: state.currentEvaluation?.id === id ? updatedEval : state.currentEvaluation,
             evaluations: { ...state.evaluations, [id]: updatedEval },

@@ -13,7 +13,7 @@ export const FeatureToolsSection: React.FC = () => {
 
   const handleStart = () => {
     const id = startNewEvaluation(DEMO_PROPERTY, true);
-    router.push(`/evaluation/${id}/snapshot`);
+    router.push(`/evaluation/${id}`);
   };
 
   return (
