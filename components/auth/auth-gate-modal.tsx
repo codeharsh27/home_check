@@ -2,15 +2,14 @@
 
 import React, { useState } from 'react';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
-import { X, ShieldCheck, Lock, CheckCircle2, AlertCircle, ArrowRight, Loader2, Sparkles, UserCheck } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { X, Loader2 } from 'lucide-react';
 import { trackEvent } from '@/lib/analytics';
 
 interface AuthGateModalProps {
   isOpen: boolean;
   evaluationId: string;
   propertyName?: string;
+  isStepTransition?: boolean;
   onClose: () => void;
   onAuthenticated: (userId?: string) => void;
 }
@@ -18,7 +17,8 @@ interface AuthGateModalProps {
 export const AuthGateModal: React.FC<AuthGateModalProps> = ({
   isOpen,
   evaluationId,
-  propertyName = 'your property',
+  propertyName = 'this property',
+  isStepTransition = false,
   onClose,
   onAuthenticated,
 }) => {
@@ -33,7 +33,7 @@ export const AuthGateModal: React.FC<AuthGateModalProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!supabase || !isSupabaseConfigured) {
-      setError('Supabase is not configured.');
+      onAuthenticated(undefined);
       return;
     }
 
@@ -46,7 +46,8 @@ export const AuthGateModal: React.FC<AuthGateModalProps> = ({
           email,
           password,
           options: {
-            emailRedirectTo: typeof window !== 'undefined' ? window.location.origin : undefined,
+            emailRedirectTo:
+              typeof window !== 'undefined' ? window.location.origin : undefined,
           },
         });
         if (signupErr) throw signupErr;
@@ -58,10 +59,11 @@ export const AuthGateModal: React.FC<AuthGateModalProps> = ({
 
         onAuthenticated(data.user?.id);
       } else {
-        const { data, error: signinErr } = await supabase.auth.signInWithPassword({
-          email,
-          password,
-        });
+        const { data, error: signinErr } =
+          await supabase.auth.signInWithPassword({
+            email,
+            password,
+          });
         if (signinErr) throw signinErr;
 
         trackEvent('auth_gate_converted', 'conversion', evaluationId, {
@@ -71,8 +73,12 @@ export const AuthGateModal: React.FC<AuthGateModalProps> = ({
 
         onAuthenticated(data.user?.id);
       }
-    } catch (err: any) {
-      setError(err?.message || 'Authentication failed. Please verify your details.');
+    } catch (err: unknown) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : 'Could not authenticate. Please verify your details.'
+      );
     } finally {
       setLoading(false);
     }
@@ -86,120 +92,114 @@ export const AuthGateModal: React.FC<AuthGateModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/40 backdrop-blur-xs p-4">
-      <div className="bg-white border border-stone-200/90 rounded-2xl max-w-md w-full p-6 sm:p-8 space-y-6 shadow-2xl relative">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
+      <div className="bg-[#141414] border border-[#ffffff1a] rounded-2xl max-w-[420px] w-full p-6 sm:p-8 space-y-6 shadow-2xl relative text-[#fafafa] animate-modal-enter">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-stone-400 hover:text-stone-700 cursor-pointer p-1"
+          className="absolute top-5 right-5 text-[#a1a1a1] hover:text-[#fafafa] cursor-pointer p-1.5 rounded-full hover:bg-white/5 transition-colors"
         >
           <X className="w-4 h-4" />
         </button>
 
-        {/* Header with security icon */}
-        <div className="space-y-2 text-center">
-          <div className="w-12 h-12 rounded-xl bg-blue-50 border border-blue-200 text-blue-600 flex items-center justify-center mx-auto shadow-xs">
-            <Lock className="w-5 h-5" />
-          </div>
-          <h2 className="text-xl font-bold text-stone-900 tracking-tight">
-            Save Your Property Decision Dossier
+        <div className="space-y-1.5">
+          <p className="text-[11px] font-mono uppercase tracking-[0.14em] text-[#a1a1a1]">
+            {isStepTransition
+              ? 'BEFORE STEP 04 · LEGAL CHECKLIST'
+              : 'WORKSPACE SYNC'}
+          </p>
+          <h2 className="font-serif text-[26px] text-[#fafafa] tracking-[-0.02em] leading-tight">
+            {isStepTransition
+              ? 'Save your audit before tracking documents'
+              : 'Save your property dossier'}
           </h2>
-          <p className="text-xs text-stone-500 leading-relaxed">
-            Securely save your calculated handover cash drain, multi-source funding structure, and verification roadmap for <strong className="text-stone-800">{propertyName}</strong>.
+          <p className="text-[13px] text-[#a1a1a1] leading-relaxed">
+            {isStepTransition ? (
+              <>
+                You&apos;ve calculated true handover cash for{' '}
+                <strong className="text-[#fafafa] font-normal">
+                  {propertyName}
+                </strong>
+                . Save your numbers to track builder legal documents across
+                devices, or skip directly to Step 4.
+              </>
+            ) : (
+              <>
+                Keep your cost calculations and document checklist for{' '}
+                <strong className="text-[#fafafa] font-normal">
+                  {propertyName}
+                </strong>{' '}
+                accessible across devices.
+              </>
+            )}
           </p>
         </div>
 
-        {/* Benefits list */}
-        <div className="p-3.5 bg-stone-50/90 border border-stone-200/80 rounded-xl space-y-2.5 text-xs">
-          <div className="flex items-center gap-2 text-stone-700">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-            <span><strong>Zero Broker Spam:</strong> We never share your data with builders or sales reps.</span>
-          </div>
-          <div className="flex items-center gap-2 text-stone-700">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-            <span><strong>Multi-Device Access:</strong> Review this dossier anytime on your phone or laptop.</span>
-          </div>
-          <div className="flex items-center gap-2 text-stone-700">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-            <span><strong>Lawyer Briefing:</strong> Save your 3-stage document checklist for advocate review.</span>
-          </div>
-        </div>
-
-        {error && (
-          <div className="p-3 bg-rose-50 border border-rose-200 rounded-lg flex items-start gap-2 text-xs text-rose-700">
-            <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
-            <span>{error}</span>
-          </div>
-        )}
+        {error && <p className="text-xs text-amber-400">{error}</p>}
 
         <form onSubmit={handleSubmit} className="space-y-3.5">
-          <Input
-            label="Email address"
-            type="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="name@example.com"
-            className="text-xs bg-stone-50/50 border-stone-200"
-          />
+          <div>
+            <label className="block text-[12px] text-[#a1a1a1] mb-1.5">
+              Email address
+            </label>
+            <input
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="name@example.com"
+              className="w-full px-3.5 py-2.5 text-[13px] rounded-xl bg-[#0a0a0a] border border-[#ffffff14] text-[#fafafa] placeholder:text-[#666666] focus:outline-none focus:border-[#fafafa]/40"
+            />
+          </div>
 
-          <Input
-            label="Password"
-            type="password"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="••••••••"
-            className="text-xs bg-stone-50/50 border-stone-200"
-          />
+          <div>
+            <label className="block text-[12px] text-[#a1a1a1] mb-1.5">
+              Password
+            </label>
+            <input
+              type="password"
+              required
+              minLength={6}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Minimum 6 characters"
+              className="w-full px-3.5 py-2.5 text-[13px] rounded-xl bg-[#0a0a0a] border border-[#ffffff14] text-[#fafafa] placeholder:text-[#666666] focus:outline-none focus:border-[#fafafa]/40"
+            />
+          </div>
 
-          <Button type="submit" size="md" className="w-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-semibold shadow-sm" disabled={loading}>
-            {loading ? (
-              <>
-                <Loader2 className="w-4 h-4 animate-spin mr-1.5" />
-                <span>Securing your evaluation...</span>
-              </>
-            ) : (
-              <span>
-                {mode === 'signup' ? 'Create Account & Save Dossier' : 'Sign In & Save Dossier'}
-              </span>
-            )}
-          </Button>
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full py-3 rounded-full bg-[#fafafa] hover:bg-[#e5e5e5] text-[#0a0a0a] font-medium text-[13px] transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 mt-2"
+          >
+            {loading && <Loader2 className="w-4 h-4 animate-spin" />}
+            <span>
+              {mode === 'signup'
+                ? 'Create account & save'
+                : 'Sign in & save'}
+            </span>
+          </button>
         </form>
 
-        <div className="text-center text-xs text-stone-500">
-          {mode === 'signup' ? (
-            <p>
-              Already have an account?{' '}
-              <button
-                type="button"
-                onClick={() => { setMode('signin'); setError(null); }}
-                className="text-blue-600 hover:text-blue-700 font-semibold hover:underline cursor-pointer"
-              >
-                Sign in
-              </button>
-            </p>
-          ) : (
-            <p>
-              New to HomeCheck?{' '}
-              <button
-                type="button"
-                onClick={() => { setMode('signup'); setError(null); }}
-                className="text-blue-600 hover:text-blue-700 font-semibold hover:underline cursor-pointer"
-              >
-                Create free account
-              </button>
-            </p>
-          )}
-        </div>
+        <div className="flex items-center justify-between pt-4 border-t border-[#ffffff12] text-[12px] text-[#a1a1a1]">
+          <button
+            type="button"
+            onClick={() => {
+              setMode(mode === 'signup' ? 'signin' : 'signup');
+              setError(null);
+            }}
+            className="hover:text-[#fafafa] cursor-pointer"
+          >
+            {mode === 'signup'
+              ? 'Already have an account? Sign in'
+              : 'Need an account? Register'}
+          </button>
 
-        {/* 1-Click Guest Bypass */}
-        <div className="pt-3 border-t border-stone-100 text-center">
           <button
             type="button"
             onClick={handleGuestBypass}
-            className="inline-flex items-center gap-1.5 text-xs text-stone-500 hover:text-stone-800 transition-colors cursor-pointer group"
+            className="text-[#fafafa] hover:underline cursor-pointer"
           >
-            <span>Or continue as guest without saving (stored in this browser) →</span>
+            {isStepTransition ? 'Continue to Step 4 →' : 'Skip for now →'}
           </button>
         </div>
       </div>

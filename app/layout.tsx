@@ -5,13 +5,13 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
-  themeColor: "#FAF8F5",
+  themeColor: "#0a0a0a",
 };
 
 export const metadata: Metadata = {
   title: "HomeCheck — Property Due-Diligence & Decision Dossier",
   description:
-    "Institutional property underwriting for home buyers in India. Calculate true handover cash drain, stage-gated legal checks, and micro-market reality before paying token money.",
+    "Don’t bet your life savings on a builder’s brochure. Uncover the true acquisition cost, EMI stress, and state-specific title checks before paying token money.",
   keywords: [
     "property due diligence India",
     "home buyer checklist",
@@ -21,21 +21,21 @@ export const metadata: Metadata = {
     "property legal check",
     "flat buying guide India",
   ],
-  authors: [{ name: "HomeCheck Team" }],
+  authors: [{ name: "Harsh Mule" }],
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://homecheck.in"),
   openGraph: {
-    title: "HomeCheck — Never Commit to a Property Blindly",
+    title: "HomeCheck — Don’t Bet Your Life Savings on a Builder’s Brochure",
     description:
-      "Calculate your true handover cash drain, stage-gated legal due diligence roadmap, and micro-market transaction reality before paying token advance.",
+      "Uncover your true handover cash outflow, EMI stress test, and state-specific legal checklist before paying token money.",
     url: "https://homecheck.in",
     siteName: "HomeCheck",
     locale: "en_IN",
     type: "website",
   },
   icons: {
-    icon: "/icon.svg",
-    shortcut: "/icon.svg",
-    apple: "/icon.svg",
+    icon: "/icon.svg?v=2",
+    shortcut: "/icon.svg?v=2",
+    apple: "/icon.svg?v=2",
   },
   robots: {
     index: true,
@@ -49,11 +49,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="light">
+    <html lang="en" className="dark scroll-smooth">
       <head>
-        <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+        <link rel="icon" href="/icon.svg?v=2" type="image/svg+xml" />
       </head>
-      <body className="bg-[#FAF8F5] text-stone-900 antialiased selection:bg-blue-600/20 selection:text-blue-900">
+      <body className="bg-[#0a0a0a] text-[#fafafa] antialiased selection:bg-[#fafafa]/20 selection:text-[#fafafa]">
         {children}
       </body>
     </html>

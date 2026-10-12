@@ -90,6 +90,9 @@ interface EvaluationStore {
   // Session & Auth isolation
   clearUserSession: () => void;
   claimEvaluation: (id: string, userId: string) => void;
+  claimAllLocalEvaluations: (userId: string) => void;
+  mergeCloudEvaluations: (cloudList: EvaluationSession[]) => void;
+  deleteEvaluation: (id: string) => void;
 
   // Checklist regeneration when property type changes
   regenerateChecklist: (id: string) => void;
@@ -130,6 +133,54 @@ export const useEvaluationStore = create<EvaluationStore>()(
           return {
             currentEvaluation: state.currentEvaluation?.id === id ? updatedEval : state.currentEvaluation,
             evaluations: { ...state.evaluations, [id]: updatedEval },
+          };
+        });
+      },
+
+      claimAllLocalEvaluations: (userId) => {
+        set((state) => {
+          const updatedEvaluations: Record<string, EvaluationSession> = { ...state.evaluations };
+          Object.values(updatedEvaluations).forEach((evalItem) => {
+            if (!evalItem.userId) {
+              const updatedEval: EvaluationSession = {
+                ...evalItem,
+                userId,
+                updatedAt: new Date().toISOString(),
+              };
+              updatedEvaluations[evalItem.id] = updatedEval;
+              claimEvaluationInSupabase(evalItem.id, userId);
+              triggerCloudSync(updatedEval);
+            }
+          });
+          return {
+            currentEvaluation: state.currentEvaluation
+              ? updatedEvaluations[state.currentEvaluation.id] || state.currentEvaluation
+              : null,
+            evaluations: updatedEvaluations,
+          };
+        });
+      },
+
+      mergeCloudEvaluations: (cloudList) => {
+        set((state) => {
+          const merged: Record<string, EvaluationSession> = { ...state.evaluations };
+          cloudList.forEach((cloudEval) => {
+            const localEval = merged[cloudEval.id];
+            if (!localEval || new Date(cloudEval.updatedAt) > new Date(localEval.updatedAt)) {
+              merged[cloudEval.id] = cloudEval;
+            }
+          });
+          return { evaluations: merged };
+        });
+      },
+
+      deleteEvaluation: (id) => {
+        set((state) => {
+          const nextEvals = { ...state.evaluations };
+          delete nextEvals[id];
+          return {
+            evaluations: nextEvals,
+            currentEvaluation: state.currentEvaluation?.id === id ? null : state.currentEvaluation,
           };
         });
       },

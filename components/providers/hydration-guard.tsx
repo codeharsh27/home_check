@@ -11,11 +11,8 @@ export function HydrationGuard({ children }: { children: React.ReactNode }) {
 
   if (!mounted) {
     return (
-      <div className="min-h-screen bg-[#FAF8F5] flex items-center justify-center">
-        <div className="space-y-3 text-center">
-          <div className="w-8 h-8 border-2 border-stone-800 border-t-transparent rounded-full animate-spin mx-auto" />
-          <p className="text-xs text-stone-500 font-medium">Loading evaluation...</p>
-        </div>
+      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
+        <div className="w-5 h-5 border-2 border-[#a1a1a1] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }

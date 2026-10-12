@@ -3,28 +3,20 @@
 import React from 'react';
 import { PropertyDetails, ChecklistItem } from '@/types';
 import { SupportedRegion } from '@/lib/regional-documents';
-import {
-  ShieldCheck,
-  FileText,
-  AlertCircle,
-  HelpCircle,
-  Scale,
-  ExternalLink,
-  ArrowRight,
-  ArrowLeft,
-  CheckCircle2,
-  Clock,
-  UserCheck,
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { ArrowRight, ArrowLeft, Check } from 'lucide-react';
 
 interface Step4Props {
   property: PropertyDetails;
   checklist?: ChecklistItem[];
   activeRegion: SupportedRegion;
-  onUpdateChecklistItem: (itemId: string, updates: Partial<ChecklistItem>) => void;
+  onUpdateChecklistItem: (
+    itemId: string,
+    updates: Partial<ChecklistItem>
+  ) => void;
   onNext: () => void;
   onBack: () => void;
+  onRequestSave?: () => void;
+  isSaved?: boolean;
 }
 
 export const Step4DeepInvestigation: React.FC<Step4Props> = ({
@@ -34,16 +26,17 @@ export const Step4DeepInvestigation: React.FC<Step4Props> = ({
   onUpdateChecklistItem,
   onNext,
   onBack,
+  onRequestSave,
+  isSaved = false,
 }) => {
-  // Free seller items vs professional lawyer review items
   const freeSellerItems = checklist.filter(
-    (item) => item.whoToContact === 'Seller / Developer' || item.whoToContact === 'Self'
+    (item) =>
+      item.whoToContact === 'Seller / Developer' || item.whoToContact === 'Self'
   );
-  const lawyerItems = checklist.filter(
-    (item) => item.whoToContact === 'Property Lawyer' || item.status === 'needs-pro'
+  const hasTrackedAnyDoc = freeSellerItems.some(
+    (item) => item.requested || item.received
   );
 
-  // Region specific label
   const regionNames: Record<SupportedRegion, string> = {
     maharashtra: 'Maharashtra (MahaRERA & IGR)',
     karnataka: 'Karnataka (K-RERA & BBMP/BDA)',
@@ -53,188 +46,177 @@ export const Step4DeepInvestigation: React.FC<Step4Props> = ({
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8">
-      {/* Step Header */}
-      <div className="space-y-1.5">
-        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
-          Step 4 of 5 • Verification & Legal Gating
-        </div>
-        <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-stone-900">
-          Independent Due Diligence & Legal Gates
+    <div className="max-w-3xl mx-auto space-y-8">
+      {/* Editorial Section Header */}
+      <div className="space-y-2">
+        <p className="text-[11px] font-mono uppercase tracking-[0.14em] text-[#a1a1a1]">
+          04 / LEGAL &amp; STATUTORY CHECKLIST ·{' '}
+          {regionNames[activeRegion].toUpperCase()}
+        </p>
+        <h1 className="font-serif text-[32px] sm:text-[40px] text-[#fafafa] tracking-[-0.025em] leading-[1.12]">
+          Pre-booking document verification
         </h1>
-        <p className="text-sm text-stone-500">
-          Region: <strong className="text-stone-800">{regionNames[activeRegion]}</strong>. Separate what you can demand from the developer for free versus when to pay an independent property advocate.
+        <p className="text-[14px] text-[#a1a1a1] max-w-xl leading-relaxed">
+          Separate the documents you should request directly from the builder for
+          free before paying a token from the title checks that require an
+          independent property advocate.
         </p>
       </div>
 
-      {/* 1. What is Already Cleared / Publicly Verified */}
-      <div className="bg-emerald-50/50 border border-emerald-200/80 rounded-2xl p-5 sm:p-6 space-y-3">
-        <div className="flex items-center gap-2 text-emerald-800 font-semibold text-sm">
-          <ShieldCheck className="w-4 h-4 text-emerald-600" />
-          Publicly Established Status
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-          <div className="p-3 bg-white rounded-xl border border-emerald-100 flex items-start gap-2.5">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-            <div>
-              <div className="font-semibold text-stone-900">RERA Registration Status</div>
-              <div className="text-stone-600">
-                {property.reraId ? `Registered (${property.reraId})` : 'Self-declared by listing / promoter'}
-              </div>
-            </div>
-          </div>
-
-          <div className="p-3 bg-white rounded-xl border border-emerald-100 flex items-start gap-2.5">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-            <div>
-              <div className="font-semibold text-stone-900">Project Timeline & Phase</div>
-              <div className="text-stone-600">
-                {property.expectedPossession ? `Declared handover: ${property.expectedPossession}` : 'Under construction phase'}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* 2. Free Seller Checks (What to Demand Before Paying Any Advance) */}
-      <div className="bg-white border border-stone-200/90 rounded-2xl p-6 sm:p-7 shadow-[0_1px_4px_rgba(0,0,0,0.03)] space-y-4">
-        <div className="flex items-center justify-between">
+      {/* 1. Free Developer Requests */}
+      <div className="bg-[#141414] border border-[#ffffff14] rounded-2xl p-6 sm:p-8 space-y-6">
+        <div className="flex items-end justify-between flex-wrap gap-2 pb-5 border-b border-[#ffffff12]">
           <div>
-            <h2 className="text-base font-bold text-stone-900 flex items-center gap-2">
-              <FileText className="w-4 h-4 text-blue-600" /> Free Document Check (Demand from Developer)
-            </h2>
-            <p className="text-xs text-stone-500">
-              Never pay more than ₹25,000 without examining these fundamental sanctions.
+            <p className="text-[11px] font-mono uppercase tracking-wider text-[#a1a1a1]">
+              PART A · REQUEST FROM BUILDER (FREE)
             </p>
+            <h2 className="font-serif text-[24px] text-[#fafafa] mt-1">
+              Documents to inspect before paying token
+            </h2>
           </div>
-          <span className="text-xs font-semibold text-stone-600 bg-stone-100 px-2.5 py-1 rounded-full">
-            {freeSellerItems.filter((i) => i.received).length}/{freeSellerItems.length} Received
+          <span className="text-[12px] font-mono text-[#a1a1a1]">
+            {freeSellerItems.filter((i) => i.received).length} /{' '}
+            {freeSellerItems.length} VERIFIED
           </span>
         </div>
 
-        <div className="space-y-3">
-          {freeSellerItems.slice(0, 4).map((item) => (
+        <div className="divide-y divide-[#ffffff10]">
+          {freeSellerItems.slice(0, 6).map((item) => (
             <div
               key={item.id}
-              className="p-4 rounded-xl border border-stone-200 hover:border-stone-300 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-stone-50/40"
+              className="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
             >
               <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <span className="font-semibold text-stone-900 text-sm">{item.title}</span>
-                  {item.received ? (
-                    <span className="text-[10px] font-semibold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded">
-                      Received
+                <div className="flex items-center gap-2.5">
+                  <span className="font-medium text-[#fafafa] text-[14px]">
+                    {item.title}
+                  </span>
+                  {item.received && (
+                    <span className="text-[11px] font-mono uppercase text-[#96a766]">
+                      · Verified
                     </span>
-                  ) : item.requested ? (
-                    <span className="text-[10px] font-semibold bg-blue-100 text-blue-800 px-2 py-0.5 rounded">
-                      Requested
-                    </span>
-                  ) : (
-                    <span className="text-[10px] font-semibold bg-stone-100 text-stone-600 px-2 py-0.5 rounded">
-                      Not Requested Yet
+                  )}
+                  {!item.received && item.requested && (
+                    <span className="text-[11px] font-mono uppercase text-[#bda96d]">
+                      · Requested
                     </span>
                   )}
                 </div>
-                <p className="text-xs text-stone-500">{item.whyItMatters}</p>
+                <p className="text-[13px] text-[#a1a1a1] leading-relaxed">
+                  {item.whyItMatters}
+                </p>
               </div>
 
               <div className="flex items-center gap-2 shrink-0">
                 {!item.requested && !item.received && (
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="text-xs"
-                    onClick={() => onUpdateChecklistItem(item.id, { requested: true })}
+                  <button
+                    type="button"
+                    className="px-3.5 py-1.5 rounded-full bg-[#0a0a0a] hover:bg-[#1f1f1f] border border-[#ffffff14] text-[12px] text-[#e5e5e5] cursor-pointer transition-colors"
+                    onClick={() =>
+                      onUpdateChecklistItem(item.id, { requested: true })
+                    }
                   >
-                    Mark as Requested
-                  </Button>
+                    Mark requested
+                  </button>
                 )}
-                {!item.received && (
-                  <Button
-                    size="sm"
-                    className="text-xs bg-emerald-600 hover:bg-emerald-700 text-white"
-                    onClick={() => onUpdateChecklistItem(item.id, { received: true, status: 'verified' })}
+                {!item.received ? (
+                  <button
+                    type="button"
+                    className="px-3.5 py-1.5 rounded-full bg-[#fafafa] hover:bg-[#e5e5e5] text-[#0a0a0a] text-[12px] font-medium cursor-pointer transition-colors"
+                    onClick={() =>
+                      onUpdateChecklistItem(item.id, {
+                        received: true,
+                        status: 'verified',
+                      })
+                    }
                   >
-                    Mark Received
-                  </Button>
+                    Mark verified
+                  </button>
+                ) : (
+                  <span className="inline-flex items-center gap-1 text-[12px] text-[#96a766]">
+                    <Check className="w-3.5 h-3.5" /> Done
+                  </span>
                 )}
               </div>
             </div>
           ))}
         </div>
+
+        {!isSaved && hasTrackedAnyDoc && onRequestSave && (
+          <div className="pt-4 border-t border-[#ffffff12] flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[12px] animate-step-enter">
+            <span className="text-[#a1a1a1]">
+              Document checklist progress is currently saved in this browser only.
+            </span>
+            <button
+              type="button"
+              onClick={onRequestSave}
+              className="text-[#fafafa] hover:underline font-medium cursor-pointer text-left sm:text-right shrink-0"
+            >
+              Sign in to sync across devices →
+            </button>
+          </div>
+        )}
       </div>
 
-      {/* 3. When & How to Involve an Independent Lawyer */}
-      <div className="bg-white border border-stone-200/90 rounded-2xl p-6 sm:p-7 shadow-[0_1px_4px_rgba(0,0,0,0.03)] space-y-4">
-        <div className="flex items-start justify-between">
+      {/* 2. Independent Lawyer Scope */}
+      <div className="bg-[#141414] border border-[#ffffff14] rounded-2xl p-6 sm:p-8 space-y-5">
+        <div className="flex items-start justify-between flex-wrap gap-2 pb-4 border-b border-[#ffffff12]">
           <div>
-            <h2 className="text-base font-bold text-stone-900 flex items-center gap-2">
-              <Scale className="w-4 h-4 text-purple-600" /> When to Hire an Independent Lawyer
-            </h2>
-            <p className="text-xs text-stone-500">
-              Avoid spending legal fees early. Engage an advocate only at this exact trigger point.
+            <p className="text-[11px] font-mono uppercase tracking-wider text-[#a1a1a1]">
+              PART B · INDEPENDENT ADVOCATE SCOPE
             </p>
+            <h2 className="font-serif text-[24px] text-[#fafafa] mt-1">
+              When to hire an independent property lawyer
+            </h2>
           </div>
-          <div className="text-right">
-            <span className="text-xs font-semibold text-purple-700 bg-purple-50 border border-purple-200 px-2.5 py-1 rounded-full">
-              Standard Fee: ₹5,000 – ₹10,000
-            </span>
-          </div>
+          <span className="text-[12px] text-[#a1a1a1]">
+            Typical fee: ₹10,000 – ₹20,000
+          </span>
         </div>
 
-        <div className="p-4 rounded-xl bg-purple-50/40 border border-purple-100 space-y-2 text-xs text-stone-700 leading-relaxed">
-          <div className="font-semibold text-purple-900 flex items-center gap-1.5">
-            <UserCheck className="w-3.5 h-3.5" /> The Golden Rule for First-Time Buyers:
-          </div>
-          <p>
-            Do <strong>NOT</strong> rely on the bank's panel advocate. Bank advocates verify title only to ensure the bank can recover loan money, not to safeguard your personal advance token!
-          </p>
-          <p>
-            <strong>The Trigger Point:</strong> Only hire an advocate once you have finalized the price and are ready to execute the draft Agreement to Sale. Hand them the 30-year Search Report and Draft Agreement.
-          </p>
-        </div>
+        <p className="text-[13px] text-[#a1a1a1] leading-relaxed">
+          Bank loan lawyers only verify whether the property can be mortgaged by
+          the bank — they do not protect your booking advance or audit delay
+          compensation clauses. Engage an independent lawyer after price
+          negotiation, before signing the Agreement for Sale (10%–20% down payment
+          stage) for {property.name || 'this project'}.
+        </p>
 
-        <div className="space-y-2 pt-2">
-          <div className="text-xs font-semibold text-stone-800">
-            Tasks to hand directly to your lawyer:
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-            <div className="p-2.5 bg-stone-50 rounded-lg border border-stone-200 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-purple-600" />
-              <span>30-Year Encumbrance Search (Nil Encumbrance)</span>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1 text-[13px]">
+          {[
+            '30-year Sub-Registrar Encumbrance Certificate (EC) audit',
+            'Draft Agreement for Sale delay & cancellation clause review',
+            'Joint Development Agreement (JDA) builder vs. landowner unit check',
+            'Floor-specific Commencement Certificate (CC) & lender NOC check',
+          ].map((task) => (
+            <div
+              key={task}
+              className="p-3.5 bg-[#0a0a0a] rounded-xl border border-[#ffffff14] text-[#e5e5e5]"
+            >
+              {task}
             </div>
-            <div className="p-2.5 bg-stone-50 rounded-lg border border-stone-200 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-purple-600" />
-              <span>Draft Agreement unilateral clauses scrutiny</span>
-            </div>
-            <div className="p-2.5 bg-stone-50 rounded-lg border border-stone-200 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-purple-600" />
-              <span>Joint Development Agreement (JDA) landowner share check</span>
-            </div>
-            <div className="p-2.5 bg-stone-50 rounded-lg border border-stone-200 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-purple-600" />
-              <span>Commencement Certificate (CC) floor sanction validation</span>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
 
       {/* Navigation Footer */}
-      <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-4 border-t border-stone-200">
-        <Button
-          variant="outline"
+      <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-4 border-t border-[#ffffff14]">
+        <button
+          type="button"
           onClick={onBack}
-          className="w-full sm:w-auto text-stone-600 inline-flex items-center justify-center gap-1.5"
+          className="w-full sm:w-auto px-5 py-2.5 rounded-full bg-[#141414] hover:bg-[#1f1f1f] border border-[#ffffff14] text-xs text-[#e5e5e5] inline-flex items-center justify-center gap-1.5 cursor-pointer"
         >
-          <ArrowLeft className="w-4 h-4" /> Back to Market Reality
-        </Button>
+          <ArrowLeft className="w-3.5 h-3.5" /> Back
+        </button>
 
-        <Button
+        <button
+          type="button"
           onClick={onNext}
-          className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 shadow-sm inline-flex items-center justify-center gap-2"
+          className="w-full sm:w-auto px-6 py-2.5 rounded-full bg-[#fafafa] hover:bg-[#e5e5e5] text-[#0a0a0a] text-[13px] font-medium inline-flex items-center justify-center gap-2 cursor-pointer"
         >
-          Generate Executive Decision Report <ArrowRight className="w-4 h-4" />
-        </Button>
+          <span>Open Final Decision Dossier</span>
+          <ArrowRight className="w-4 h-4" />
+        </button>
       </div>
     </div>
   );

@@ -1,367 +1,273 @@
 'use client';
 
 import React from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { 
-  IndianRupee, 
-  ShieldCheck, 
-  TrendingUp, 
-  ArrowRight, 
-  AlertTriangle, 
-  CheckCircle2, 
-  Clock, 
-  FileCheck,
-  Building2,
-  Scale,
-  Landmark,
-  FileSpreadsheet
-} from 'lucide-react';
+import { ArrowUp, Plus, Globe, SlidersHorizontal, CheckCircle2, FileCheck2 } from 'lucide-react';
 import { useEvaluationStore, DEMO_PROPERTY } from '@/store/evaluation';
 
 export const CoreEnginesSection: React.FC = () => {
   const router = useRouter();
   const startNewEvaluation = useEvaluationStore((state) => state.startNewEvaluation);
 
-  const handleOpenDemoWithStep = (stepIndex: number) => {
+  const handleOpenDemo = () => {
     const id = startNewEvaluation(DEMO_PROPERTY, true);
     router.push(`/evaluation/${id}`);
   };
 
   return (
-    <section id="how-it-works" className="py-24 sm:py-32 bg-[#08090B] relative overflow-hidden border-b border-white/[0.06]">
-      {/* Subtle ambient lighting glows */}
-      <div className="absolute top-1/4 left-[-150px] w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute top-2/3 right-[-150px] w-[500px] h-[500px] bg-amber-500/5 rounded-full blur-[140px] pointer-events-none" />
+    <section id="what-we-check" className="pt-20 sm:pt-28 pb-16 bg-[#0a0a0a] relative">
+      {/* Centered Section Header */}
+      <div className="max-w-[680px] mx-auto px-6 text-center mb-14 sm:mb-20">
+        <h2 className="font-serif text-[34px] sm:text-[44px] font-normal tracking-[-0.02em] text-[#fafafa] leading-[1.12]">
+          What we check in every evaluation
+        </h2>
+        <p className="mt-3.5 text-[15px] sm:text-[16px] text-[#a1a1a1] font-sans leading-[1.6] max-w-[520px] mx-auto">
+          Our 5-step workspace looks beyond the builder’s marketing brochure to calculate your real financial commitment and organize your legal verification.
+        </p>
+      </div>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-8">
-        
-        {/* Section Header */}
-        <div className="max-w-2xl mb-20 sm:mb-28">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.04] border border-white/10 backdrop-blur-md mb-4">
-            <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
-            <span className="text-[11px] font-mono uppercase tracking-widest text-stone-300">
-              DEEP UNDERWRITING ENGINES
-            </span>
-          </div>
+      {/* 3 Alternating Rows inside 1px solid #ffffff14 Grid Container (max-w-[1200px]) */}
+      <div className="max-w-[1200px] mx-auto border-t border-b border-[#ffffff14]">
+        {/* ── ROW 1: Visual Card Left, Copy Right (Steps 2 & 3: Financial Reality) ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 border-b border-[#ffffff14]">
+          {/* Left Visual Column */}
+          <div className="p-5 sm:p-8 lg:p-10 lg:border-r border-[#ffffff14] flex items-center justify-center">
+            <div
+              onClick={handleOpenDemo}
+              className="relative w-full aspect-[1584/1360] rounded-2xl overflow-hidden border border-[#ffffff14] flex items-center justify-center p-5 sm:p-8 cursor-pointer group"
+            >
+              <img
+                src="/images/landing/engine-courtyard.jpg"
+                alt="Minimalist architectural courtyard at dusk"
+                className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.02]"
+              />
+              <div className="absolute inset-0 bg-black/25" />
 
-          <h2 className="text-3xl sm:text-5xl font-serif font-normal tracking-tight text-white leading-[1.12]">
-            Audits that feel like having an institutional team.
-          </h2>
-
-          <p className="mt-5 text-base sm:text-lg text-stone-400 font-sans leading-relaxed">
-            Listing sites show marketing brochures and quoted base rates. HomeCheck deconstructs the non-financeable cash requirements, stage-gated title risks, and locality negotiation gaps before you sign.
-          </p>
-        </div>
-
-        {/* ── Feature 01: Alternating Row (Visual Left, Narrative Right) ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center mb-28 sm:mb-36">
-          
-          {/* Visual Left: Dark Glassmorphic Cash Drain Terminal */}
-          <div className="lg:col-span-7 order-2 lg:order-1">
-            <div className="relative rounded-3xl bg-gradient-to-b from-[#14161C] to-[#0D0E12] border border-white/[0.08] p-6 sm:p-8 shadow-[0_0_50px_-15px_rgba(0,0,0,0.8)] overflow-hidden group">
-              {/* Top ambient highlight line */}
-              <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-blue-500/40 to-transparent" />
-              
-              {/* Window header */}
-              <div className="flex items-center justify-between pb-5 border-b border-white/[0.06] mb-6">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-2.5 h-2.5 rounded-full bg-rose-500/60" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-amber-500/60" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/60" />
-                  <span className="text-xs font-mono text-stone-400 ml-2">ENGINE // HANDOVER_CASH_DRAIN</span>
-                </div>
-                <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-md">
-                  STRESS_CALCULATED
-                </span>
-              </div>
-
-              {/* Realistic Visual Artifact: Cash Drain Ladder */}
-              <div className="space-y-4">
-                <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.05] flex items-center justify-between">
-                  <div>
-                    <span className="text-xs text-stone-400 block font-mono">BASE AGREEMENT VALUE</span>
-                    <span className="text-lg sm:text-xl font-semibold text-white">₹ 68,00,000</span>
+              {/* Frosted-Glass Window Overlay */}
+              <div className="relative z-10 w-full max-w-[390px] rounded-2xl bg-[#171717]/75 backdrop-blur-2xl border border-white/15 p-4 sm:p-5 shadow-[0_24px_60px_rgba(0,0,0,0.55)]">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-white/25" />
+                    <span className="w-2 h-2 rounded-full bg-white/25" />
+                    <span className="w-2 h-2 rounded-full bg-white/25" />
                   </div>
-                  <div className="text-right">
-                    <span className="text-xs text-stone-400 block font-mono">MAX BANK LTV (80%)</span>
-                    <span className="text-lg sm:text-xl font-semibold text-blue-400">₹ 54,40,000</span>
-                  </div>
+                  <span className="w-2.5 h-[1.5px] bg-white/30 rounded-full" />
                 </div>
 
-                {/* The Unfinanceable Possession Cash Drain */}
-                <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-b from-amber-500/[0.06] to-transparent border border-amber-500/20 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
-                      <span className="text-xs font-mono uppercase tracking-wider text-amber-300">
-                        Liquid Out-Of-Pocket Drain
-                      </span>
-                    </div>
-                    <span className="text-base sm:text-lg font-mono font-bold text-amber-300">
-                      ₹ 18,24,000
+                <div className="text-center mb-4">
+                  <span className="text-[16px] sm:text-[18px] font-medium text-[#fafafa] tracking-[-0.01em]">
+                    Step 2 &amp; 3 · True Cost Model
+                  </span>
+                </div>
+
+                <div className="flex flex-wrap items-center justify-center gap-1.5 mb-4">
+                  {['20% Down Payment', 'Stamp Duty & Reg', 'Society Corpus', '+1.25% EMI Stress'].map((chip) => (
+                    <span
+                      key={chip}
+                      className="px-2.5 py-1 rounded-full bg-white/[0.08] border border-white/10 text-[11px] text-[#e5e5e5]"
+                    >
+                      {chip}
                     </span>
-                  </div>
-
-                  {/* Micro Breakdown rows */}
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-[11px] font-mono text-stone-400">
-                    <div className="p-2 rounded-lg bg-black/40 border border-white/[0.04]">
-                      <span className="block text-[10px] text-stone-500">20% DOWN PMT</span>
-                      <span className="text-stone-200">₹ 13,60,000</span>
-                    </div>
-                    <div className="p-2 rounded-lg bg-black/40 border border-white/[0.04]">
-                      <span className="block text-[10px] text-stone-500">STAMP & REG</span>
-                      <span className="text-stone-200">₹ 4,76,000</span>
-                    </div>
-                    <div className="p-2 rounded-lg bg-black/40 border border-white/[0.04]">
-                      <span className="block text-[10px] text-stone-500">2-YR CORPUS</span>
-                      <span className="text-stone-200">₹ 1,88,000</span>
-                    </div>
-                    <div className="p-2 rounded-lg bg-black/40 border border-white/[0.04]">
-                      <span className="block text-[10px] text-stone-500">FITOUT BASIC</span>
-                      <span className="text-stone-200">₹ 8,00,000</span>
-                    </div>
-                  </div>
+                  ))}
                 </div>
 
-                {/* Floating Rate Hike Stress Indicator */}
-                <div className="flex items-center justify-between p-3 rounded-xl bg-white/[0.02] border border-white/[0.04] text-xs">
-                  <div className="flex items-center gap-2 text-stone-400">
-                    <Clock className="w-3.5 h-3.5 text-blue-400" />
-                    <span>RBI +1.25% Repo Hike Impact:</span>
+                <div className="rounded-xl bg-black/40 border border-white/10 p-3.5">
+                  <p className="text-[12px] sm:text-[13px] text-[#d4d4d4] leading-[1.5] mb-4">
+                    ₹68L Quoted Base → ₹76.84L True Acquisition Cost · Requires ₹18.24L liquid savings before handover
+                  </p>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2 text-[#a1a1a1]">
+                      <Plus className="w-3.5 h-3.5" />
+                      <Globe className="w-3.5 h-3.5" />
+                      <SlidersHorizontal className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="w-7 h-7 rounded-full bg-[#fafafa] text-[#0a0a0a] flex items-center justify-center shadow-md">
+                      <ArrowUp className="w-3.5 h-3.5 stroke-[2.2]" />
+                    </div>
                   </div>
-                  <span className="font-mono text-stone-200 font-medium">
-                    +₹4,420/mo <span className="text-stone-500">(or +48 mos tenure)</span>
-                  </span>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Narrative Right */}
-          <div className="lg:col-span-5 order-1 lg:order-2 space-y-5">
-            <span className="text-xs font-mono uppercase tracking-[2px] text-blue-400">
-              01 // FINANCIAL UNDERWRITING
+          {/* Right Copy Column */}
+          <div className="p-6 sm:p-12 lg:p-16 flex flex-col justify-center items-start">
+            <span className="text-[12px] font-mono text-[#a1a1a1] tracking-[0.01em] mb-2">
+              Steps 2 &amp; 3 · Financial Reality
             </span>
-
-            <h3 className="text-2xl sm:text-4xl font-serif font-normal text-white leading-tight">
-              Banks finance the agreement. You finance possession.
+            <h3 className="font-serif text-[26px] sm:text-[32px] font-normal text-[#fafafa] tracking-[-0.02em] leading-[1.15]">
+              True Cost &amp; Cash Shortfall Calculator
             </h3>
-
-            <p className="text-stone-400 leading-relaxed text-sm sm:text-base">
-              Buyers budget for the 20% down payment and assume the home loan handles the rest. In reality, mandatory non-financeable obligations — stamp duty, registration, advance society maintenance corpus, infrastructure cess, and basic interiors — demand ₹15L–₹25L in liquid cash right at possession.
+            <p className="mt-3.5 text-[14px] sm:text-[15px] text-[#a1a1a1] leading-[1.65] max-w-[420px]">
+              Enter your actual liquid savings, monthly income, and co-owner details. We calculate the full non-loanable cash required for Stamp Duty, Registration, GST, and Society Corpus — plus how your EMI holds up under a +1.25% RBI rate hike.
             </p>
-
-            <div className="pt-2">
-              <button
-                onClick={() => handleOpenDemoWithStep(2)}
-                className="inline-flex items-center gap-2 text-sm font-mono text-white hover:text-blue-400 transition-colors group cursor-pointer"
-              >
-                <span>Simulate your possession liquidity gap</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={handleOpenDemo}
+              className="mt-6 px-4 py-2 rounded-full bg-[#171717] hover:bg-[#262626] border border-[#ffffff14] text-[13px] font-medium text-[#e5e5e5] transition-colors cursor-pointer"
+            >
+              Try Calculator in Sample
+            </button>
           </div>
         </div>
 
-        {/* ── Feature 02: Alternating Row (Narrative Left, Visual Right) ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center mb-28 sm:mb-36">
-          
-          {/* Narrative Left */}
-          <div className="lg:col-span-5 space-y-5">
-            <span className="text-xs font-mono uppercase tracking-[2px] text-emerald-400">
-              02 // LEGAL RISK CONTAINMENT
+        {/* ── ROW 2: Copy Left, Visual Card Right (Step 4: State-Specific Legal Checklist) ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 border-b border-[#ffffff14]">
+          {/* Left Copy Column */}
+          <div className="p-6 sm:p-12 lg:p-16 flex flex-col justify-center items-start order-2 lg:order-1 lg:border-r border-[#ffffff14]">
+            <span className="text-[12px] font-mono text-[#a1a1a1] tracking-[0.01em] mb-2">
+              Step 4 · Regional Legal Gating
             </span>
-
-            <h3 className="text-2xl sm:text-4xl font-serif font-normal text-white leading-tight">
-              Never release token advances before municipal CC validation.
+            <h3 className="font-serif text-[26px] sm:text-[32px] font-normal text-[#fafafa] tracking-[-0.02em] leading-[1.15]">
+              State-Aware Document Checklists
             </h3>
-
-            <p className="text-stone-400 leading-relaxed text-sm sm:text-base">
-              Builders routinely rush buyers into signing non-refundable booking applications with ₹50,000–₹2,00,000 token cheques before the 30-year Nil Encumbrance Certificate (EC), municipal Commencement Certificate (CC) floor sanction, or lender Bank NOC are produced. HomeCheck enforces a stage-gated document barrier.
+            <p className="mt-3.5 text-[14px] sm:text-[15px] text-[#a1a1a1] leading-[1.65] max-w-[420px]">
+              Get a tailored document checklist for Maharashtra (7/12 Utara &amp; Index II), Karnataka (A-Khata &amp; Mother Deed), Tamil Nadu (Patta/Chitta), or Delhi-NCR. Clearly see what to demand from the builder for free vs. what needs a property lawyer.
             </p>
-
-            <div className="pt-2">
-              <button
-                onClick={() => handleOpenDemoWithStep(4)}
-                className="inline-flex items-center gap-2 text-sm font-mono text-white hover:text-emerald-400 transition-colors group cursor-pointer"
-              >
-                <span>Inspect stage-gated legal protocols</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={handleOpenDemo}
+              className="mt-6 px-4 py-2 rounded-full bg-[#171717] hover:bg-[#262626] border border-[#ffffff14] text-[13px] font-medium text-[#e5e5e5] transition-colors cursor-pointer"
+            >
+              View Regional Checklist
+            </button>
           </div>
 
-          {/* Visual Right: Dark Glassmorphic Stage-Gated Document Shield */}
-          <div className="lg:col-span-7">
-            <div className="relative rounded-3xl bg-gradient-to-b from-[#14161C] to-[#0D0E12] border border-white/[0.08] p-6 sm:p-8 shadow-[0_0_50px_-15px_rgba(0,0,0,0.8)] overflow-hidden">
-              <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-emerald-500/40 to-transparent" />
-              
-              <div className="flex items-center justify-between pb-5 border-b border-white/[0.06] mb-6">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-2.5 h-2.5 rounded-full bg-rose-500/60" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-amber-500/60" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/60" />
-                  <span className="text-xs font-mono text-stone-400 ml-2">AUDIT // STAGE_GATED_TITLE_SHIELD</span>
-                </div>
-                <span className="text-[10px] font-mono text-blue-400 bg-blue-500/10 border border-blue-500/20 px-2 py-0.5 rounded-md">
-                  STAGE_1_ACTIVE
-                </span>
-              </div>
+          {/* Right Visual Column */}
+          <div className="p-5 sm:p-8 lg:p-10 flex items-center justify-center order-1 lg:order-2">
+            <div
+              onClick={handleOpenDemo}
+              className="relative w-full aspect-[1584/1360] rounded-2xl overflow-hidden border border-[#ffffff14] flex items-center justify-center p-5 sm:p-8 cursor-pointer group"
+            >
+              <img
+                src="/images/hero_property.jpg"
+                alt="Twilight residential facade"
+                className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.02]"
+              />
+              <div className="absolute inset-0 bg-black/45" />
 
-              {/* Realistic Document Checklist Rows */}
-              <div className="space-y-3">
-                {/* Item 1: RERA Registered */}
-                <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/[0.05] flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                    <div>
-                      <span className="text-xs font-medium text-white block">MahaRERA Project ID P52100012345</span>
-                      <span className="text-[11px] text-stone-500 font-mono">Quarterly compliances updated · Escrow active</span>
-                    </div>
+              {/* Composite 2-Card Overlay */}
+              <div className="relative z-10 w-full max-w-[420px] grid grid-cols-12 gap-3 items-center">
+                <div className="col-span-5 rounded-2xl bg-[#171717]/85 backdrop-blur-xl border border-white/15 p-3.5 shadow-2xl flex flex-col justify-between h-[185px]">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-mono text-[#a1a1a1]">STEP 4 // GATES</span>
+                    <FileCheck2 className="w-3.5 h-3.5 text-[#96a766]" />
                   </div>
-                  <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">
-                    VERIFIED
-                  </span>
+                  <div className="my-auto py-2">
+                    <div className="text-[11px] text-[#a1a1a1]">Free vs. Lawyer</div>
+                    <div className="text-[15px] font-serif text-[#fafafa] mt-0.5">State Guide</div>
+                  </div>
+                  <div className="flex items-center gap-1.5 text-[10px] text-[#96a766]">
+                    <CheckCircle2 className="w-3 h-3" />
+                    <span>MH · KA · TN · NCR</span>
+                  </div>
                 </div>
 
-                {/* Item 2: Commencement Certificate Floor Check */}
-                <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/[0.05] flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                    <div>
-                      <span className="text-xs font-medium text-white block">Municipal Commencement Cert (CC)</span>
-                      <span className="text-[11px] text-stone-500 font-mono">Sanctioned up to 18th floor · Unit on 12th floor</span>
+                <div className="col-span-7 rounded-2xl bg-[#171717]/80 backdrop-blur-2xl border border-white/15 p-4 shadow-2xl flex flex-col justify-between h-[185px]">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-white/25" />
+                      <span className="w-2 h-2 rounded-full bg-white/25" />
+                      <span className="w-2 h-2 rounded-full bg-white/25" />
                     </div>
+                    <span className="w-2.5 h-[1.5px] bg-white/30 rounded-full" />
                   </div>
-                  <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">
-                    SANCTIONED
-                  </span>
-                </div>
 
-                {/* Item 3: 30-Year Encumbrance Form 15 */}
-                <div className="p-3.5 rounded-2xl bg-amber-500/[0.03] border border-amber-500/20 flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <Clock className="w-4 h-4 text-amber-400 shrink-0" />
-                    <div>
-                      <span className="text-xs font-medium text-white block">30-Year Nil Encumbrance Certificate (Form 15)</span>
-                      <span className="text-[11px] text-amber-300/80 font-mono">Sub-registrar record pending buyer advocate inspection</span>
-                    </div>
-                  </div>
-                  <span className="text-[10px] font-mono text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded">
-                    MANDATORY_PRE_TOKEN
-                  </span>
-                </div>
+                  <p className="text-[12px] text-[#e5e5e5] leading-[1.45] my-auto">
+                    Ask builder for RERA ID, Sanction Plan &amp; CC first — hire an advocate for 30-Yr EC &amp; Bank NOC before agreement
+                  </p>
 
-                {/* Item 4: Construction Lender Bank NOC */}
-                <div className="p-3.5 rounded-2xl bg-rose-500/[0.03] border border-rose-500/20 flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
-                    <div>
-                      <span className="text-xs font-medium text-white block">Construction Lender Bank NOC</span>
-                      <span className="text-[11px] text-rose-300/80 font-mono">Land is mortgaged to HDFC Ltd · Specific unit release letter required</span>
+                  <div className="flex items-center justify-between pt-2 border-t border-white/10">
+                    <div className="flex items-center gap-2 text-[#a1a1a1]">
+                      <Plus className="w-3.5 h-3.5" />
+                      <Globe className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="w-6 h-6 rounded-full bg-[#fafafa] text-[#0a0a0a] flex items-center justify-center">
+                      <ArrowUp className="w-3 h-3 stroke-[2.2]" />
                     </div>
                   </div>
-                  <span className="text-[10px] font-mono text-rose-400 bg-rose-500/10 px-2 py-0.5 rounded">
-                    RELEASE_REQUIRED
-                  </span>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* ── Feature 03: Alternating Row (Visual Left, Narrative Right) ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
-          
-          {/* Visual Left: Micro-Market Price Radar */}
-          <div className="lg:col-span-7 order-2 lg:order-1">
-            <div className="relative rounded-3xl bg-gradient-to-b from-[#14161C] to-[#0D0E12] border border-white/[0.08] p-6 sm:p-8 shadow-[0_0_50px_-15px_rgba(0,0,0,0.8)] overflow-hidden">
-              <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-500/40 to-transparent" />
-              
-              <div className="flex items-center justify-between pb-5 border-b border-white/[0.06] mb-6">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-2.5 h-2.5 rounded-full bg-rose-500/60" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-amber-500/60" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/60" />
-                  <span className="text-xs font-mono text-stone-400 ml-2">RADAR // LOCALITY_MEDIAN_BENCHMARK</span>
-                </div>
-                <span className="text-[10px] font-mono text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 px-2 py-0.5 rounded-md">
-                  WAKAD_PUNE_2KM
-                </span>
-              </div>
+        {/* ── ROW 3: Visual Card Left, Copy Right (Steps 3 & 5: Alternatives & Printable Report) ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-2">
+          {/* Left Visual Column */}
+          <div className="p-5 sm:p-8 lg:p-10 lg:border-r border-[#ffffff14] flex items-center justify-center">
+            <div
+              onClick={handleOpenDemo}
+              className="relative w-full aspect-[1584/1360] rounded-2xl overflow-hidden border border-[#ffffff14] flex items-center justify-center p-5 sm:p-8 cursor-pointer group"
+            >
+              <img
+                src="/images/landing/engine-skyline.jpg"
+                alt="Aerial twilight residential towers in misty valley"
+                className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.02]"
+              />
+              <div className="absolute inset-0 bg-black/25" />
 
-              {/* Price comparison card */}
-              <div className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/[0.05]">
-                    <span className="text-[10px] font-mono text-stone-500 block">BUILDER ASKING RATE</span>
-                    <span className="text-lg font-bold text-white">₹ 6,476 <span className="text-xs font-normal text-stone-400">/sq.ft</span></span>
+              {/* Frosted-Glass Window Overlay */}
+              <div className="relative z-10 w-full max-w-[390px] rounded-2xl bg-[#171717]/75 backdrop-blur-2xl border border-white/15 p-4 sm:p-5 shadow-[0_24px_60px_rgba(0,0,0,0.55)]">
+                <div className="flex items-center justify-between mb-5">
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-white/25" />
+                    <span className="w-2 h-2 rounded-full bg-white/25" />
+                    <span className="w-2 h-2 rounded-full bg-white/25" />
                   </div>
-                  <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/[0.05]">
-                    <span className="text-[10px] font-mono text-stone-500 block">LOCALITY MEDIAN CLOSE</span>
-                    <span className="text-lg font-bold text-stone-300">₹ 6,100 <span className="text-xs font-normal text-stone-400">/sq.ft</span></span>
-                  </div>
-                  <div className="p-3.5 rounded-2xl bg-emerald-500/[0.05] border border-emerald-500/20">
-                    <span className="text-[10px] font-mono text-emerald-400 block">NEGOTIATION ROOM</span>
-                    <span className="text-lg font-bold text-emerald-400">₹ 3.95 Lakhs</span>
-                  </div>
+                  <span className="w-2.5 h-[1.5px] bg-white/30 rounded-full" />
                 </div>
 
-                {/* Nearby Active Alternatives within 2.5 km */}
-                <div className="p-4 rounded-2xl bg-black/40 border border-white/[0.05] space-y-2.5">
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-stone-400 block">
-                    ACTIVE MICRO-MARKET ALTERNATIVES (WITHIN 2.5 KM)
+                <div className="flex flex-col items-center text-center mb-5">
+                  <div
+                    className="w-10 h-10 rounded-xl flex items-center justify-center mb-3 shadow-lg border border-white/20"
+                    style={{
+                      background:
+                        'linear-gradient(135deg, #6691a3 0%, #96a766 50%, #bda96d 100%)',
+                    }}
+                  >
+                    <span className="text-[11px] font-mono font-bold text-[#0a0a0a]">PDF</span>
+                  </div>
+                  <span className="text-[14px] font-medium text-[#fafafa]">
+                    Step 5 · Printable Decision Dossier
                   </span>
-                  
-                  <div className="space-y-2 text-xs">
-                    <div className="flex items-center justify-between p-2 rounded-xl bg-white/[0.02] hover:bg-white/[0.04] transition-colors">
-                      <div className="flex items-center gap-2">
-                        <Building2 className="w-3.5 h-3.5 text-blue-400" />
-                        <span className="text-stone-200">Rohan Tarang · 2 BHK (1,020 sq.ft)</span>
-                      </div>
-                      <span className="font-mono text-stone-300">₹ 64.5 Lakhs <span className="text-[10px] text-stone-500">(₹6,323/sq.ft)</span></span>
-                    </div>
+                  <span className="text-[12px] text-[#a1a1a1] mt-0.5">
+                    Pre-Token · Pre-Agreement · Possession Snagging
+                  </span>
+                </div>
 
-                    <div className="flex items-center justify-between p-2 rounded-xl bg-white/[0.02] hover:bg-white/[0.04] transition-colors">
-                      <div className="flex items-center gap-2">
-                        <Building2 className="w-3.5 h-3.5 text-blue-400" />
-                        <span className="text-stone-200">Kolte Patil Western Avenue · 2 BHK</span>
-                      </div>
-                      <span className="font-mono text-stone-300">₹ 69.0 Lakhs <span className="text-[10px] text-stone-500">(₹6,570/sq.ft)</span></span>
-                    </div>
+                <div className="rounded-xl bg-black/40 border border-white/10 p-3 flex items-center justify-between">
+                  <span className="text-[12px] text-[#d4d4d4] pl-1">
+                    Export 12-point brief for your site visit &amp; lawyer
+                  </span>
+                  <div className="w-7 h-7 rounded-full bg-[#fafafa] text-[#0a0a0a] flex items-center justify-center shrink-0">
+                    <ArrowUp className="w-3.5 h-3.5 stroke-[2.2]" />
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Narrative Right */}
-          <div className="lg:col-span-5 order-1 lg:order-2 space-y-5">
-            <span className="text-xs font-mono uppercase tracking-[2px] text-cyan-400">
-              03 // VALUATION INTELLIGENCE
+          {/* Right Copy Column */}
+          <div className="p-6 sm:p-12 lg:p-16 flex flex-col justify-center items-start">
+            <span className="text-[12px] font-mono text-[#a1a1a1] tracking-[0.01em] mb-2">
+              Steps 3 &amp; 5 · Alternatives &amp; Report
             </span>
-
-            <h3 className="text-2xl sm:text-4xl font-serif font-normal text-white leading-tight">
-              Walk into the sales office with real sub-registrar benchmarks.
+            <h3 className="font-serif text-[26px] sm:text-[32px] font-normal text-[#fafafa] tracking-[-0.02em] leading-[1.15]">
+              Locality Alternatives &amp; Printable Brief
             </h3>
-
-            <p className="text-stone-400 leading-relaxed text-sm sm:text-base">
-              Developers artificially inflate base prices by padding floor rise, premium location charges (PLC), and clubhouse fees. HomeCheck cross-references actual registered transaction ranges in the exact micro-market and scans active nearby inventory within 2–4 km.
+            <p className="mt-3.5 text-[14px] sm:text-[15px] text-[#a1a1a1] leading-[1.65] max-w-[420px]">
+              Compare your shortlisted unit’s per-sq.ft carpet rate against similar residential options in the same locality, and export a structured, print-ready PDF decision report to take to the builder sales office or your advocate.
             </p>
-
-            <div className="pt-2">
-              <button
-                onClick={() => handleOpenDemoWithStep(3)}
-                className="inline-flex items-center gap-2 text-sm font-mono text-white hover:text-cyan-400 transition-colors group cursor-pointer"
-              >
-                <span>Compare micro-market pricing radar</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={handleOpenDemo}
+              className="mt-6 px-4 py-2 rounded-full bg-[#171717] hover:bg-[#262626] border border-[#ffffff14] text-[13px] font-medium text-[#e5e5e5] transition-colors cursor-pointer"
+            >
+              Preview Printable Dossier
+            </button>
           </div>
         </div>
-
       </div>
     </section>
   );

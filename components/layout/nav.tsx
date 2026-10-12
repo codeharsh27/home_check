@@ -2,25 +2,56 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { User as UserIcon, LogOut, Menu, X } from 'lucide-react';
-import { AuthModal } from '@/components/auth/auth-modal';
+import { LogOut, Menu, X } from 'lucide-react';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { useEvaluationStore } from '@/store/evaluation';
 import type { User } from '@supabase/supabase-js';
 
-const navItems = [
-  { label: 'Home', href: '#', active: true },
-  { label: 'How It Works', href: '#how-it-works' },
+const navItems: { label: string; href: string; external?: boolean }[] = [
   { label: 'What We Check', href: '#what-we-check' },
-  { label: 'Sample', href: '#sample-evaluation' },
-  { label: 'FAQ', href: '#faq' },
+  { label: 'Sample Dossier', href: '#sample-evaluation' },
+  { label: 'Buyer Guides', href: '#guides' },
+  {
+    label: 'PM Case Study ↗',
+    href: 'https://harshmule.vercel.app/project/homecheck?lens=pm',
+    external: true,
+  },
 ];
 
 /**
- * In-Hero Navbar (Original location inside the rounded rectangular hero image)
+ * Custom Architectural "H" Monogram for HomeCheck (100% original IP)
+ */
+export const BrandMark: React.FC<{ className?: string }> = ({ className = 'w-7 h-7' }) => (
+  <svg
+    viewBox="0 0 32 32"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+  >
+    {/* Left Structural Pillar */}
+    <rect x="5" y="5" width="5.5" height="22" rx="1.5" fill="#FAFAFA" />
+    {/* Right Structural Pillar with Cantilevered Roof */}
+    <path
+      d="M21.5 5C21.5 4.17157 22.1716 3.5 23 3.5H27V27H21.5V5Z"
+      fill="#FAFAFA"
+    />
+    {/* Architectural Crossbeam & Check Diagonal */}
+    <path
+      d="M10.5 14H21.5V19H10.5V14Z"
+      fill="#FAFAFA"
+    />
+    <path
+      d="M12.5 8.5L18.5 3.5H23L16 9.5H12.5V8.5Z"
+      fill="#FAFAFA"
+      fillOpacity="0.65"
+    />
+  </svg>
+);
+
+/**
+ * In-Hero Navbar — exact 1:1 Kero AI top bar
  */
 export const HeroNavbar: React.FC = () => {
-  const [authModalOpen, setAuthModalOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const { clearUserSession } = useEvaluationStore();
@@ -42,126 +73,122 @@ export const HeroNavbar: React.FC = () => {
   };
 
   return (
-    <>
-      <header className="absolute top-0 left-0 right-0 z-40 px-3 sm:px-6 md:px-8 py-4 sm:py-5 pointer-events-auto">
-        <div className="max-w-7xl mx-auto relative flex items-center justify-between">
-          
-          {/* Left: Brand Logo */}
-          <Link href="/" className="flex items-center gap-1 z-10 group">
-            <span className="text-white text-xl sm:text-2xl font-extrabold tracking-tight drop-shadow-md">
-              HomeCheck<span className="text-blue-500">.</span>
-            </span>
+    <header className="absolute top-0 left-0 right-0 z-40 px-6 py-5 pointer-events-auto">
+      <div className="max-w-[1136px] mx-auto flex items-center justify-between">
+        {/* Left: Geometric Brand Mark + HomeCheck */}
+        <Link href="/" className="flex items-center gap-2.5 z-10 group">
+          <BrandMark className="w-6 h-6 transition-transform duration-200 group-hover:scale-105" />
+          <span className="text-[#fafafa] text-[15px] font-medium tracking-[-0.02em]">
+            HomeCheck
+          </span>
+        </Link>
+
+        {/* Center: 4 Clean Links */}
+        <nav className="hidden md:flex items-center gap-8 lg:gap-12 absolute left-1/2 -translate-x-1/2">
+          {navItems.map((item) => (
+            <a
+              key={item.label}
+              href={item.href}
+              target={item.external ? '_blank' : undefined}
+              rel={item.external ? 'noopener noreferrer' : undefined}
+              className="text-[14px] font-normal text-[#e5e5e5] hover:text-[#a1a1a1] transition-colors tracking-[-0.01em]"
+            >
+              {item.label}
+            </a>
+          ))}
+        </nav>
+
+        {/* Right: Sign In + White Pill CTA */}
+        <div className="flex items-center gap-5 z-10">
+          {user ? (
+            <div className="flex items-center gap-3">
+              <Link
+                href="/dashboard"
+                className="hidden sm:inline-block text-[14px] font-normal text-[#e5e5e5] hover:text-[#a1a1a1] transition-colors"
+              >
+                Dashboard
+              </Link>
+              <button
+                onClick={handleSignOut}
+                title="Sign out"
+                className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-[#fafafa] transition-colors cursor-pointer"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          ) : (
+            <Link
+              href="/login"
+              className="hidden sm:inline-block text-[14px] font-normal text-[#e5e5e5] hover:text-[#a1a1a1] transition-colors cursor-pointer"
+            >
+              Sign In
+            </Link>
+          )}
+
+          <Link
+            href="/dashboard?new=true"
+            className="px-4 py-2 rounded-full bg-[#fafafa] hover:bg-[#e5e5e5] text-[#0a0a0a] text-[13px] font-medium tracking-[-0.01em] transition-all cursor-pointer shadow-sm"
+          >
+            Start Free Audit
           </Link>
 
-          {/* Center: Nav Pill Bar (Desktop) */}
-          <nav className="hidden lg:flex items-center gap-1 px-2 py-1.5 rounded-full bg-white/20 backdrop-blur-md border border-white/30 shadow-lg absolute left-1/2 -translate-x-1/2 z-10">
+          {/* Mobile Hamburger Toggle */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="md:hidden p-2 rounded-full bg-white/10 hover:bg-white/20 text-[#fafafa] transition-colors cursor-pointer"
+            aria-label="Toggle navigation menu"
+          >
+            {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Dropdown Menu Drawer */}
+      {mobileMenuOpen && (
+        <div className="md:hidden mt-3 p-4 rounded-2xl bg-[#171717]/95 backdrop-blur-xl border border-white/10 shadow-2xl space-y-3">
+          <nav className="flex flex-col space-y-1">
             {navItems.map((item) => (
               <a
                 key={item.label}
                 href={item.href}
-                className={`px-4 sm:px-5 py-2 rounded-full text-xs font-semibold tracking-wide transition-all ${
-                  item.active
-                    ? 'bg-white text-stone-900 shadow-md'
-                    : 'text-white/90 hover:text-white hover:bg-white/15'
-                }`}
+                target={item.external ? '_blank' : undefined}
+                rel={item.external ? 'noopener noreferrer' : undefined}
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-3 py-2.5 rounded-xl text-sm text-[#e5e5e5] hover:text-white hover:bg-white/5 transition-colors"
               >
                 {item.label}
               </a>
             ))}
           </nav>
-
-          {/* Right: Auth Action Buttons & Mobile Hamburger */}
-          <div className="flex items-center gap-1.5 sm:gap-2.5 z-10">
-            {user ? (
-              <div className="flex items-center gap-1.5 sm:gap-2">
-                <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/15 backdrop-blur-md border border-white/25 text-xs text-white">
-                  <UserIcon className="w-3.5 h-3.5" />
-                  <span className="max-w-[100px] md:max-w-[140px] truncate">{user.email}</span>
-                </div>
-                <button
-                  onClick={handleSignOut}
-                  title="Sign out"
-                  className="p-1.5 sm:p-2 rounded-full bg-white/15 hover:bg-white/25 text-white transition-colors cursor-pointer"
-                >
-                  <LogOut className="w-4 h-4" />
-                </button>
-              </div>
-            ) : (
-              <div className="flex items-center gap-1.5 sm:gap-2.5">
-                <button
-                  onClick={() => setAuthModalOpen(true)}
-                  className="px-3 sm:px-5 py-1.5 sm:py-2 rounded-full text-xs font-semibold text-white/90 hover:text-white bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/25 transition-all shadow-xs cursor-pointer"
-                >
-                  Login
-                </button>
-                <a
-                  href="#hero-intake"
-                  className="hidden sm:inline-flex px-4 sm:px-5 py-1.5 sm:py-2 rounded-full text-xs font-bold text-white bg-[#2563EB] hover:bg-[#1D4ED8] transition-all shadow-md shadow-blue-600/30 cursor-pointer"
-                >
-                  Evaluate
-                </a>
-              </div>
-            )}
-
-            {/* Mobile Hamburger Toggle */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 rounded-full bg-white/15 hover:bg-white/25 text-white transition-colors cursor-pointer"
-              aria-label="Toggle navigation menu"
+          <div className="pt-2 border-t border-white/10 flex items-center justify-between gap-2">
+            <Link
+              href="/dashboard?new=true"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex-1 py-2.5 rounded-full text-xs font-medium text-center text-[#0a0a0a] bg-[#fafafa] hover:bg-[#e5e5e5] transition-colors"
             >
-              {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
-            </button>
-          </div>
-
-        </div>
-
-        {/* Mobile Dropdown Menu Drawer */}
-        {mobileMenuOpen && (
-          <div className="lg:hidden mt-3 p-4 rounded-2xl bg-stone-900/90 backdrop-blur-xl border border-white/20 shadow-2xl space-y-3 animate-in fade-in slide-in-from-top-2 duration-200">
-            <nav className="flex flex-col space-y-1">
-              {navItems.map((item) => (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="px-3 py-2 rounded-xl text-xs font-semibold text-stone-200 hover:text-white hover:bg-white/10 transition-colors"
-                >
-                  {item.label}
-                </a>
-              ))}
-            </nav>
-            <div className="pt-2 border-t border-white/10 flex items-center justify-between gap-2">
-              <a
-                href="#hero-intake"
+              Start Free Audit
+            </Link>
+            {user ? (
+              <Link
+                href="/dashboard"
                 onClick={() => setMobileMenuOpen(false)}
-                className="flex-1 py-2 rounded-xl text-xs font-bold text-center text-white bg-[#2563EB] hover:bg-[#1D4ED8] transition-colors"
+                className="px-4 py-2.5 rounded-full text-xs font-medium text-[#e5e5e5] bg-white/10 hover:bg-white/15 transition-colors"
               >
-                Evaluate Property
-              </a>
-              {!user && (
-                <button
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    setAuthModalOpen(true);
-                  }}
-                  className="px-4 py-2 rounded-xl text-xs font-semibold text-stone-200 bg-white/10 hover:bg-white/20 transition-colors"
-                >
-                  Sign In
-                </button>
-              )}
-            </div>
+                Dashboard
+              </Link>
+            ) : (
+              <Link
+                href="/login"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-4 py-2.5 rounded-full text-xs font-medium text-[#e5e5e5] bg-white/10 hover:bg-white/15 transition-colors"
+              >
+                Sign In
+              </Link>
+            )}
           </div>
-        )}
-      </header>
-
-      <AuthModal
-        isOpen={authModalOpen}
-        onClose={() => setAuthModalOpen(false)}
-        onSuccess={() => {
-          supabase?.auth.getUser().then(({ data }) => setUser(data.user));
-        }}
-      />
-    </>
+        </div>
+      )}
+    </header>
   );
 };
 
@@ -169,21 +196,16 @@ export const HeroNavbar: React.FC = () => {
  * Sticky Navbar (Smoothly transitions in when user scrolls past hero)
  */
 export const StickyNavbar: React.FC = () => {
-  const [authModalOpen, setAuthModalOpen] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const { clearUserSession } = useEvaluationStore();
 
   useEffect(() => {
     const handleScroll = () => {
-      // Reveal sticky navbar once user scrolls down 220px
-      setIsScrolled(window.scrollY > 220);
+      setIsScrolled(window.scrollY > 260);
     };
-
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
-
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -204,134 +226,71 @@ export const StickyNavbar: React.FC = () => {
   };
 
   return (
-    <>
-      <header
-        className={`fixed top-0 left-0 right-0 z-50 bg-[#08090B]/90 backdrop-blur-xl border-b border-white/10 shadow-2xl py-2.5 sm:py-3 px-3 sm:px-6 md:px-8 transition-all duration-300 ease-out ${
-          isScrolled
-            ? 'translate-y-0 opacity-100 pointer-events-auto'
-            : '-translate-y-full opacity-0 pointer-events-none'
-        }`}
-      >
-        <div className="max-w-7xl mx-auto relative flex items-center justify-between">
-          
-          {/* Left: Brand Logo */}
-          <Link href="/" className="flex items-center gap-1 z-10 group">
-            <span className="text-white text-xl sm:text-2xl font-serif font-bold tracking-tight">
-              HomeCheck<span className="text-blue-500">.</span>
-            </span>
-          </Link>
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 bg-[#0a0a0a]/85 backdrop-blur-xl border-b border-[#ffffff14] py-3.5 px-6 transition-all duration-300 ease-out ${
+        isScrolled
+          ? 'translate-y-0 opacity-100 pointer-events-auto'
+          : '-translate-y-full opacity-0 pointer-events-none'
+      }`}
+    >
+      <div className="max-w-[1136px] mx-auto flex items-center justify-between">
+        <Link href="/" className="flex items-center gap-2.5 z-10 group">
+          <BrandMark className="w-6 h-6 transition-transform duration-200 group-hover:scale-105" />
+          <span className="text-[#fafafa] text-[15px] font-medium tracking-[-0.02em]">
+            HomeCheck
+          </span>
+        </Link>
 
-          {/* Center: Nav Pill Bar */}
-          <nav className="hidden lg:flex items-center gap-1 px-2 py-1.5 rounded-full bg-white/[0.04] border border-white/10 shadow-2xl absolute left-1/2 -translate-x-1/2 z-10">
-            {navItems.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                className={`px-4 sm:px-5 py-2 rounded-full text-xs font-mono tracking-wide transition-all ${
-                  item.active
-                    ? 'bg-white text-stone-900 shadow-md font-semibold'
-                    : 'text-stone-400 hover:text-white hover:bg-white/[0.06]'
-                }`}
-              >
-                {item.label}
-              </a>
-            ))}
-          </nav>
-
-          {/* Right: Auth Action Buttons & Mobile Hamburger */}
-          <div className="flex items-center gap-1.5 sm:gap-2.5 z-10">
-            {user ? (
-              <div className="flex items-center gap-1.5 sm:gap-2">
-                <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs bg-white/[0.06] border border-white/10 text-stone-200 shadow-2xs font-mono">
-                  <UserIcon className="w-3.5 h-3.5" />
-                  <span className="max-w-[100px] md:max-w-[140px] truncate">{user.email}</span>
-                </div>
-                <button
-                  onClick={handleSignOut}
-                  title="Sign out"
-                  className="p-1.5 sm:p-2 rounded-full bg-white/[0.06] hover:bg-white/[0.1] text-stone-300 transition-colors cursor-pointer border border-white/10"
-                >
-                  <LogOut className="w-4 h-4" />
-                </button>
-              </div>
-            ) : (
-              <div className="flex items-center gap-1.5 sm:gap-2.5">
-                <button
-                  onClick={() => setAuthModalOpen(true)}
-                  className="px-3 sm:px-5 py-1.5 sm:py-2 rounded-full text-xs font-mono text-stone-300 bg-white/[0.06] hover:bg-white/[0.1] border border-white/10 transition-all cursor-pointer"
-                >
-                  Login
-                </button>
-                <a
-                  href="#hero-intake"
-                  className="hidden sm:inline-flex px-4 sm:px-5 py-1.5 sm:py-2 rounded-full text-xs font-mono font-bold text-stone-900 bg-white hover:bg-stone-200 transition-all shadow-md cursor-pointer"
-                >
-                  Evaluate
-                </a>
-              </div>
-            )}
-
-            {/* Mobile Hamburger Toggle */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 rounded-full bg-white/[0.06] hover:bg-white/[0.1] text-stone-300 transition-colors cursor-pointer border border-white/10"
-              aria-label="Toggle navigation menu"
+        <nav className="hidden md:flex items-center gap-8 lg:gap-12 absolute left-1/2 -translate-x-1/2">
+          {navItems.map((item) => (
+            <a
+              key={item.label}
+              href={item.href}
+              target={item.external ? '_blank' : undefined}
+              rel={item.external ? 'noopener noreferrer' : undefined}
+              className="text-[14px] font-normal text-[#e5e5e5] hover:text-[#a1a1a1] transition-colors tracking-[-0.01em]"
             >
-              {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
-            </button>
-          </div>
+              {item.label}
+            </a>
+          ))}
+        </nav>
 
-        </div>
-
-        {/* Mobile Dropdown Menu Drawer */}
-        {mobileMenuOpen && (
-          <div className="lg:hidden mt-2 p-4 rounded-2xl bg-[#0E1014] border border-white/10 shadow-2xl space-y-3 animate-in fade-in slide-in-from-top-2 duration-200">
-            <nav className="flex flex-col space-y-1">
-              {navItems.map((item) => (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="px-3 py-2 rounded-xl text-xs font-mono text-stone-300 hover:text-white hover:bg-white/[0.06] transition-colors"
-                >
-                  {item.label}
-                </a>
-              ))}
-            </nav>
-            <div className="pt-2 border-t border-white/[0.08] flex items-center justify-between gap-2">
-              <a
-                href="#hero-intake"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex-1 py-2 rounded-xl text-xs font-mono font-bold text-center text-stone-900 bg-white hover:bg-stone-200 transition-colors"
+        <div className="flex items-center gap-5 z-10">
+          {user ? (
+            <div className="flex items-center gap-3">
+              <Link
+                href="/dashboard"
+                className="hidden sm:inline-block text-[14px] font-normal text-[#e5e5e5] hover:text-[#a1a1a1] transition-colors"
               >
-                Evaluate Property
-              </a>
-              {!user && (
-                <button
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    setAuthModalOpen(true);
-                  }}
-                  className="px-4 py-2 rounded-xl text-xs font-mono text-stone-300 bg-white/[0.06] hover:bg-white/[0.1] border border-white/10 transition-colors"
-                >
-                  Sign In
-                </button>
-              )}
+                Dashboard
+              </Link>
+              <button
+                onClick={handleSignOut}
+                title="Sign out"
+                className="p-1.5 rounded-full bg-[#171717] hover:bg-[#262626] text-[#e5e5e5] transition-colors cursor-pointer border border-[#ffffff14]"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+              </button>
             </div>
-          </div>
-        )}
-      </header>
+          ) : (
+            <Link
+              href="/login"
+              className="hidden sm:inline-block text-[14px] font-normal text-[#e5e5e5] hover:text-[#a1a1a1] transition-colors cursor-pointer"
+            >
+              Sign In
+            </Link>
+          )}
 
-      <AuthModal
-        isOpen={authModalOpen}
-        onClose={() => setAuthModalOpen(false)}
-        onSuccess={() => {
-          supabase?.auth.getUser().then(({ data }) => setUser(data.user));
-        }}
-      />
-    </>
+          <Link
+            href="/dashboard?new=true"
+            className="px-4 py-1.5 rounded-full bg-[#fafafa] hover:bg-[#e5e5e5] text-[#0a0a0a] text-[13px] font-medium tracking-[-0.01em] transition-all cursor-pointer"
+          >
+            Start Free Audit
+          </Link>
+        </div>
+      </div>
+    </header>
   );
 };
 
-// Default export for backward compatibility
 export const Navbar = HeroNavbar;

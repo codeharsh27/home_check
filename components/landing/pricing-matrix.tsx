@@ -1,259 +1,131 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { useRouter } from 'next/navigation';
-import { Check, ArrowRight, ShieldCheck, HelpCircle } from 'lucide-react';
+import { Check, Sparkles, ArrowRight } from 'lucide-react';
 import { useEvaluationStore, DEMO_PROPERTY } from '@/store/evaluation';
+
+const earlyAccessFeatures = [
+  'Portal URL parsing or manual property entry',
+  'True acquisition cost & hidden charges breakdown',
+  'Liquid cash shortfall / surplus calculator',
+  'EMI affordability & +1.25% rate-hike stress test',
+  'Same-locality alternative property suggestions',
+  'State-specific checklists (MH, KA, TN, Delhi-NCR)',
+  'Free builder checks vs. lawyer review separation',
+  'Printable PDF decision report & site-visit checklist',
+];
 
 export const PricingMatrixSection: React.FC = () => {
   const router = useRouter();
   const startNewEvaluation = useEvaluationStore((state) => state.startNewEvaluation);
 
-  const handleLaunch = () => {
+  const handleLoadSample = () => {
     const id = startNewEvaluation(DEMO_PROPERTY, true);
     router.push(`/evaluation/${id}`);
   };
 
   return (
-    <section id="pricing" className="py-24 sm:py-32 bg-[#0A0B0E] relative overflow-hidden border-b border-white/[0.06]">
-      {/* Ambient background glow behind featured tier */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-blue-600/10 rounded-full blur-[140px] pointer-events-none" />
-
-      <div className="max-w-6xl mx-auto px-4 sm:px-8 relative z-10">
-        
-        {/* Header */}
-        <div className="text-center max-w-2xl mx-auto mb-16 sm:mb-20 space-y-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.04] border border-white/10 backdrop-blur-md mb-2">
-            <span className="text-[11px] font-mono uppercase tracking-widest text-stone-300">
-              TRANSPARENT DUE DILIGENCE
-            </span>
-          </div>
-
-          <h2 className="text-3xl sm:text-5xl font-serif font-normal tracking-tight text-white leading-[1.12]">
-            Simple, predictable pricing.
+    <section id="pricing" className="py-20 sm:py-28 bg-[#0a0a0a] relative">
+      <div className="max-w-[1200px] mx-auto px-6">
+        {/* Centered Section Header */}
+        <div className="text-center mb-12 sm:mb-14 max-w-[560px] mx-auto">
+          <h2 className="font-serif text-[34px] sm:text-[44px] font-normal tracking-[-0.02em] text-[#fafafa] leading-[1.12]">
+            Open &amp; free during Early Access
           </h2>
-
-          <p className="text-stone-400 font-sans text-sm sm:text-base">
-            Protecting a ₹1 Crore lifetime decision shouldn’t come with hidden fees. Start free or unlock comprehensive underwriting.
+          <p className="mt-3.5 text-[15px] sm:text-[16px] text-[#a1a1a1] leading-[1.6]">
+            We built HomeCheck to help Indian homebuyers make safer property decisions. Use the complete 5-step evaluation workspace for free — no subscription or credit card required.
           </p>
         </div>
 
-        {/* 3 Sculpted Dark Tier Cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 mb-20 items-stretch">
-          
-          {/* Tier 1: Free Self-Audit */}
-          <div className="rounded-3xl bg-[#121316] border border-white/[0.08] p-7 sm:p-8 flex flex-col justify-between">
-            <div className="space-y-6">
-              <div>
-                <span className="text-xs font-mono text-stone-400 block mb-2">TIER // 01</span>
-                <h3 className="text-xl font-serif text-white">Self-Audit</h3>
-                <p className="text-xs text-stone-400 mt-1">For quick listing sanity checks and basic rate comparison.</p>
+        {/* Single Centered Early Access Card */}
+        <div className="max-w-[580px] mx-auto">
+          <div
+            className="rounded-2xl p-7 sm:p-10 flex flex-col justify-between relative overflow-hidden shadow-[0_24px_80px_rgba(0,0,0,0.65)]"
+            style={{
+              background:
+                'linear-gradient(180deg, #171717 35%, rgba(122, 98, 67, 0.48) 100%)',
+              border: '1px solid rgba(189, 169, 109, 0.35)',
+            }}
+          >
+            {/* Top Header Row */}
+            <div>
+              <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
+                <div>
+                  <div className="flex items-center gap-2 mb-2.5">
+                    <span className="text-[18px] font-medium text-[#fafafa]">
+                      Early Access Workspace
+                    </span>
+                    <span className="w-6 h-6 rounded-lg bg-white/10 border border-white/15 inline-flex items-center justify-center text-[#bda96d]">
+                      <Sparkles className="w-3.5 h-3.5" />
+                    </span>
+                  </div>
+
+                  {/* Sage-Green Pill Badge */}
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/35 border border-white/15">
+                    <span className="w-2 h-2 rounded-full bg-[#96a766]" />
+                    <span className="text-[11px] font-medium text-[#fafafa]">
+                      100% Free · No Login Required to Start
+                    </span>
+                  </div>
+                </div>
+
+                {/* Price Display */}
+                <div className="text-left sm:text-right">
+                  <div className="flex items-baseline sm:justify-end gap-1.5">
+                    <span className="font-serif text-[44px] sm:text-[50px] text-[#fafafa] leading-none tracking-[-0.02em]">
+                      ₹0
+                    </span>
+                    <span className="text-[13px] text-[#d4d4d4]">/ unlimited audits</span>
+                  </div>
+                  <p className="text-[12px] text-[#a1a1a1] mt-1">
+                    Full 5-step workspace unlocked
+                  </p>
+                </div>
               </div>
 
-              <div className="pt-2">
-                <span className="text-3xl sm:text-4xl font-serif font-bold text-white">₹ 0</span>
-                <span className="text-xs font-mono text-stone-500 ml-2">/ free forever</span>
-              </div>
+              {/* Divider + 8 Real Product Capabilities */}
+              <div className="border-t border-white/15 pt-6">
+                <div className="text-[11px] font-mono uppercase tracking-wider text-[#d4d4d4] mb-4">
+                  WHAT YOU CAN DO RIGHT NOW IN YOUR AUDIT:
+                </div>
 
-              <ul className="space-y-3 pt-4 border-t border-white/[0.06] text-xs font-sans text-stone-300">
-                <li className="flex items-center gap-2.5">
-                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Instant portal listing intake (Housing, NoBroker, 99acres)</span>
-                </li>
-                <li className="flex items-center gap-2.5">
-                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Base rate ₹/sq.ft and carpet efficiency calculation</span>
-                </li>
-                <li className="flex items-center gap-2.5">
-                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Standard 10-point Pre-Token document checklist</span>
-                </li>
-                <li className="flex items-center gap-2.5">
-                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Local browser session persistence</span>
-                </li>
-              </ul>
+                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3.5">
+                  {earlyAccessFeatures.map((item) => (
+                    <li
+                      key={item}
+                      className="flex items-start gap-2.5 text-[13px] text-[#fafafa] leading-[1.45]"
+                    >
+                      <span className="w-4 h-4 rounded-full bg-white/20 flex items-center justify-center shrink-0 mt-0.5">
+                        <Check className="w-2.5 h-2.5 text-[#fafafa]" />
+                      </span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
 
-            <div className="pt-8">
-              <button
-                onClick={handleLaunch}
-                className="w-full py-3 rounded-full bg-white/[0.06] hover:bg-white/[0.1] text-white text-xs font-mono transition-colors border border-white/10 cursor-pointer"
+            {/* Bottom Actions */}
+            <div className="mt-8 pt-6 border-t border-white/15 flex flex-col items-center gap-3">
+              <a
+                href="/dashboard?new=true"
+                className="w-full py-3.5 rounded-full bg-[#fafafa] hover:bg-[#e5e5e5] text-[#0a0a0a] text-[14px] font-medium text-center transition-colors shadow-lg cursor-pointer"
               >
-                Start Free Audit
+                Start Evaluating a Property — Free
+              </a>
+
+              <button
+                type="button"
+                onClick={handleLoadSample}
+                className="inline-flex items-center gap-1.5 text-[12px] text-[#d4d4d4] hover:text-[#fafafa] transition-colors cursor-pointer pt-1"
+              >
+                <span>Or explore with our pre-loaded Wakad 2BHK sample</span>
+                <ArrowRight className="w-3.5 h-3.5" />
               </button>
             </div>
-          </div>
-
-          {/* Tier 2: Decision Dossier (Featured with Glow) */}
-          <div className="rounded-3xl bg-[#141720] border-2 border-blue-500/50 p-7 sm:p-8 flex flex-col justify-between relative shadow-[0_0_50px_-15px_rgba(59,130,246,0.3)]">
-            <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-blue-600 text-[10px] font-mono text-white tracking-widest uppercase font-bold shadow-md">
-              MOST POPULAR
-            </div>
-
-            <div className="space-y-6">
-              <div>
-                <span className="text-xs font-mono text-blue-400 block mb-2">TIER // 02</span>
-                <h3 className="text-xl font-serif text-white">Decision Dossier</h3>
-                <p className="text-xs text-stone-300 mt-1">Full financial stress testing, micro-market benchmarks, and printable PDF dossier.</p>
-              </div>
-
-              <div className="pt-2">
-                <span className="text-3xl sm:text-4xl font-serif font-bold text-white">₹ 999</span>
-                <span className="text-xs font-mono text-stone-400 ml-2">/ property evaluation</span>
-              </div>
-
-              <ul className="space-y-3 pt-4 border-t border-white/[0.08] text-xs font-sans text-stone-200">
-                <li className="flex items-center gap-2.5 font-medium">
-                  <Check className="w-4 h-4 text-blue-400 shrink-0" />
-                  <span>Everything in Free Self-Audit</span>
-                </li>
-                <li className="flex items-center gap-2.5">
-                  <Check className="w-4 h-4 text-blue-400 shrink-0" />
-                  <span>Comprehensive Handover Cash Drain Ladder</span>
-                </li>
-                <li className="flex items-center gap-2.5">
-                  <Check className="w-4 h-4 text-blue-400 shrink-0" />
-                  <span>Floating Rate Hike Stress Test (+1.25% RBI Repo)</span>
-                </li>
-                <li className="flex items-center gap-2.5">
-                  <Check className="w-4 h-4 text-blue-400 shrink-0" />
-                  <span>Locality median transaction radar & 3 active comps</span>
-                </li>
-                <li className="flex items-center gap-2.5">
-                  <Check className="w-4 h-4 text-blue-400 shrink-0" />
-                  <span>Printable Executive Decision Dossier (PDF Export)</span>
-                </li>
-              </ul>
-            </div>
-
-            <div className="pt-8">
-              <button
-                onClick={handleLaunch}
-                className="w-full py-3 rounded-full bg-white text-stone-900 hover:bg-stone-200 text-xs font-mono font-bold transition-all shadow-lg cursor-pointer"
-              >
-                Generate Decision Dossier →
-              </button>
-            </div>
-          </div>
-
-          {/* Tier 3: Advocate Briefing Pack */}
-          <div className="rounded-3xl bg-[#121316] border border-white/[0.08] p-7 sm:p-8 flex flex-col justify-between">
-            <div className="space-y-6">
-              <div>
-                <span className="text-xs font-mono text-stone-400 block mb-2">TIER // 03</span>
-                <h3 className="text-xl font-serif text-white">Advocate Briefing Pack</h3>
-                <p className="text-xs text-stone-400 mt-1">For buyers hiring legal counsel or preparing for final possession snags.</p>
-              </div>
-
-              <div className="pt-2">
-                <span className="text-3xl sm:text-4xl font-serif font-bold text-white">₹ 2,499</span>
-                <span className="text-xs font-mono text-stone-500 ml-2">/ property evaluation</span>
-              </div>
-
-              <ul className="space-y-3 pt-4 border-t border-white/[0.06] text-xs font-sans text-stone-300">
-                <li className="flex items-center gap-2.5 font-medium">
-                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Everything in Decision Dossier</span>
-                </li>
-                <li className="flex items-center gap-2.5">
-                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>12-Point Independent Lawyer Scrutiny Briefing</span>
-                </li>
-                <li className="flex items-center gap-2.5">
-                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Joint Snagging Defect Audit Handover Checklist</span>
-                </li>
-                <li className="flex items-center gap-2.5">
-                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>State-specific regional document guidelines (MH, KA, DL, TS)</span>
-                </li>
-              </ul>
-            </div>
-
-            <div className="pt-8">
-              <button
-                onClick={handleLaunch}
-                className="w-full py-3 rounded-full bg-white/[0.06] hover:bg-white/[0.1] text-white text-xs font-mono transition-colors border border-white/10 cursor-pointer"
-              >
-                Inspect Advocate Pack
-              </button>
-            </div>
-          </div>
-
-        </div>
-
-        {/* Feature Comparison Matrix (Matching Kero AI) */}
-        <div className="pt-12 border-t border-white/[0.06]">
-          <div className="text-center mb-10">
-            <h3 className="text-xl sm:text-2xl font-serif text-white">Compare evaluation capabilities</h3>
-            <p className="text-xs font-mono text-stone-400 mt-1">Detailed feature breakdown across all diligence tiers</p>
-          </div>
-
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs font-mono text-stone-300 min-w-[600px]">
-              <thead>
-                <tr className="border-b border-white/[0.08] text-stone-500">
-                  <th className="py-3.5 px-4 font-normal">AUDIT CAPABILITY</th>
-                  <th className="py-3.5 px-4 font-normal text-center">SELF-AUDIT</th>
-                  <th className="py-3.5 px-4 font-normal text-center text-blue-400">DECISION DOSSIER</th>
-                  <th className="py-3.5 px-4 font-normal text-center">ADVOCATE PACK</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-white/[0.04]">
-                <tr>
-                  <td className="py-3.5 px-4 text-white">Multi-Portal Listing Decomposition</td>
-                  <td className="py-3.5 px-4 text-center text-emerald-400">✓</td>
-                  <td className="py-3.5 px-4 text-center text-emerald-400 font-bold">✓</td>
-                  <td className="py-3.5 px-4 text-center text-emerald-400">✓</td>
-                </tr>
-                <tr>
-                  <td className="py-3.5 px-4 text-white">Carpet Area & Rate / sq.ft Analysis</td>
-                  <td className="py-3.5 px-4 text-center text-emerald-400">✓</td>
-                  <td className="py-3.5 px-4 text-center text-emerald-400 font-bold">✓</td>
-                  <td className="py-3.5 px-4 text-center text-emerald-400">✓</td>
-                </tr>
-                <tr>
-                  <td className="py-3.5 px-4 text-white">Handover Possession Cash Drain Ladder</td>
-                  <td className="py-3.5 px-4 text-center text-stone-600">—</td>
-                  <td className="py-3.5 px-4 text-center text-emerald-400 font-bold">✓</td>
-                  <td className="py-3.5 px-4 text-center text-emerald-400">✓</td>
-                </tr>
-                <tr>
-                  <td className="py-3.5 px-4 text-white">Floating Rate Hike Stress Test (+1.25%)</td>
-                  <td className="py-3.5 px-4 text-center text-stone-600">—</td>
-                  <td className="py-3.5 px-4 text-center text-emerald-400 font-bold">✓</td>
-                  <td className="py-3.5 px-4 text-center text-emerald-400">✓</td>
-                </tr>
-                <tr>
-                  <td className="py-3.5 px-4 text-white">Micro-Market Sub-Registrar Comps Radar</td>
-                  <td className="py-3.5 px-4 text-center text-stone-600">—</td>
-                  <td className="py-3.5 px-4 text-center text-emerald-400 font-bold">✓</td>
-                  <td className="py-3.5 px-4 text-center text-emerald-400">✓</td>
-                </tr>
-                <tr>
-                  <td className="py-3.5 px-4 text-white">Printable Executive Dossier (PDF Export)</td>
-                  <td className="py-3.5 px-4 text-center text-stone-600">—</td>
-                  <td className="py-3.5 px-4 text-center text-emerald-400 font-bold">✓</td>
-                  <td className="py-3.5 px-4 text-center text-emerald-400">✓</td>
-                </tr>
-                <tr>
-                  <td className="py-3.5 px-4 text-white">Lawyer Briefing Notes & Questionnaire</td>
-                  <td className="py-3.5 px-4 text-center text-stone-600">—</td>
-                  <td className="py-3.5 px-4 text-center text-stone-600 font-bold">—</td>
-                  <td className="py-3.5 px-4 text-center text-emerald-400">✓</td>
-                </tr>
-                <tr>
-                  <td className="py-3.5 px-4 text-white">Defect Snagging Possession Checklist</td>
-                  <td className="py-3.5 px-4 text-center text-stone-600">—</td>
-                  <td className="py-3.5 px-4 text-center text-stone-600 font-bold">—</td>
-                  <td className="py-3.5 px-4 text-center text-emerald-400">✓</td>
-                </tr>
-              </tbody>
-            </table>
           </div>
         </div>
-
       </div>
     </section>
   );

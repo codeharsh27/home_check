@@ -2,9 +2,7 @@
 
 import React, { useState } from 'react';
 import { BuyerContext, PropertyDetails } from '@/types';
-import { Home, TrendingUp, Briefcase, IndianRupee, ArrowRight, ArrowLeft, ShieldCheck, Sparkles } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { ArrowRight, ArrowLeft } from 'lucide-react';
 
 interface Step2Props {
   property: PropertyDetails;
@@ -15,7 +13,6 @@ interface Step2Props {
 }
 
 export const Step2IntentFinance: React.FC<Step2Props> = ({
-  property,
   buyerContext = {},
   onUpdateContext,
   onNext,
@@ -25,13 +22,17 @@ export const Step2IntentFinance: React.FC<Step2Props> = ({
     buyerContext.purpose || 'Personal'
   );
   const [availableFunds, setAvailableFunds] = useState<string>(
-    buyerContext.availableFunds ? String(buyerContext.availableFunds) : '2000000'
+    buyerContext.availableFunds
+      ? String(buyerContext.availableFunds)
+      : '2000000'
   );
   const [monthlyIncome, setMonthlyIncome] = useState<string>(
     buyerContext.monthlyIncome ? String(buyerContext.monthlyIncome) : '160000'
   );
   const [existingObligations, setExistingObligations] = useState<string>(
-    buyerContext.existingObligations ? String(buyerContext.existingObligations) : '15000'
+    buyerContext.existingObligations
+      ? String(buyerContext.existingObligations)
+      : '15000'
   );
   const [hasJointApplicant, setHasJointApplicant] = useState<boolean>(
     buyerContext.hasJointApplicant || false
@@ -80,286 +81,244 @@ export const Step2IntentFinance: React.FC<Step2Props> = ({
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
-      {/* Intro Header */}
-      <div className="space-y-1.5">
-        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
-          Step 2 of 5 • Intent & Financial Capacity
-        </div>
-        <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-stone-900">
-          Why Are You Buying & What Can You Fund?
+    <div className="max-w-3xl mx-auto space-y-8">
+      {/* Editorial Section Header */}
+      <div className="space-y-2">
+        <p className="text-[11px] font-mono uppercase tracking-[0.14em] text-[#a1a1a1]">
+          02 / INTENT &amp; FINANCIAL CAPACITY
+        </p>
+        <h1 className="font-serif text-[32px] sm:text-[40px] text-[#fafafa] tracking-[-0.025em] leading-[1.12]">
+          Define your budget &amp; loan parameters
         </h1>
-        <p className="text-sm text-stone-500">
-          Your motive dictates which risks matter most. Your upfront capital decides if you face cash-trap hurdles before handover.
+        <p className="text-[14px] text-[#a1a1a1] max-w-xl leading-relaxed">
+          Banks cap home loans at 80% of the base agreement value. Your liquid
+          savings must cover the 20% down payment plus non-loanable stamp duty,
+          registration, and society corpus charges.
         </p>
       </div>
 
-      <div className="bg-white border border-stone-200/90 rounded-2xl p-6 sm:p-8 shadow-[0_1px_4px_rgba(0,0,0,0.03)] space-y-8">
+      <div className="bg-[#141414] border border-[#ffffff14] rounded-2xl p-6 sm:p-8 space-y-8">
         {/* Section 1: Purchase Motive */}
         <div className="space-y-3">
-          <label className="text-sm font-semibold text-stone-900 block">
-            1. Primary Motive for Purchasing
+          <label className="text-[12px] font-mono uppercase tracking-wider text-[#a1a1a1] block">
+            Purchase Motive
           </label>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            {/* Personal */}
-            <div
-              onClick={() => setPurpose('Personal')}
-              className={`p-4 rounded-xl border cursor-pointer transition-all ${
-                purpose === 'Personal' || purpose === 'Primary residence'
-                  ? 'border-blue-600 bg-blue-50/60 ring-1 ring-blue-500/20 shadow-sm'
-                  : 'border-stone-200 hover:border-stone-300 hover:bg-stone-50/60'
-              }`}
-            >
-              <div className="flex items-center gap-2.5">
-                <div className="p-2 rounded-lg bg-blue-100 text-blue-700">
-                  <Home className="w-4 h-4" />
+            {[
+              {
+                key: 'Personal' as const,
+                title: 'Self-Use Residence',
+                desc: 'Focuses on possession timeline, livability, and monthly cashflow comfort.',
+              },
+              {
+                key: 'Investment' as const,
+                title: 'Rental / Investment',
+                desc: 'Focuses on rental yield, entry price vs. locality median, and holding cost.',
+              },
+              {
+                key: 'Business' as const,
+                title: 'Commercial / Studio',
+                desc: 'Focuses on commercial zoning permissions, signage, and utility load.',
+              },
+            ].map((item) => {
+              const active =
+                purpose === item.key ||
+                (item.key === 'Personal' && purpose === 'Primary residence');
+              return (
+                <div
+                  key={item.key}
+                  onClick={() => setPurpose(item.key)}
+                  className={`p-4 rounded-xl border cursor-pointer transition-colors ${
+                    active
+                      ? 'border-[#fafafa] bg-[#1c1c1c]'
+                      : 'border-[#ffffff14] bg-[#0a0a0a] hover:border-[#ffffff28]'
+                  }`}
+                >
+                  <div className="font-medium text-[#fafafa] text-[14px]">
+                    {item.title}
+                  </div>
+                  <p className="text-[12px] text-[#a1a1a1] mt-1.5 leading-relaxed">
+                    {item.desc}
+                  </p>
                 </div>
-                <div className="font-semibold text-stone-900 text-sm">Personal End-Use</div>
-              </div>
-              <p className="text-xs text-stone-600 mt-2 leading-relaxed">
-                Prioritizes possession certainty, livability, school/office commute, and low maintenance surprises.
-              </p>
-            </div>
-
-            {/* Investment */}
-            <div
-              onClick={() => setPurpose('Investment')}
-              className={`p-4 rounded-xl border cursor-pointer transition-all ${
-                purpose === 'Investment'
-                  ? 'border-blue-600 bg-blue-50/60 ring-1 ring-blue-500/20 shadow-sm'
-                  : 'border-stone-200 hover:border-stone-300 hover:bg-stone-50/60'
-              }`}
-            >
-              <div className="flex items-center gap-2.5">
-                <div className="p-2 rounded-lg bg-emerald-100 text-emerald-700">
-                  <TrendingUp className="w-4 h-4" />
-                </div>
-                <div className="font-semibold text-stone-900 text-sm">Rental / Investment</div>
-              </div>
-              <p className="text-xs text-stone-600 mt-2 leading-relaxed">
-                Prioritizes net rental yield (~2.5–3.2%), capital appreciation rate, and tenant vacancy risks.
-              </p>
-            </div>
-
-            {/* Business / Commercial */}
-            <div
-              onClick={() => setPurpose('Business')}
-              className={`p-4 rounded-xl border cursor-pointer transition-all ${
-                purpose === 'Business'
-              ? 'border-blue-600 bg-blue-50/60 ring-1 ring-blue-500/20 shadow-sm'
-              : 'border-stone-200 hover:border-stone-300 hover:bg-stone-50/60'
-              }`}
-            >
-              <div className="flex items-center gap-2.5">
-                <div className="p-2 rounded-lg bg-purple-100 text-purple-700">
-                  <Briefcase className="w-4 h-4" />
-                </div>
-                <div className="font-semibold text-stone-900 text-sm">Business / Studio</div>
-              </div>
-              <p className="text-xs text-stone-600 mt-2 leading-relaxed">
-                Prioritizes commercial zoning permissions, power back-up load, and high customer footfall access.
-              </p>
-            </div>
+              );
+            })}
           </div>
         </div>
 
         {/* Section 2: Financial Realities */}
-        <div className="space-y-4 pt-6 border-t border-stone-100">
-          <label className="text-sm font-semibold text-stone-900 block">
-            2. Available Capital & Cashflow
+        <div className="space-y-5 pt-6 border-t border-[#ffffff12]">
+          <label className="text-[12px] font-mono uppercase tracking-wider text-[#a1a1a1] block">
+            Capital &amp; Monthly Income
           </label>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
-              <label className="text-xs font-semibold text-stone-700 flex items-center justify-between">
-                <span>Total Liquid Savings for Upfront Costs</span>
-                <span className="text-[11px] text-stone-600 font-normal">(Down payment + Stamp Duty)</span>
+              <label className="text-[13px] text-[#e5e5e5] block mb-1.5">
+                Liquid savings available for upfront costs (₹)
               </label>
-              <div className="relative mt-1.5">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-stone-400">
-                  <IndianRupee className="w-4 h-4" />
-                </div>
-                <Input
-                  type="number"
-                  value={availableFunds}
-                  onChange={(e) => setAvailableFunds(e.target.value)}
-                  placeholder="e.g. 2000000"
-                  className="pl-9 bg-white"
-                />
-              </div>
-              <p className="text-[11px] text-stone-600 mt-1">
-                Tip: Banks do not finance stamp duty or corpus funds.
+              <input
+                type="number"
+                value={availableFunds}
+                onChange={(e) => setAvailableFunds(e.target.value)}
+                placeholder="e.g. 2000000"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-[#0a0a0a] border border-[#ffffff14] text-sm text-[#fafafa] focus:outline-none focus:border-[#fafafa]/40"
+              />
+              <p className="text-[11px] text-[#666666] mt-1">
+                Covers 20% down payment + stamp duty + registration
               </p>
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-stone-700 flex items-center justify-between">
-                <span>Monthly In-Hand Household Income</span>
-                <span className="text-[11px] text-stone-600 font-normal">(Net post-tax)</span>
+              <label className="text-[13px] text-[#e5e5e5] block mb-1.5">
+                Monthly net household income (₹)
               </label>
-              <div className="relative mt-1.5">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-stone-400">
-                  <IndianRupee className="w-4 h-4" />
-                </div>
-                <Input
-                  type="number"
-                  value={monthlyIncome}
-                  onChange={(e) => setMonthlyIncome(e.target.value)}
-                  placeholder="e.g. 150000"
-                  className="pl-9 bg-white"
-                />
-              </div>
-              <p className="text-[11px] text-stone-600 mt-1">
-                Used to compute safe debt-to-income (DTI) tolerance.
+              <input
+                type="number"
+                value={monthlyIncome}
+                onChange={(e) => setMonthlyIncome(e.target.value)}
+                placeholder="e.g. 160000"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-[#0a0a0a] border border-[#ffffff14] text-sm text-[#fafafa] focus:outline-none focus:border-[#fafafa]/40"
+              />
+              <p className="text-[11px] text-[#666666] mt-1">
+                Post-tax monthly take-home pay
               </p>
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-stone-700 flex items-center justify-between">
-                <span>Existing Monthly EMI Obligations</span>
-                <span className="text-[11px] text-stone-600 font-normal">(Car / Personal / Education)</span>
+              <label className="text-[13px] text-[#e5e5e5] block mb-1.5">
+                Existing monthly EMIs (₹)
               </label>
-              <div className="relative mt-1.5">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-stone-400">
-                  <IndianRupee className="w-4 h-4" />
-                </div>
-                <Input
-                  type="number"
-                  value={existingObligations}
-                  onChange={(e) => setExistingObligations(e.target.value)}
-                  placeholder="e.g. 15000"
-                  className="pl-9 bg-white"
-                />
-              </div>
+              <input
+                type="number"
+                value={existingObligations}
+                onChange={(e) => setExistingObligations(e.target.value)}
+                placeholder="e.g. 15000"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-[#0a0a0a] border border-[#ffffff14] text-sm text-[#fafafa] focus:outline-none focus:border-[#fafafa]/40"
+              />
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-stone-700 block">
-                Target Loan Tenure
+              <label className="text-[13px] text-[#e5e5e5] block mb-1.5">
+                Loan tenure
               </label>
-              <div className="grid grid-cols-3 gap-2 mt-1.5">
+              <div className="grid grid-cols-3 gap-2">
                 {[15, 20, 25].map((yrs) => (
                   <button
                     key={yrs}
                     type="button"
                     onClick={() => setTenureYears(yrs)}
-                    className={`py-2 text-xs font-medium rounded-lg border transition-all ${
+                    className={`py-2.5 text-xs font-medium rounded-xl border transition-colors cursor-pointer ${
                       tenureYears === yrs
-                        ? 'bg-blue-50 border-blue-600 text-blue-900 font-semibold shadow-xs'
-                        : 'border-stone-200 text-stone-600 hover:bg-stone-50'
+                        ? 'bg-[#fafafa] border-[#fafafa] text-[#0a0a0a]'
+                        : 'bg-[#0a0a0a] border-[#ffffff14] text-[#a1a1a1] hover:text-[#fafafa]'
                     }`}
                   >
-                    {yrs} Years
+                    {yrs} yrs
                   </button>
                 ))}
               </div>
             </div>
           </div>
 
-          {/* Granular Financing Sources */}
-          <div className="mt-4 pt-4 border-t border-stone-100 space-y-3">
-            <div className="text-xs font-semibold text-stone-800">
-              Expected Financing Sources & Allocation
+          {/* Optional Funding Allocation */}
+          <div className="pt-4 grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+            <div>
+              <label className="text-[12px] text-[#a1a1a1] block mb-1.5">
+                Planned Home Loan (₹)
+              </label>
+              <input
+                type="number"
+                value={homeLoanAmount}
+                onChange={(e) => setHomeLoanAmount(e.target.value)}
+                placeholder="Auto (80% LTV)"
+                className="w-full px-3 py-2 rounded-xl bg-[#0a0a0a] border border-[#ffffff14] text-xs text-[#fafafa] placeholder:text-[#666666] focus:outline-none"
+              />
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div className="p-3 bg-stone-50 rounded-xl border border-stone-200">
-                <label className="text-[11px] font-semibold text-stone-700 block">
-                  Planned Home Loan (₹)
-                </label>
-                <Input
-                  type="number"
-                  value={homeLoanAmount}
-                  onChange={(e) => setHomeLoanAmount(e.target.value)}
-                  placeholder="Auto (up to 80% LTV)"
-                  className="mt-1 bg-white text-xs h-8"
-                />
-                <span className="text-[10px] text-stone-600 block mt-1">Leave empty to auto-calculate</span>
-              </div>
 
-              <div className="p-3 bg-stone-50 rounded-xl border border-stone-200">
-                <label className="text-[11px] font-semibold text-stone-700 block">
-                  Family Contribution / Gift (₹)
-                </label>
-                <Input
-                  type="number"
-                  value={familyFundsAmount}
-                  onChange={(e) => setFamilyFundsAmount(e.target.value)}
-                  placeholder="e.g. 500000"
-                  className="mt-1 bg-white text-xs h-8"
-                />
-                <span className="text-[10px] text-stone-600 block mt-1">Non-repayable assistance</span>
-              </div>
+            <div>
+              <label className="text-[12px] text-[#a1a1a1] block mb-1.5">
+                Family Support / Gift (₹)
+              </label>
+              <input
+                type="number"
+                value={familyFundsAmount}
+                onChange={(e) => setFamilyFundsAmount(e.target.value)}
+                placeholder="Optional"
+                className="w-full px-3 py-2 rounded-xl bg-[#0a0a0a] border border-[#ffffff14] text-xs text-[#fafafa] placeholder:text-[#666666] focus:outline-none"
+              />
+            </div>
 
-              <div className="p-3 bg-stone-50 rounded-xl border border-stone-200">
-                <label className="text-[11px] font-semibold text-stone-700 block">
-                  Company Soft Loan / Advance (₹)
-                </label>
-                <Input
-                  type="number"
-                  value={companyLoanAmount}
-                  onChange={(e) => setCompanyLoanAmount(e.target.value)}
-                  placeholder="e.g. 300000"
-                  className="mt-1 bg-white text-xs h-8"
-                />
-                <span className="text-[10px] text-stone-600 block mt-1">Employer low-interest loan</span>
-              </div>
+            <div>
+              <label className="text-[12px] text-[#a1a1a1] block mb-1.5">
+                Employer / Soft Loan (₹)
+              </label>
+              <input
+                type="number"
+                value={companyLoanAmount}
+                onChange={(e) => setCompanyLoanAmount(e.target.value)}
+                placeholder="Optional"
+                className="w-full px-3 py-2 rounded-xl bg-[#0a0a0a] border border-[#ffffff14] text-xs text-[#fafafa] placeholder:text-[#666666] focus:outline-none"
+              />
             </div>
           </div>
         </div>
 
-        {/* Section 3: Tax & Concessions Optimization */}
-        <div className="space-y-3 pt-6 border-t border-stone-100 bg-stone-50/60 p-4 rounded-xl border border-stone-200/80">
-          <div className="text-xs font-semibold text-stone-900 flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5 text-blue-600" /> Government Concessions & Co-Applicant Optimizations
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-            <label className="flex items-start gap-2.5 p-2 rounded-lg bg-white border border-stone-200 cursor-pointer hover:border-stone-300">
-              <input
-                type="checkbox"
-                checked={femaleCoOwner}
-                onChange={(e) => setFemaleCoOwner(e.target.checked)}
-                className="mt-0.5 rounded text-blue-600"
-              />
-              <div className="text-xs">
-                <div className="font-semibold text-stone-800">Female Primary or Co-Owner</div>
-                <div className="text-stone-600 text-[11px]">
-                  Unlocks 1% stamp duty concession (e.g. saves ~₹85,000 in Maharashtra & Delhi).
-                </div>
+        {/* Section 3: Co-Ownership & Concessions */}
+        <div className="pt-6 border-t border-[#ffffff12] grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          <label className="flex items-start gap-3 p-3.5 rounded-xl bg-[#0a0a0a] border border-[#ffffff14] cursor-pointer hover:border-[#ffffff28]">
+            <input
+              type="checkbox"
+              checked={femaleCoOwner}
+              onChange={(e) => setFemaleCoOwner(e.target.checked)}
+              className="mt-0.5 rounded accent-[#fafafa]"
+            />
+            <div className="text-xs">
+              <div className="font-medium text-[#fafafa]">
+                Female primary or co-owner
               </div>
-            </label>
+              <div className="text-[#a1a1a1] text-[11px] mt-0.5">
+                Applies 1% stamp duty reduction in Maharashtra, Delhi &amp;
+                applicable states.
+              </div>
+            </div>
+          </label>
 
-            <label className="flex items-start gap-2.5 p-2 rounded-lg bg-white border border-stone-200 cursor-pointer hover:border-stone-300">
-              <input
-                type="checkbox"
-                checked={hasJointApplicant}
-                onChange={(e) => setHasJointApplicant(e.target.checked)}
-                className="mt-0.5 rounded text-blue-600"
-              />
-              <div className="text-xs">
-                <div className="font-semibold text-stone-800">Joint Applicant (Spouse / Parent)</div>
-                <div className="text-stone-600 text-[11px]">
-                  Doubles Section 24 tax exemption limit from ₹2 Lakh to ₹4 Lakh per year.
-                </div>
+          <label className="flex items-start gap-3 p-3.5 rounded-xl bg-[#0a0a0a] border border-[#ffffff14] cursor-pointer hover:border-[#ffffff28]">
+            <input
+              type="checkbox"
+              checked={hasJointApplicant}
+              onChange={(e) => setHasJointApplicant(e.target.checked)}
+              className="mt-0.5 rounded accent-[#fafafa]"
+            />
+            <div className="text-xs">
+              <div className="font-medium text-[#fafafa]">
+                Joint home loan co-applicant
               </div>
-            </label>
-          </div>
+              <div className="text-[#a1a1a1] text-[11px] mt-0.5">
+                Doubles Section 24(b) annual interest tax deduction limit.
+              </div>
+            </div>
+          </label>
         </div>
 
         {/* Action Controls */}
-        <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-4 border-t border-stone-100">
-          <Button
-            variant="outline"
+        <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-5 border-t border-[#ffffff12]">
+          <button
+            type="button"
             onClick={onBack}
-            className="w-full sm:w-auto text-stone-600 inline-flex items-center justify-center gap-1.5"
+            className="w-full sm:w-auto px-5 py-2.5 rounded-full bg-[#0a0a0a] hover:bg-[#1f1f1f] border border-[#ffffff14] text-xs text-[#e5e5e5] inline-flex items-center justify-center gap-1.5 cursor-pointer"
           >
-            <ArrowLeft className="w-4 h-4" /> Back to Specs
-          </Button>
+            <ArrowLeft className="w-3.5 h-3.5" /> Back
+          </button>
 
-          <Button
+          <button
+            type="button"
             onClick={handleContinue}
-            className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 shadow-sm inline-flex items-center justify-center gap-2"
+            className="w-full sm:w-auto px-6 py-2.5 rounded-full bg-[#fafafa] hover:bg-[#e5e5e5] text-[#0a0a0a] text-[13px] font-medium inline-flex items-center justify-center gap-2 cursor-pointer"
           >
-            Run Reality & Alternative Check <ArrowRight className="w-4 h-4" />
-          </Button>
+            <span>Calculate True Cost &amp; Stress Test</span>
+            <ArrowRight className="w-4 h-4" />
+          </button>
         </div>
       </div>
     </div>

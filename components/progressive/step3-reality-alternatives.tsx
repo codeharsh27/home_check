@@ -3,22 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { PropertyDetails, BuyerContext, AlternativeProperty } from '@/types';
 import { calculateFinancialIntelligence, formatCurrency } from '@/lib/calculations';
-import {
-  TrendingUp,
-  AlertTriangle,
-  CheckCircle2,
-  ExternalLink,
-  ShieldAlert,
-  ArrowRight,
-  ArrowLeft,
-  Flame,
-  Percent,
-  Layers,
-  Sparkles,
-  Info,
-  Loader2,
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { ExternalLink, ArrowRight, ArrowLeft, Loader2 } from 'lucide-react';
 
 interface Step3Props {
   property: PropertyDetails;
@@ -42,19 +27,20 @@ export const Step3RealityAlternatives: React.FC<Step3Props> = ({
     cachedAlternatives.length > 0 ? cachedAlternatives : []
   );
 
-  // Financial calculations
   const fin = calculateFinancialIntelligence(property, buyerContext);
 
-  // Benchmark logic
   const carpetArea = property.carpetArea || 1000;
-  const askingRate = property.price > 0 && carpetArea > 0 ? Math.round(property.price / carpetArea) : 8000;
-  
-  // Locality reference range (approx benchmark for location)
-  const medianLocalityRate = Math.round(askingRate * 0.92); // ~8% below typical high-asking listing
-  const priceDiffPercent = Math.round(((askingRate - medianLocalityRate) / medianLocalityRate) * 100);
+  const askingRate =
+    property.price > 0 && carpetArea > 0
+      ? Math.round(property.price / carpetArea)
+      : 8000;
+
+  const medianLocalityRate = Math.round(askingRate * 0.92);
+  const priceDiffPercent = Math.round(
+    ((askingRate - medianLocalityRate) / medianLocalityRate) * 100
+  );
   const isOverpriced = priceDiffPercent > 5;
 
-  // Fetch live alternatives if not cached
   useEffect(() => {
     if (alternatives.length > 0) return;
 
@@ -92,92 +78,206 @@ export const Step3RealityAlternatives: React.FC<Step3Props> = ({
   }, [property, alternatives.length, onSetAlternatives]);
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8">
-      {/* Step Header */}
-      <div className="space-y-1.5">
-        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
-          Step 3 of 5 • Market Reality & Live Alternatives
-        </div>
-        <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-stone-900">
-          Market Price Reality & Alternatives
+    <div className="max-w-3xl mx-auto space-y-8">
+      {/* Editorial Section Header */}
+      <div className="space-y-2">
+        <p className="text-[11px] font-mono uppercase tracking-[0.14em] text-[#a1a1a1]">
+          03 / TRUE COST &amp; MARKET BENCHMARK
+        </p>
+        <h1 className="font-serif text-[32px] sm:text-[40px] text-[#fafafa] tracking-[-0.025em] leading-[1.12]">
+          True handover cash &amp; rate stress test
         </h1>
-        <p className="text-sm text-stone-500">
-          Evaluate whether this asking price has room for negotiation, compare with active listings nearby, and inspect the real cash drain before committing.
+        <p className="text-[14px] text-[#a1a1a1] max-w-xl leading-relaxed">
+          Review the complete out-of-pocket cash required beyond your bank loan,
+          stress-test your monthly EMI against a +1.25% rate hike, and compare
+          nearby listings.
         </p>
       </div>
 
-      {/* 1. Price Reality Benchmark Card */}
-      <div className="bg-white border border-stone-200/90 rounded-2xl p-6 sm:p-7 shadow-[0_1px_4px_rgba(0,0,0,0.03)] space-y-5">
-        <div className="flex items-center justify-between flex-wrap gap-2">
-          <div className="text-sm font-semibold text-stone-900 flex items-center gap-2">
-            <TrendingUp className="w-4 h-4 text-blue-600" /> Locality Rate Benchmark
+      {/* 1. True Handover Cash Drain Ledger */}
+      <div className="bg-[#141414] border border-[#ffffff14] rounded-2xl p-6 sm:p-8 space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-6 border-b border-[#ffffff12]">
+          <div>
+            <p className="text-[11px] font-mono uppercase tracking-wider text-[#a1a1a1]">
+              OUT-OF-POCKET ACQUISITION LEDGER
+            </p>
+            <h2 className="font-serif text-[24px] sm:text-[28px] text-[#fafafa] mt-1">
+              Cash required from your savings
+            </h2>
+            <p className="text-[13px] text-[#a1a1a1] mt-1">
+              Banks lend up to 80% of the base agreement price only.
+            </p>
           </div>
-          <div
-            className={`text-xs px-2.5 py-1 rounded-full font-semibold border ${
-              isOverpriced
-                ? 'bg-amber-50 text-amber-800 border-amber-200'
-                : 'bg-emerald-50 text-emerald-800 border-emerald-200'
-            }`}
-          >
-            {isOverpriced
-              ? `Listed ~${priceDiffPercent}% above locality median`
-              : 'Listed within fair market bracket'}
+          <div className="text-left sm:text-right">
+            <span className="text-[11px] font-mono uppercase tracking-wider text-[#bda96d]">
+              Total Non-Loan Cash Needed
+            </span>
+            <div className="font-serif text-[32px] sm:text-[38px] text-[#fafafa] leading-none mt-1">
+              {formatCurrency(fin.handoverCashNeeded)}
+            </div>
           </div>
         </div>
 
-        {/* Visual Benchmark Bar */}
-        <div className="space-y-2">
-          <div className="h-3 w-full bg-stone-100 rounded-full relative overflow-hidden flex">
-            <div className="w-1/3 bg-emerald-200/80 h-full" title="Below Market (Good Value)" />
-            <div className="w-1/3 bg-blue-200/80 h-full" title="Fair Market Band" />
-            <div className="w-1/3 bg-amber-200/80 h-full" title="Developer Premium" />
-          </div>
-          <div className="flex justify-between text-[11px] text-stone-600 font-medium">
-            <span>₹{(medianLocalityRate * 0.9).toFixed(0)} (Value)</span>
-            <span className="text-stone-700 font-semibold">
-              Median: ₹{medianLocalityRate.toLocaleString('en-IN')}/sq.ft
+        {/* Clean Hairline Ledger Rows */}
+        <div className="divide-y divide-[#ffffff10] text-[14px]">
+          <div className="py-3 flex items-center justify-between">
+            <span className="text-[#a1a1a1]">Quoted Base Agreement Value</span>
+            <span className="text-[#fafafa] font-medium">
+              {formatCurrency(fin.breakdown.basePrice)}
             </span>
-            <span className="text-stone-900 font-semibold">
-              This Property: ₹{askingRate.toLocaleString('en-IN')}/sq.ft
+          </div>
+          <div className="py-3 flex items-center justify-between">
+            <span className="text-[#a1a1a1]">
+              Maximum Bank Loan Disbursal (80% LTV)
+            </span>
+            <span className="text-[#96a766]">
+              {formatCurrency(fin.breakdown.maxLoanEligible)}
+            </span>
+          </div>
+          <div className="py-3 flex items-center justify-between">
+            <span className="text-[#fafafa]">
+              1. Minimum 20% Cash Down Payment
+            </span>
+            <span className="text-[#fafafa] font-medium">
+              {formatCurrency(fin.breakdown.minimumDownPayment)}
+            </span>
+          </div>
+          <div className="py-3 flex items-center justify-between">
+            <span className="text-[#fafafa]">
+              2. State Stamp Duty &amp; Registration Charges
+            </span>
+            <span className="text-[#fafafa] font-medium">
+              {formatCurrency(
+                fin.breakdown.stampDuty + fin.breakdown.registration
+              )}
+            </span>
+          </div>
+          <div className="py-3 flex items-center justify-between">
+            <span className="text-[#fafafa]">
+              3. Society Corpus &amp; Advance Maintenance
+            </span>
+            <span className="text-[#fafafa] font-medium">
+              {formatCurrency(fin.breakdown.societyCorpus)}
+            </span>
+          </div>
+          <div className="py-3 flex items-center justify-between">
+            <span className="text-[#fafafa]">
+              4. Infrastructure, Parking &amp; Basic Fit-Out Buffer
+            </span>
+            <span className="text-[#fafafa] font-medium">
+              {formatCurrency(
+                fin.breakdown.infrastructureAndParking +
+                  fin.breakdown.interiorBuffer
+              )}
             </span>
           </div>
         </div>
 
-        <div className="text-xs text-stone-600 bg-stone-50 p-3.5 rounded-xl border border-stone-100 leading-relaxed">
-          <span className="font-semibold text-stone-800">Negotiation Strategy: </span>
-          {isOverpriced ? (
-            <>
-              Similar 2 BHKs in {property.location || 'this micro-market'} are closing closer to{' '}
-              <strong className="text-stone-900">₹{medianLocalityRate.toLocaleString('en-IN')}/sq.ft</strong>. 
-              You have room to negotiate{' '}
-              <strong className="text-stone-900">
-                {formatCurrency(Math.round((askingRate - medianLocalityRate) * carpetArea))}
-              </strong>{' '}
-              off the asking agreement value before token advance.
-            </>
-          ) : (
-            <>
-              The asking rate appears aligned with current registered RERA transactions for {property.location || 'this area'}. 
-              Focus negotiation on waivers for floor rise, preferred location charges (PLC), or covered parking fees.
-            </>
-          )}
+        {/* Two-Column Stress Test & Tax Relief */}
+        <div className="pt-6 border-t border-[#ffffff12] grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="p-5 rounded-xl bg-[#0a0a0a] border border-[#ffffff14] space-y-2.5">
+            <div className="text-[11px] font-mono uppercase tracking-wider text-[#a1a1a1]">
+              FLOATING RATE STRESS TEST (+1.25%)
+            </div>
+            <div className="flex items-baseline justify-between text-[13px] pt-1">
+              <span className="text-[#a1a1a1]">Base Monthly EMI</span>
+              <span className="text-[#fafafa] font-medium">
+                {formatCurrency(fin.stressTest.currentEmi)}/mo
+              </span>
+            </div>
+            <div className="flex items-baseline justify-between text-[13px]">
+              <span className="text-[#a1a1a1]">Stressed EMI (+1.25%)</span>
+              <span className="text-[#bda96d] font-medium">
+                {formatCurrency(fin.stressTest.rateHikeEmi)}/mo
+              </span>
+            </div>
+            <p className="text-[12px] text-[#666666] leading-relaxed pt-1">
+              Adds {formatCurrency(fin.stressTest.extraInterestOverTenure)} in
+              cumulative interest over the loan tenure if rates rise by 1.25%.
+            </p>
+          </div>
+
+          <div className="p-5 rounded-xl bg-[#0a0a0a] border border-[#ffffff14] space-y-2.5">
+            <div className="text-[11px] font-mono uppercase tracking-wider text-[#a1a1a1]">
+              TAX DEDUCTIONS &amp; PREPAYMENT
+            </div>
+            <div className="flex items-baseline justify-between text-[13px] pt-1">
+              <span className="text-[#a1a1a1]">Annual Tax Saved (Sec 24 + 80C)</span>
+              <span className="text-[#96a766] font-medium">
+                {formatCurrency(fin.taxSavings.totalAnnualTaxSaved)}/yr
+              </span>
+            </div>
+            <div className="flex items-baseline justify-between text-[13px]">
+              <span className="text-[#a1a1a1]">1 Extra EMI / Year Saves</span>
+              <span className="text-[#fafafa] font-medium">
+                {formatCurrency(fin.taxSavings.prepaymentSavings.interestSaved)}
+              </span>
+            </div>
+            <p className="text-[12px] text-[#666666] leading-relaxed pt-1">
+              Prepaying one additional EMI each year shortens loan tenure by ~
+              {fin.taxSavings.prepaymentSavings.yearsSaved} years.
+            </p>
+          </div>
         </div>
       </div>
 
-      {/* 2. Live Comparable Alternatives */}
+      {/* 2. Locality Benchmark Card */}
+      <div className="bg-[#141414] border border-[#ffffff14] rounded-2xl p-6 sm:p-8 space-y-4">
+        <div className="flex items-center justify-between flex-wrap gap-2">
+          <div>
+            <p className="text-[11px] font-mono uppercase tracking-wider text-[#a1a1a1]">
+              LOCALITY BENCHMARK
+            </p>
+            <h3 className="font-serif text-[22px] text-[#fafafa] mt-0.5">
+              ₹{askingRate.toLocaleString('en-IN')}/sq.ft vs. ₹
+              {medianLocalityRate.toLocaleString('en-IN')}/sq.ft locality median
+            </h3>
+          </div>
+          <span className="text-[12px] text-[#bda96d]">
+            {isOverpriced
+              ? `~${priceDiffPercent}% above median closes`
+              : 'Within fair market range'}
+          </span>
+        </div>
+
+        <p className="text-[13px] text-[#a1a1a1] leading-relaxed">
+          {isOverpriced ? (
+            <>
+              Recent transactions in {property.location || 'this locality'} close
+              closer to ₹{medianLocalityRate.toLocaleString('en-IN')}/sq.ft. Use
+              this spread to negotiate roughly{' '}
+              <strong className="text-[#fafafa] font-normal">
+                {formatCurrency(
+                  Math.round((askingRate - medianLocalityRate) * carpetArea)
+                )}
+              </strong>{' '}
+              off the quoted agreement price or request waivers on floor-rise and
+              clubhouse charges.
+            </>
+          ) : (
+            <>
+              The quoted rate aligns with registered transactions in{' '}
+              {property.location || 'this area'}. Focus negotiation on covered car
+              parking and floor-rise waivers.
+            </>
+          )}
+        </p>
+      </div>
+
+      {/* 3. Nearby Comparable Projects */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-bold text-stone-900 flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-blue-600" /> Active Comparable Projects in the Vicinity
-            </h2>
-            <p className="text-xs text-stone-500">
-              Real developments currently active on aggregators & developer portals within the same micro-market.
+            <p className="text-[11px] font-mono uppercase tracking-wider text-[#a1a1a1]">
+              MICRO-MARKET COMPARABLES
             </p>
+            <h2 className="font-serif text-[24px] text-[#fafafa] mt-0.5">
+              Nearby residential projects
+            </h2>
           </div>
           {loadingAlts && (
-            <div className="text-xs text-stone-500 flex items-center gap-1.5">
-              <Loader2 className="w-3.5 h-3.5 animate-spin" /> Discovering...
+            <div className="text-xs text-[#a1a1a1] flex items-center gap-1.5">
+              <Loader2 className="w-3.5 h-3.5 animate-spin" /> Loading...
             </div>
           )}
         </div>
@@ -186,53 +286,46 @@ export const Step3RealityAlternatives: React.FC<Step3Props> = ({
           {alternatives.map((alt) => (
             <div
               key={alt.id}
-              className="bg-white border border-stone-200/90 rounded-2xl p-5 shadow-[0_1px_3px_rgba(0,0,0,0.03)] flex flex-col justify-between hover:border-blue-300 transition-all group"
+              className="bg-[#141414] border border-[#ffffff14] rounded-2xl p-5 flex flex-col justify-between"
             >
               <div className="space-y-2.5">
-                <div className="flex items-start justify-between gap-1">
-                  <span className="text-[10px] font-semibold uppercase tracking-wider text-stone-600 bg-stone-100 px-2 py-0.5 rounded-md">
-                    {alt.bhk} • {alt.sourcePlatform}
-                  </span>
-                  <span className="text-[10px] font-medium text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">
-                    Active
-                  </span>
+                <div className="text-[10px] font-mono uppercase tracking-wider text-[#a1a1a1]">
+                  {alt.bhk} · {alt.sourcePlatform}
                 </div>
 
                 <div>
-                  <h3 className="font-semibold text-stone-900 text-sm group-hover:text-blue-600 transition-colors">
+                  <h3 className="font-medium text-[#fafafa] text-[15px]">
                     {alt.name}
                   </h3>
-                  <div className="text-xs text-stone-600">{alt.developer}</div>
+                  <div className="text-[12px] text-[#a1a1a1]">
+                    {alt.developer}
+                  </div>
                 </div>
 
                 <div className="pt-1">
-                  <div className="text-base font-bold text-stone-900">
+                  <div className="font-serif text-[22px] text-[#fafafa]">
                     {formatCurrency(alt.price)}
                   </div>
-                  <div className="text-[11px] text-stone-600">
-                    ₹{alt.ratePerSqFt?.toLocaleString('en-IN')}/sq.ft carpet ({alt.carpetArea} sq.ft)
+                  <div className="text-[11px] text-[#666666]">
+                    ₹{alt.ratePerSqFt?.toLocaleString('en-IN')}/sq.ft (
+                    {alt.carpetArea} sq.ft)
                   </div>
                 </div>
 
-                <p className="text-xs text-stone-600 leading-snug line-clamp-2">
+                <p className="text-[12px] text-[#a1a1a1] leading-relaxed line-clamp-2">
                   {alt.usp}
                 </p>
-
-                {alt.differenceVsSubject && (
-                  <div className="text-[11px] font-medium text-blue-700 bg-blue-50/70 p-2 rounded-lg border border-blue-100/80">
-                    {alt.differenceVsSubject}
-                  </div>
-                )}
               </div>
 
-              <div className="pt-4 mt-3 border-t border-stone-100">
+              <div className="pt-4 mt-4 border-t border-[#ffffff12]">
                 <a
                   href={alt.sourceUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full inline-flex items-center justify-center gap-1.5 text-xs font-semibold text-blue-600 hover:text-blue-800 py-1.5 rounded-lg hover:bg-blue-50/60 transition-colors"
+                  className="inline-flex items-center gap-1.5 text-[12px] text-[#e5e5e5] hover:text-[#fafafa] transition-colors"
                 >
-                  Inspect Live Listing <ExternalLink className="w-3.5 h-3.5" />
+                  <span>View listing</span>
+                  <ExternalLink className="w-3 h-3" />
                 </a>
               </div>
             </div>
@@ -240,143 +333,24 @@ export const Step3RealityAlternatives: React.FC<Step3Props> = ({
         </div>
       </div>
 
-      {/* 3. Real-World Financial Reality Ladder */}
-      <div className="bg-white border border-stone-200/90 rounded-2xl p-5 sm:p-7 shadow-[0_1px_4px_rgba(0,0,0,0.03)] space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div>
-            <h2 className="text-base sm:text-lg font-bold text-stone-900">
-              The Real Handover Cash Drain (Hidden Costs)
-            </h2>
-            <p className="text-xs text-stone-500">
-              Banks only finance 80% of Agreement Value. All non-financeable cash must come from your savings.
-            </p>
-          </div>
-          <div className="text-left sm:text-right bg-stone-50 sm:bg-transparent p-3 sm:p-0 rounded-xl sm:rounded-none">
-            <div className="text-xs text-stone-600 font-medium">True Cash Required at Handover</div>
-            <div className="text-xl sm:text-2xl font-extrabold text-stone-900">
-              {formatCurrency(fin.handoverCashNeeded)}
-            </div>
-          </div>
-        </div>
+      {/* Bottom Navigation */}
+      <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-4 border-t border-[#ffffff14]">
+        <button
+          type="button"
+          onClick={onBack}
+          className="w-full sm:w-auto px-5 py-2.5 rounded-full bg-[#141414] hover:bg-[#1f1f1f] border border-[#ffffff14] text-xs text-[#e5e5e5] inline-flex items-center justify-center gap-1.5 cursor-pointer"
+        >
+          <ArrowLeft className="w-3.5 h-3.5" /> Back
+        </button>
 
-        {/* Cost Stack Breakdown */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-          <div className="p-3 rounded-xl bg-stone-50 border border-stone-100">
-            <div className="text-xs text-stone-600 font-medium">Agreement Value</div>
-            <div className="text-sm font-semibold text-stone-900 mt-0.5">
-              {formatCurrency(fin.breakdown.basePrice)}
-            </div>
-            <div className="text-[10px] text-stone-600">Base quoted price</div>
-          </div>
-
-          <div className="p-3 rounded-xl bg-stone-50 border border-stone-100">
-            <div className="text-xs text-stone-600 font-medium">Max Bank Loan (80%)</div>
-            <div className="text-sm font-semibold text-stone-900 mt-0.5">
-              {formatCurrency(fin.breakdown.maxLoanEligible)}
-            </div>
-            <div className="text-[10px] text-emerald-600">Max bank disbursal</div>
-          </div>
-
-          <div className="p-3 rounded-xl bg-amber-50/50 border border-amber-100">
-            <div className="text-xs text-stone-600 font-medium">Min Down Payment (20%)</div>
-            <div className="text-sm font-semibold text-stone-900 mt-0.5">
-              {formatCurrency(fin.breakdown.minimumDownPayment)}
-            </div>
-            <div className="text-[10px] text-amber-700">Cash to developer</div>
-          </div>
-
-          <div className="p-3 rounded-xl bg-stone-50 border border-stone-100">
-            <div className="text-xs text-stone-600 font-medium">Govt Duties (Stamp + Reg)</div>
-            <div className="text-sm font-semibold text-stone-900 mt-0.5">
-              {formatCurrency(fin.breakdown.stampDuty + fin.breakdown.registration)}
-            </div>
-            <div className="text-[10px] text-stone-600">IGR State Treasury (Cash)</div>
-          </div>
-
-          <div className="p-3 rounded-xl bg-stone-50 border border-stone-100">
-            <div className="text-xs text-stone-600 font-medium">Corpus & Advance Maint</div>
-            <div className="text-sm font-semibold text-stone-900 mt-0.5">
-              {formatCurrency(fin.breakdown.societyCorpus)}
-            </div>
-            <div className="text-[10px] text-stone-600">Society escrow deposit</div>
-          </div>
-
-          <div className="p-3 rounded-xl bg-stone-50 border border-stone-100">
-            <div className="text-xs text-stone-600 font-medium">Infra & Basic Fit-outs</div>
-            <div className="text-sm font-semibold text-stone-900 mt-0.5">
-              {formatCurrency(fin.breakdown.infrastructureAndParking + fin.breakdown.interiorBuffer)}
-            </div>
-            <div className="text-[10px] text-stone-600">Parking + kitchen buffer</div>
-          </div>
-        </div>
-
-        {/* Dynamic Stress Test & Safety Runway */}
-        <div className="pt-4 border-t border-stone-100 grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="p-4 rounded-xl bg-stone-50 border border-stone-200/80 space-y-2">
-            <div className="text-xs font-semibold text-stone-900 flex items-center gap-1.5">
-              <Flame className="w-3.5 h-3.5 text-amber-600" /> Floating Rate Hike Stress Test (+1.25%)
-            </div>
-            <div className="flex items-baseline justify-between text-xs">
-              <span className="text-stone-600">Current Base EMI:</span>
-              <span className="font-semibold text-stone-900">{formatCurrency(fin.stressTest.currentEmi)}/mo</span>
-            </div>
-            <div className="flex items-baseline justify-between text-xs">
-              <span className="text-stone-600">If RBI Hikes Rates:</span>
-              <span className="font-bold text-amber-700">{formatCurrency(fin.stressTest.rateHikeEmi)}/mo</span>
-            </div>
-            <p className="text-[11px] text-stone-600 leading-tight">
-              A +1.25% floating rate hike will cost you an additional{' '}
-              <strong>{formatCurrency(fin.stressTest.extraInterestOverTenure)}</strong> in interest, or stretch loan tenure by ~3.5 years.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-stone-50 border border-stone-200/80 space-y-2">
-            <div className="text-xs font-semibold text-stone-900 flex items-center gap-1.5">
-              <Percent className="w-3.5 h-3.5 text-blue-600" /> Tax Relief & Savings Strategies
-            </div>
-            <div className="flex items-baseline justify-between text-xs">
-              <span className="text-stone-600">Annual Tax Saved (Sec 24 + 80C):</span>
-              <span className="font-bold text-emerald-700">{formatCurrency(fin.taxSavings.totalAnnualTaxSaved)}/yr</span>
-            </div>
-            {fin.taxSavings.femaleConcessionApplicable && (
-              <div className="flex items-baseline justify-between text-xs text-emerald-700">
-                <span>Female Co-owner Concession:</span>
-                <span className="font-semibold">{formatCurrency(fin.taxSavings.femaleStampDutySaved)} saved upfront</span>
-              </div>
-            )}
-            <p className="text-[11px] text-stone-600 leading-tight">
-              Paying just <strong>1 extra EMI per year</strong> saves ~
-              <strong>{formatCurrency(fin.taxSavings.prepaymentSavings.interestSaved)}</strong> in interest and closes your loan {fin.taxSavings.prepaymentSavings.yearsSaved} years earlier.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* The Crucial Fork Section */}
-      <div className="bg-gradient-to-br from-blue-50/70 to-indigo-50/50 border border-blue-200/80 rounded-2xl p-6 sm:p-8 text-center space-y-4 shadow-sm">
-        <h2 className="text-xl font-bold text-stone-900">
-          Ready to Proceed with This Property?
-        </h2>
-        <p className="text-sm text-stone-600 max-w-xl mx-auto leading-relaxed">
-          Now that you know the market reality and actual out-of-pocket costs, you can either explore the alternative listings above, or run a deep regulatory investigation into this shortlisted project.
-        </p>
-
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-          <Button
-            variant="outline"
-            onClick={onBack}
-            className="w-full sm:w-auto bg-white hover:bg-stone-50 text-stone-700 inline-flex items-center gap-2"
-          >
-            <ArrowLeft className="w-4 h-4" /> Adjust Intent / Budget
-          </Button>
-
-          <Button
-            onClick={onProceedToInvestigation}
-            className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 shadow-sm inline-flex items-center gap-2"
-          >
-            Investigate THIS Property Further <ArrowRight className="w-4 h-4" />
-          </Button>
-        </div>
+        <button
+          type="button"
+          onClick={onProceedToInvestigation}
+          className="w-full sm:w-auto px-6 py-2.5 rounded-full bg-[#fafafa] hover:bg-[#e5e5e5] text-[#0a0a0a] text-[13px] font-medium inline-flex items-center justify-center gap-2 cursor-pointer"
+        >
+          <span>Continue to Legal &amp; RERA Checklist</span>
+          <ArrowRight className="w-4 h-4" />
+        </button>
       </div>
     </div>
   );

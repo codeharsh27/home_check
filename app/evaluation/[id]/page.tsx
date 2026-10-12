@@ -12,8 +12,9 @@ import { Step4DeepInvestigation } from '@/components/progressive/step4-deep-inve
 import { Step5DecisionReport } from '@/components/progressive/step5-decision-report';
 import { SynthesizingAnimation } from '@/components/progressive/synthesizing-animation';
 import { AuthGateModal } from '@/components/auth/auth-gate-modal';
+import { BrandMark } from '@/components/layout/nav';
 import { supabase } from '@/lib/supabase';
-import { ArrowLeft, CheckCircle2 } from 'lucide-react';
+import { Plus, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import type { User } from '@supabase/supabase-js';
 
@@ -36,22 +37,27 @@ export default function ProgressiveEvaluationPage() {
 
   const [hasLoaded, setHasLoaded] = useState(false);
   const [showAuthGate, setShowAuthGate] = useState(false);
+  const [pendingStepAfterAuth, setPendingStepAfterAuth] = useState<
+    number | null
+  >(null);
   const [isSynthesizing, setIsSynthesizing] = useState(false);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   useEffect(() => {
     if (!supabase) return;
     supabase.auth.getUser().then(({ data }) => setCurrentUser(data.user));
-    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setCurrentUser(session?.user || null);
-    });
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setCurrentUser(session?.user || null);
+      }
+    );
     return () => authListener?.subscription.unsubscribe();
   }, []);
 
   useEffect(() => {
     const found = loadEvaluation(evalId);
     setHasLoaded(true);
-    if (!found) router.replace('/');
+    if (!found) router.replace('/dashboard?new=true');
   }, [evalId, loadEvaluation, router]);
 
   const evaluation = evaluations[evalId];
@@ -72,53 +78,96 @@ export default function ProgressiveEvaluationPage() {
     handleSelectStep(prevStep);
   };
 
+  // Primary Signup Touchpoint: Step 3 -> Step 4 transition
+  // After the user has seen their full True Handover Cash & Stress Test value in Step 3,
+  // and clicks "Continue to Step 4: Legal Checklist", softly offer to save their dossier
+  // before tracking builder legal documents (with 1-click "Skip for now ->").
+  const handleProceedFromStep3ToStep4 = () => {
+    if (!currentUser && typeof window !== 'undefined') {
+      const promptKey = `hc_auth_prompted_${evalId}`;
+      const alreadyPrompted = sessionStorage.getItem(promptKey) === 'true';
+      if (!alreadyPrompted) {
+        sessionStorage.setItem(promptKey, 'true');
+        setPendingStepAfterAuth(4);
+        setShowAuthGate(true);
+        return;
+      }
+    }
+    handleSelectStep(4);
+  };
+
   if (!hasLoaded || !evaluation) {
     return (
-      <div className="min-h-screen bg-[#F8F9FB] flex items-center justify-center">
-        <div className="text-stone-400 text-sm animate-pulse">Loading evaluation workspace...</div>
+      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
+        <Loader2 className="w-5 h-5 animate-spin text-[#a1a1a1]" />
       </div>
     );
   }
 
   return (
     <HydrationGuard>
-      <div className="min-h-screen bg-[#F8F9FB] text-stone-900 flex flex-col font-sans">
-        {/* Top Product Header */}
-        <header className="bg-white border-b border-stone-200/80 px-3 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between">
-          <div className="flex items-center gap-2 sm:gap-3">
-            <Link
-              href="/"
-              className="text-stone-400 hover:text-stone-800 transition-colors p-1 -ml-1 rounded-lg"
-              title="Return to Home"
-            >
-              <ArrowLeft className="w-4 h-4" />
-            </Link>
-            <div className="flex items-center gap-1.5 sm:gap-2">
-              <span className="font-extrabold text-sm tracking-tight text-stone-900">
-                HomeCheck<span className="text-blue-600">.</span>
-              </span>
-              <span className="text-stone-300">/</span>
-              <span className="text-xs font-medium text-stone-600 truncate max-w-[110px] sm:max-w-xs">
-                {evaluation.property.name || 'Property Workspace'}
+      <div className="min-h-screen bg-[#0a0a0a] text-[#fafafa] print:bg-white print:text-black flex flex-col font-sans">
+        {/* Minimal Editorial Top Header */}
+        <header className="bg-[#0a0a0a]/90 backdrop-blur-xl border-b border-[#ffffff14] px-4 sm:px-6 py-3.5 print:hidden">
+          <div className="max-w-[1136px] mx-auto flex items-center justify-between gap-3">
+            {/* Left: BrandMark + Active Property Breadcrumb */}
+            <div className="flex items-center gap-3 min-w-0">
+              <Link
+                href="/"
+                className="flex items-center gap-2 group shrink-0"
+                title="HomeCheck"
+              >
+                <BrandMark className="w-6 h-6 transition-transform duration-200 group-hover:scale-105" />
+                <span className="hidden sm:inline font-medium text-[15px] tracking-[-0.02em] text-[#fafafa]">
+                  HomeCheck
+                </span>
+              </Link>
+              <span className="text-[#ffffff1f]">/</span>
+              <Link
+                href="/dashboard"
+                className="text-[13px] text-[#a1a1a1] hover:text-[#fafafa] transition-colors hidden sm:inline"
+              >
+                Workspace
+              </Link>
+              <span className="text-[#ffffff1f] hidden sm:inline">/</span>
+              <span className="text-[13px] text-[#e5e5e5] truncate max-w-[150px] sm:max-w-[260px]">
+                {evaluation.property.name || 'Property Audit'}
               </span>
             </div>
-          </div>
 
-          <div className="flex items-center gap-2">
-            {currentUser ? (
-              <div className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold shrink-0">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                <span className="hidden sm:inline">Saved to</span>
-                <span className="max-w-[100px] truncate text-stone-600 font-normal">{currentUser.email}</span>
-              </div>
-            ) : (
-              <button
-                onClick={() => setShowAuthGate(true)}
-                className="text-xs font-semibold text-stone-600 hover:text-stone-900 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg border border-stone-200 bg-white hover:bg-stone-50 transition-colors shrink-0"
+            {/* Right: Save Progress + All Properties + Add Property */}
+            <div className="flex items-center gap-3 shrink-0">
+              {currentUser ? (
+                <span className="hidden md:inline text-[12px] text-[#a1a1a1]">
+                  Saved · {currentUser.email}
+                </span>
+              ) : (
+                <button
+                  onClick={() => {
+                    setPendingStepAfterAuth(null);
+                    setShowAuthGate(true);
+                  }}
+                  className="text-[12px] text-[#a1a1a1] hover:text-[#fafafa] transition-colors cursor-pointer"
+                >
+                  Save progress
+                </button>
+              )}
+
+              <Link
+                href="/dashboard"
+                className="px-3.5 py-1.5 rounded-full bg-[#171717] hover:bg-[#222222] border border-[#ffffff14] text-[12px] text-[#e5e5e5] transition-colors"
               >
-                Save Progress
-              </button>
-            )}
+                All Properties
+              </Link>
+
+              <Link
+                href="/dashboard?new=true"
+                className="hidden sm:inline-flex items-center gap-1 px-3.5 py-1.5 rounded-full bg-[#fafafa] hover:bg-[#e5e5e5] text-[#0a0a0a] text-[12px] font-medium transition-colors"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>Add Property</span>
+              </Link>
+            </div>
           </div>
         </header>
 
@@ -126,31 +175,30 @@ export default function ProgressiveEvaluationPage() {
         <StepNavigator
           currentStep={currentStep}
           onSelectStep={handleSelectStep}
-          completedSteps={Array.from({ length: currentStep - 1 }, (_, i) => i + 1)}
+          completedSteps={Array.from(
+            { length: currentStep - 1 },
+            (_, i) => i + 1
+          )}
         />
 
-        {/* Step Body */}
-        <main className="flex-1 max-w-6xl w-full mx-auto px-3 sm:px-6 py-5 sm:py-8">
+        {/* Step Body with Smooth Editorial Transition */}
+        <main className="flex-1 max-w-[1136px] w-full mx-auto px-4 sm:px-6 py-8 sm:py-12">
           {isSynthesizing ? (
-            <SynthesizingAnimation
-              locality={evaluation.property.location || evaluation.property.city || ''}
-              property={evaluation.property}
-              buyerContext={evaluation.buyerContext}
-              onComplete={() => {
-                setIsSynthesizing(false);
-                handleSelectStep(3);
-                // Soft Gate: Prompt user once to save their dossier if not authenticated
-                if (!currentUser && typeof window !== 'undefined') {
-                  const alreadyPrompted = sessionStorage.getItem(`auth_prompted_${evalId}`);
-                  if (!alreadyPrompted) {
-                    sessionStorage.setItem(`auth_prompted_${evalId}`, 'true');
-                    setShowAuthGate(true);
-                  }
+            <div className="animate-step-enter">
+              <SynthesizingAnimation
+                locality={
+                  evaluation.property.location || evaluation.property.city || ''
                 }
-              }}
-            />
+                property={evaluation.property}
+                buyerContext={evaluation.buyerContext}
+                onComplete={() => {
+                  setIsSynthesizing(false);
+                  handleSelectStep(3);
+                }}
+              />
+            </div>
           ) : (
-            <>
+            <div key={currentStep} className="animate-step-enter">
               {currentStep === 1 && (
                 <Step1Intake
                   property={evaluation.property}
@@ -177,7 +225,7 @@ export default function ProgressiveEvaluationPage() {
                   buyerContext={evaluation.buyerContext}
                   cachedAlternatives={evaluation.alternatives}
                   onSetAlternatives={(alts) => setAlternatives(evalId, alts)}
-                  onProceedToInvestigation={handleNext}
+                  onProceedToInvestigation={handleProceedFromStep3ToStep4}
                   onBack={handleBack}
                 />
               )}
@@ -192,6 +240,11 @@ export default function ProgressiveEvaluationPage() {
                   }
                   onNext={handleNext}
                   onBack={handleBack}
+                  onRequestSave={() => {
+                    setPendingStepAfterAuth(null);
+                    setShowAuthGate(true);
+                  }}
+                  isSaved={!!currentUser}
                 />
               )}
 
@@ -201,17 +254,28 @@ export default function ProgressiveEvaluationPage() {
                   buyerContext={evaluation.buyerContext}
                   checklist={evaluation.checklist}
                   onBack={handleBack}
-                  onRequestSave={() => setShowAuthGate(true)}
+                  onRequestSave={() => {
+                    setPendingStepAfterAuth(null);
+                    setShowAuthGate(true);
+                  }}
                   isSaved={!!currentUser}
                 />
               )}
-            </>
+            </div>
           )}
         </main>
 
         <AuthGateModal
           isOpen={showAuthGate}
-          onClose={() => setShowAuthGate(false)}
+          isStepTransition={pendingStepAfterAuth === 4}
+          onClose={() => {
+            setShowAuthGate(false);
+            if (pendingStepAfterAuth) {
+              const targetStep = pendingStepAfterAuth;
+              setPendingStepAfterAuth(null);
+              handleSelectStep(targetStep);
+            }
+          }}
           onAuthenticated={async (userId) => {
             setShowAuthGate(false);
             if (userId) {
@@ -220,6 +284,11 @@ export default function ProgressiveEvaluationPage() {
                 const u = await supabase.auth.getUser();
                 if (u.data.user) setCurrentUser(u.data.user);
               }
+            }
+            if (pendingStepAfterAuth) {
+              const targetStep = pendingStepAfterAuth;
+              setPendingStepAfterAuth(null);
+              handleSelectStep(targetStep);
             }
           }}
           evaluationId={evalId}

@@ -7,9 +7,22 @@ export type EvidenceStatus =
   | 'needs-pro'
   | 'potential-issue';
 
+export type PropertyType =
+  | 'Apartment'
+  | 'Villa'
+  | 'Plot'
+  | 'Independent House'
+  | 'Other';
+
+export type PossessionStatus =
+  | 'Ready to move'
+  | 'Under construction'
+  | 'Pre-launch'
+  | 'Resale';
+
 export interface PropertyDetails {
   name: string;
-  type: 'Apartment' | 'Villa' | 'Plot' | 'Independent House' | 'Other';
+  type: PropertyType;
   price: number;
   location: string;
   city?: string;
@@ -21,7 +34,7 @@ export interface PropertyDetails {
   totalFloors?: string;
   developer?: string;
   reraId?: string;
-  possessionStatus?: 'Ready to move' | 'Under construction' | 'Pre-launch';
+  possessionStatus?: PossessionStatus;
   expectedPossession?: string;
   parking?: string;
   facing?: string;
