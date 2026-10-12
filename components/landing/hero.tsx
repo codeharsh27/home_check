@@ -113,11 +113,11 @@ export const HeroSection: React.FC = () => {
   return (
     <>
       {/* Outer Padding Container for 1-Glance Framed Aesthetic */}
-      <div className="w-full p-2.5 sm:p-4 md:p-6 bg-[#FAF8F5]">
+      <div className="w-full p-2.5 sm:p-4 md:p-6 bg-[#08090B]">
         
         {/* Main Hero Card Container with Rounded Borders from ALL corners */}
         <section
-          className="relative w-full min-h-[580px] sm:min-h-[640px] lg:h-[92vh] max-h-[840px] rounded-[24px] sm:rounded-[32px] md:rounded-[40px] overflow-hidden flex flex-col justify-between shadow-2xl shadow-stone-900/10 border border-stone-200/60"
+          className="relative w-full min-h-[580px] sm:min-h-[640px] lg:h-[90vh] max-h-[820px] rounded-[24px] sm:rounded-[32px] md:rounded-[40px] overflow-hidden flex flex-col justify-between shadow-[0_20px_80px_-20px_rgba(0,0,0,0.9)] border border-white/10"
           style={{
             backgroundImage: 'url(/images/hero.png)',
             backgroundSize: 'cover',
@@ -126,7 +126,7 @@ export const HeroSection: React.FC = () => {
           }}
         >
           {/* Subtle Natural Daylight Gradient Overlay letting the sky blue shine through */}
-          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/45 via-blue-950/20 to-slate-950/50 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/65 via-slate-950/40 to-slate-950/80 pointer-events-none" />
 
           {/* Floating Centered Navbar inside rounded rectangular hero image container */}
           <HeroNavbar />
@@ -136,19 +136,19 @@ export const HeroSection: React.FC = () => {
             
             {/* Small Eyebrow with Gentle Float Animation */}
             <div className="mb-3 sm:mb-4">
-              <span className="text-[10px] sm:text-xs font-bold uppercase tracking-[1.5px] text-blue-400 bg-blue-950/80 border border-blue-500/40 px-3 sm:px-3.5 py-1 rounded-full backdrop-blur-md inline-block shadow-lg animate-float">
-                BEFORE YOU PAY TOKEN MONEY
+              <span className="text-[10px] sm:text-xs font-mono uppercase tracking-[2px] text-stone-300 bg-white/[0.06] border border-white/15 px-3.5 py-1.5 rounded-full backdrop-blur-md inline-block shadow-lg">
+                PROPERTY DUE DILIGENCE // STAGE-GATED
               </span>
             </div>
 
-            {/* Main Headline */}
-            <h1 className="text-2xl sm:text-5xl md:text-[56px] font-extrabold tracking-tight text-white leading-[1.12] sm:leading-[1.08] max-w-3xl drop-shadow-md">
-              Never Commit to a Property Blindly.
+            {/* Main Headline with Serif Typography */}
+            <h1 className="text-3xl sm:text-5xl md:text-[62px] font-serif font-normal tracking-tight text-white leading-[1.08] max-w-3xl drop-shadow-md">
+              Never commit ₹1 Crore blindly.
             </h1>
 
             {/* Supporting Text */}
-            <p className="mt-3 sm:mt-5 text-xs sm:text-base md:text-lg text-white/90 font-normal max-w-2xl leading-relaxed drop-shadow-sm px-2">
-              Buying a home is your life’s largest investment. Uncover the true possession cash drain, stage-gated legal risks, and micro-market transaction reality before signing away your savings.
+            <p className="mt-3 sm:mt-5 text-xs sm:text-base md:text-lg text-stone-300 font-sans font-normal max-w-2xl leading-relaxed drop-shadow-sm px-2">
+              Buying a home is your lifetime’s largest investment. Uncover the true possession cash drain, stage-gated legal risks, and micro-market negotiation leverage before paying token money.
             </p>
 
             {/* Search Intake Pill with Interactive Focus Ring & Border */}

@@ -36,6 +36,7 @@ const config: Config = {
       },
       fontFamily: {
         sans: ["var(--font-manrope)", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
+        serif: ["var(--font-serif)", "Georgia", "serif"],
         mono: ["var(--font-mono)", "monospace"],
       }
     },

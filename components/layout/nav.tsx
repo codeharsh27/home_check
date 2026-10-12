@@ -206,7 +206,7 @@ export const StickyNavbar: React.FC = () => {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 bg-[#FAF8F5]/95 backdrop-blur-md border-b border-stone-200/80 shadow-md py-2.5 sm:py-3 px-3 sm:px-6 md:px-8 transition-all duration-300 ease-out ${
+        className={`fixed top-0 left-0 right-0 z-50 bg-[#08090B]/90 backdrop-blur-xl border-b border-white/10 shadow-2xl py-2.5 sm:py-3 px-3 sm:px-6 md:px-8 transition-all duration-300 ease-out ${
           isScrolled
             ? 'translate-y-0 opacity-100 pointer-events-auto'
             : '-translate-y-full opacity-0 pointer-events-none'
@@ -216,21 +216,21 @@ export const StickyNavbar: React.FC = () => {
           
           {/* Left: Brand Logo */}
           <Link href="/" className="flex items-center gap-1 z-10 group">
-            <span className="text-stone-900 text-xl sm:text-2xl font-extrabold tracking-tight">
-              HomeCheck<span className="text-blue-600">.</span>
+            <span className="text-white text-xl sm:text-2xl font-serif font-bold tracking-tight">
+              HomeCheck<span className="text-blue-500">.</span>
             </span>
           </Link>
 
           {/* Center: Nav Pill Bar */}
-          <nav className="hidden lg:flex items-center gap-1 px-2 py-1.5 rounded-full bg-stone-100/95 border border-stone-200/90 shadow-2xs absolute left-1/2 -translate-x-1/2 z-10">
+          <nav className="hidden lg:flex items-center gap-1 px-2 py-1.5 rounded-full bg-white/[0.04] border border-white/10 shadow-2xl absolute left-1/2 -translate-x-1/2 z-10">
             {navItems.map((item) => (
               <a
                 key={item.label}
                 href={item.href}
-                className={`px-4 sm:px-5 py-2 rounded-full text-xs font-semibold tracking-wide transition-all ${
+                className={`px-4 sm:px-5 py-2 rounded-full text-xs font-mono tracking-wide transition-all ${
                   item.active
-                    ? 'bg-white text-stone-900 shadow-xs border border-stone-200/70'
-                    : 'text-stone-600 hover:text-blue-700 hover:bg-stone-200/60'
+                    ? 'bg-white text-stone-900 shadow-md font-semibold'
+                    : 'text-stone-400 hover:text-white hover:bg-white/[0.06]'
                 }`}
               >
                 {item.label}
@@ -242,14 +242,14 @@ export const StickyNavbar: React.FC = () => {
           <div className="flex items-center gap-1.5 sm:gap-2.5 z-10">
             {user ? (
               <div className="flex items-center gap-1.5 sm:gap-2">
-                <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs bg-white border border-stone-200 text-stone-800 shadow-2xs">
+                <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs bg-white/[0.06] border border-white/10 text-stone-200 shadow-2xs font-mono">
                   <UserIcon className="w-3.5 h-3.5" />
                   <span className="max-w-[100px] md:max-w-[140px] truncate">{user.email}</span>
                 </div>
                 <button
                   onClick={handleSignOut}
                   title="Sign out"
-                  className="p-1.5 sm:p-2 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-700 transition-colors cursor-pointer"
+                  className="p-1.5 sm:p-2 rounded-full bg-white/[0.06] hover:bg-white/[0.1] text-stone-300 transition-colors cursor-pointer border border-white/10"
                 >
                   <LogOut className="w-4 h-4" />
                 </button>
@@ -258,13 +258,13 @@ export const StickyNavbar: React.FC = () => {
               <div className="flex items-center gap-1.5 sm:gap-2.5">
                 <button
                   onClick={() => setAuthModalOpen(true)}
-                  className="px-3 sm:px-5 py-1.5 sm:py-2 rounded-full text-xs font-semibold text-stone-800 bg-white hover:bg-stone-100 border border-stone-200 transition-all shadow-xs cursor-pointer"
+                  className="px-3 sm:px-5 py-1.5 sm:py-2 rounded-full text-xs font-mono text-stone-300 bg-white/[0.06] hover:bg-white/[0.1] border border-white/10 transition-all cursor-pointer"
                 >
                   Login
                 </button>
                 <a
                   href="#hero-intake"
-                  className="hidden sm:inline-flex px-4 sm:px-5 py-1.5 sm:py-2 rounded-full text-xs font-bold text-white bg-[#2563EB] hover:bg-[#1D4ED8] transition-all shadow-md shadow-blue-600/30 cursor-pointer"
+                  className="hidden sm:inline-flex px-4 sm:px-5 py-1.5 sm:py-2 rounded-full text-xs font-mono font-bold text-stone-900 bg-white hover:bg-stone-200 transition-all shadow-md cursor-pointer"
                 >
                   Evaluate
                 </a>
@@ -274,7 +274,7 @@ export const StickyNavbar: React.FC = () => {
             {/* Mobile Hamburger Toggle */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-700 transition-colors cursor-pointer border border-stone-200/80"
+              className="lg:hidden p-2 rounded-full bg-white/[0.06] hover:bg-white/[0.1] text-stone-300 transition-colors cursor-pointer border border-white/10"
               aria-label="Toggle navigation menu"
             >
               {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
@@ -285,24 +285,24 @@ export const StickyNavbar: React.FC = () => {
 
         {/* Mobile Dropdown Menu Drawer */}
         {mobileMenuOpen && (
-          <div className="lg:hidden mt-2 p-4 rounded-2xl bg-white border border-stone-200 shadow-xl space-y-3 animate-in fade-in slide-in-from-top-2 duration-200">
+          <div className="lg:hidden mt-2 p-4 rounded-2xl bg-[#0E1014] border border-white/10 shadow-2xl space-y-3 animate-in fade-in slide-in-from-top-2 duration-200">
             <nav className="flex flex-col space-y-1">
               {navItems.map((item) => (
                 <a
                   key={item.label}
                   href={item.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="px-3 py-2 rounded-xl text-xs font-semibold text-stone-700 hover:text-stone-900 hover:bg-stone-100 transition-colors"
+                  className="px-3 py-2 rounded-xl text-xs font-mono text-stone-300 hover:text-white hover:bg-white/[0.06] transition-colors"
                 >
                   {item.label}
                 </a>
               ))}
             </nav>
-            <div className="pt-2 border-t border-stone-100 flex items-center justify-between gap-2">
+            <div className="pt-2 border-t border-white/[0.08] flex items-center justify-between gap-2">
               <a
                 href="#hero-intake"
                 onClick={() => setMobileMenuOpen(false)}
-                className="flex-1 py-2 rounded-xl text-xs font-bold text-center text-white bg-[#2563EB] hover:bg-[#1D4ED8] transition-colors"
+                className="flex-1 py-2 rounded-xl text-xs font-mono font-bold text-center text-stone-900 bg-white hover:bg-stone-200 transition-colors"
               >
                 Evaluate Property
               </a>
@@ -312,7 +312,7 @@ export const StickyNavbar: React.FC = () => {
                     setMobileMenuOpen(false);
                     setAuthModalOpen(true);
                   }}
-                  className="px-4 py-2 rounded-xl text-xs font-semibold text-stone-700 bg-stone-100 hover:bg-stone-200 transition-colors"
+                  className="px-4 py-2 rounded-xl text-xs font-mono text-stone-300 bg-white/[0.06] hover:bg-white/[0.1] border border-white/10 transition-colors"
                 >
                   Sign In
                 </button>

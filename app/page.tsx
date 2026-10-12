@@ -1,56 +1,52 @@
 import React from 'react';
 import { StickyNavbar } from '@/components/layout/nav';
 import { HeroSection } from '@/components/landing/hero';
-import { ProblemSection } from '@/components/landing/problem-section';
-import { HowItWorksSection } from '@/components/landing/how-it-works';
-import { ProductShowcaseSection } from '@/components/landing/product-showcase';
-import { WhatWeCheckSection } from '@/components/landing/property-categories';
-import { SampleEvaluationSection } from '@/components/landing/sample-evaluation';
-import { TrustSection } from '@/components/landing/trust-section';
-import { FAQSection } from '@/components/landing/faq-section';
-import { CTABannerSection } from '@/components/landing/cta-banner';
-import { Footer } from '@/components/landing/footer';
+import { CoreEnginesSection } from '@/components/landing/core-engines';
+import { InteractiveDossierSection } from '@/components/landing/interactive-dossier';
+import { BentoTestimonialsSection } from '@/components/landing/bento-testimonials';
+import { PricingMatrixSection } from '@/components/landing/pricing-matrix';
+import { BuyerGuidesSection } from '@/components/landing/buyer-guides';
+import { DarkFAQSection } from '@/components/landing/dark-faq';
+import { DarkCTABannerSection } from '@/components/landing/dark-cta';
+import { DarkFooter } from '@/components/landing/dark-footer';
 import { BackToTop } from '@/components/layout/back-to-top';
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-[#FAF8F5] text-stone-900 flex flex-col font-sans selection:bg-blue-600/20 selection:text-blue-900 relative">
+    <div className="min-h-screen bg-[#08090B] text-stone-100 flex flex-col font-sans selection:bg-blue-600/30 selection:text-white relative overflow-x-hidden">
       {/* Sticky Navigation Bar (Reveals smoothly on scroll) */}
       <StickyNavbar />
 
       <main className="flex-1">
-        {/* 1. Hero & 2. Value strip */}
+        {/* 1. Atmospheric Hero with live intake search & trust strip */}
         <HeroSection />
 
-        {/* 3. Problem / "You found the property. Now what?" */}
-        <ProblemSection />
+        {/* 2. Alternating 2-Column Core Engines (Cash Drain, Legal Shield, Micro-Market Radar) */}
+        <CoreEnginesSection />
 
-        {/* 4. How it works */}
-        <HowItWorksSection />
+        {/* 3. Interactive Decision Dossier Centerpiece (Dynamic Tabbed Controller) */}
+        <InteractiveDossierSection />
 
-        {/* 5. Product evaluation showcase */}
-        <ProductShowcaseSection />
+        {/* 4. Asymmetrical Bento Social Proof Grid ("Hear from real buyers") */}
+        <BentoTestimonialsSection />
 
-        {/* 6. What we help you check */}
-        <WhatWeCheckSection />
+        {/* 5. Simple, Predictable Pricing Matrix & Feature Breakdown */}
+        <PricingMatrixSection />
 
-        {/* 7. Sample evaluation */}
-        <SampleEvaluationSection />
+        {/* 6. Editorial Buyer Guides / Field Notes */}
+        <BuyerGuidesSection />
 
-        {/* 8. What HomeCheck is / isn't */}
-        <TrustSection />
+        {/* 7. Dark FAQ Accordion */}
+        <DarkFAQSection />
 
-        {/* 9. FAQ */}
-        <FAQSection />
-
-        {/* 10. Final CTA */}
-        <CTABannerSection />
+        {/* 8. Cinematic Closing CTA + Giant Watermark */}
+        <DarkCTABannerSection />
       </main>
 
-      {/* 11. Footer */}
-      <Footer />
+      {/* 9. Minimalist Dark Footer */}
+      <DarkFooter />
 
-      {/* 12. Floating Back to Top Button */}
+      {/* 10. Floating Back to Top Button */}
       <BackToTop />
     </div>
   );
