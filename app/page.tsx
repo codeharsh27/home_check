@@ -1,6 +1,7 @@
 import React from 'react';
 import { StickyNavbar } from '@/components/layout/nav';
 import { HeroSection } from '@/components/landing/hero';
+import { LogoTickerSection } from '@/components/landing/logo-ticker';
 import { CoreEnginesSection } from '@/components/landing/core-engines';
 import { InteractiveDossierSection } from '@/components/landing/interactive-dossier';
 import { BentoTestimonialsSection } from '@/components/landing/bento-testimonials';
@@ -18,10 +19,13 @@ export default function LandingPage() {
       <StickyNavbar />
 
       <main className="flex-1">
-        {/* 1. Atmospheric Hero with live intake search & trust strip */}
+        {/* 1. Atmospheric Hero with live intake search */}
         <HeroSection />
 
-        {/* 2. Alternating 2-Column Core Engines (Cash Drain, Legal Shield, Micro-Market Radar) */}
+        {/* 2. Official Registries & Statutory Databases Ticker */}
+        <LogoTickerSection />
+
+        {/* 3. Alternating 2-Column Core Engines (Cash Drain, Legal Shield, Micro-Market Radar) */}
         <CoreEnginesSection />
 
         {/* 3. Interactive Decision Dossier Centerpiece (Dynamic Tabbed Controller) */}

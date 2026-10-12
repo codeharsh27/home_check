@@ -151,13 +151,13 @@ export const HeroSection: React.FC = () => {
               Buying a home is your lifetime’s largest investment. Uncover the true possession cash drain, stage-gated legal risks, and micro-market negotiation leverage before paying token money.
             </p>
 
-            {/* Search Intake Pill with Interactive Focus Ring & Border */}
+            {/* Search Intake Pill with Interactive Focus Ring & Kero AI Glassmorphism */}
             <form
               id="hero-intake"
               onSubmit={handleStartEvaluation}
-              className="mt-5 sm:mt-8 w-full max-w-2xl relative"
+              className="mt-6 sm:mt-8 w-full max-w-2xl relative"
             >
-              <div className="bg-white rounded-full shadow-2xl p-1 sm:p-2 flex items-center gap-1.5 sm:gap-2 border-2 border-white/90 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/25 transition-all duration-300">
+              <div className="bg-[#121316]/90 rounded-full shadow-[0_0_50px_-10px_rgba(91,139,223,0.35)] p-1.5 sm:p-2 flex items-center gap-1.5 sm:gap-2 border border-white/20 backdrop-blur-xl focus-within:border-blue-400 focus-within:ring-4 focus-within:ring-blue-500/20 transition-all duration-300">
                 
                 {/* Single Input */}
                 <div className="flex-1 px-3 sm:px-5">
@@ -166,7 +166,7 @@ export const HeroSection: React.FC = () => {
                     value={urlInput}
                     onChange={(e) => setUrlInput(e.target.value)}
                     placeholder="Paste listing URL (Housing, NoBroker, 99acres...)"
-                    className="w-full text-xs sm:text-sm text-stone-800 placeholder-stone-400 bg-transparent outline-none font-normal"
+                    className="w-full text-xs sm:text-sm text-white placeholder-stone-400 bg-transparent outline-none font-mono"
                   />
                 </div>
 
@@ -178,22 +178,22 @@ export const HeroSection: React.FC = () => {
                     setOptionsModalOpen(true);
                   }}
                   title="Upload brochure or manual entry"
-                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-700 flex items-center justify-center transition-all hover:scale-105 active:scale-95 shrink-0 cursor-pointer shadow-sm border border-stone-200/60"
+                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/[0.08] hover:bg-white/[0.15] text-stone-300 flex items-center justify-center transition-all hover:scale-105 active:scale-95 shrink-0 cursor-pointer border border-white/10"
                 >
                   <SlidersHorizontal className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 </button>
 
-                {/* Primary CTA Button */}
+                {/* Primary CTA Button (High-Contrast Kero White) */}
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="px-3.5 sm:px-6 py-2 sm:py-3 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs sm:text-sm font-bold shadow-md shadow-blue-600/30 transition-all hover:scale-[1.02] shrink-0 cursor-pointer flex items-center gap-1.5 group"
+                  className="px-4 sm:px-7 py-2 sm:py-3 rounded-full bg-white hover:bg-stone-200 text-stone-900 text-xs sm:text-sm font-mono font-bold shadow-xl transition-all hover:scale-[1.02] shrink-0 cursor-pointer flex items-center gap-1.5 group"
                 >
                   {isLoading ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <Loader2 className="w-4 h-4 animate-spin text-stone-900" />
                   ) : (
                     <>
-                      <span>Audit <span className="hidden sm:inline">This Property</span></span>
+                      <span>Analyse <span className="hidden sm:inline">Listing</span></span>
                       <Search className="w-3.5 h-3.5 group-hover:scale-110 transition-transform" />
                     </>
                   )}
@@ -207,15 +207,37 @@ export const HeroSection: React.FC = () => {
                 </div>
               )}
 
-              {/* Sample link below the input */}
-              <div className="mt-3.5 flex items-center justify-center gap-1.5 text-xs text-white/80">
-                <span>No listing?</span>
+              {/* Sample link chips below the input */}
+              <div className="mt-4 flex flex-wrap items-center justify-center gap-2 text-[11px] font-mono text-stone-400">
+                <span>Or load live audit:</span>
                 <button
                   type="button"
                   onClick={handleLoadDemo}
-                  className="text-white font-semibold underline underline-offset-4 hover:text-blue-300 cursor-pointer transition-colors"
+                  className="px-2.5 py-1 rounded-full bg-white/[0.05] hover:bg-white/[0.1] text-stone-300 hover:text-white border border-white/10 transition-colors cursor-pointer"
                 >
-                  Start with a sample property →
+                  Wakad, Pune (2BHK · ₹68L) →
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const id = startNewEvaluation({
+                      name: 'Prestige Lakeside Habitat',
+                      location: 'Whitefield, Bengaluru',
+                      city: 'Bengaluru',
+                      state: 'Karnataka',
+                      price: 14500000,
+                      carpetArea: 1650,
+                      bhk: '3 BHK',
+                      developer: 'Prestige Group',
+                      possessionStatus: 'Ready to move',
+                      reraId: 'PRM/KA/RERA/1251/310/PR/170915/000176',
+                      sourceName: 'Sample Bengaluru Listing',
+                    }, false);
+                    router.push(`/evaluation/${id}`);
+                  }}
+                  className="hidden sm:inline-block px-2.5 py-1 rounded-full bg-white/[0.05] hover:bg-white/[0.1] text-stone-300 hover:text-white border border-white/10 transition-colors cursor-pointer"
+                >
+                  Whitefield, BLR (3BHK · ₹1.45 Cr) →
                 </button>
               </div>
             </form>
